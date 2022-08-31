@@ -52,6 +52,9 @@ TagManager:
   - name: Items
     uniqueID: 2981228041
     locked: 0
-  - name: Characters
+  - name: Enemies
     uniqueID: 3501401831
+    locked: 0
+  - name: Characters
+    uniqueID: 168254547
     locked: 0

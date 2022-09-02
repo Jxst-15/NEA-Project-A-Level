@@ -7,9 +7,9 @@ public class PlayerController : MonoBehaviour
 
     // Variables for player movement
     [SerializeField] private int vSpeed = 2;
-    [SerializeField] private int hSpeed = 4;
-    [SerializeField] private int vRunSpeed = 5;
-    [SerializeField] private int hRunSpeed = 7;
+    [SerializeField] private int hSpeed = 3;
+    [SerializeField] private int vRunSpeed = 4;
+    [SerializeField] private int hRunSpeed = 5;
     [SerializeField] private bool isRunning = false;
     private float vMove, hMove;
 
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private float dodgeTime;
 
     // For double tapping key
-    private float tapSpeed;
+    private float doubleTapSpeed;
     KeyCode lastKey;
 
     // For flipping player
@@ -47,17 +47,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (canMove == true) // If player able to move
-        {   
+        {
             // Gets raw number value of axis
             vMove = Input.GetAxisRaw("Vertical"); 
             hMove = Input.GetAxisRaw("Horizontal");       
             if (hMove > 0)
             {
                 facingRight = true;
-                flip(facingRight); // Flip method runs
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    if (tapSpeed > Time.time && lastKey == KeyCode.D) // If the defined double tap speed > time elapsed & lastkey pressed = 'D'
+                    if (doubleTapSpeed > Time.time && lastKey == KeyCode.D) // If the defined double tap speed > time elapsed & lastkey pressed = 'D'
                     {
                         side = 2;
                         // doubleTapped = true;
@@ -65,7 +64,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        tapSpeed = Time.time + 0.3f; // Double tap speed updated to time elapsed + 0.3 seconds
+                        doubleTapSpeed = Time.time + 0.3f; // Double tap speed updated to time elapsed + 0.3 seconds
                     }
                     lastKey = KeyCode.D;
                 }
@@ -73,10 +72,9 @@ public class PlayerController : MonoBehaviour
             else if (hMove < 0) // If player moving left as x axis < 0 (-1) means player facing left left
             {
                 facingRight = false;
-                flip(facingRight);
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    if (tapSpeed > Time.time && lastKey == KeyCode.A)
+                    if (doubleTapSpeed > Time.time && lastKey == KeyCode.A)
                     {
                         side = 1; // Indicates left side
                         // doubleTapped = true; // Key has been double tapped
@@ -84,13 +82,14 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        tapSpeed = Time.time + 0.3f;
+                        doubleTapSpeed = Time.time + 0.3f;
                     }
                     lastKey = KeyCode.A; // Last key pressed is set to A
                 }
             }
+            Flip(facingRight); // Flip method runs
         }
-        action();
+        Action();
     }
 
 
@@ -101,7 +100,7 @@ public class PlayerController : MonoBehaviour
         isDodging = false;
         if (canMove == true)
         {
-            jump(); // Jump method called
+            Jump(); // Jump method called
 
             if (isDodging == false && isRunning == false) // If player not currently dodging or running
             {
@@ -112,30 +111,30 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftControl)) // If player wants to sprint
             {
                 isRunning = true;
-                run();
+                Run();
             }
 
-            dodge();
+            Dodge();
         }
     }
 
-    public void jump()
-    { 
-        if (Input.GetButtonDown("Jump") && onGround == true)
+    public void Jump()
+    {
+        if (Input.GetButtonDown("Jump"))
         {
             onGround = false;
             Debug.Log("Player jumped!");
             // rb.AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
+            // onGround = true;
         }
-        onGround = true;
     }
 
-    public void run()
+    public void Run()
     {
         rb.velocity = new Vector2(hMove * hRunSpeed, vMove * vRunSpeed); // Similar to normal movement but speed values replaced with run speed values
     }
 
-    public void dodge()
+    public void Dodge()
     {
         if (side != 0)
         {
@@ -162,7 +161,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void action() // Action button can be worked on at later date when items added
+    public void Action() // Action button can be worked on at later date when items added
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
@@ -171,7 +170,7 @@ public class PlayerController : MonoBehaviour
         // Action Button WIP
     }
 
-    public void flip(bool facingRight) // Takes in bool flag to determine which direction player facing
+    public void Flip(bool facingRight) // Takes in bool flag to determine which direction player facing
     {
         if (facingRight == true) {
             this.transform.localScale = new Vector2(playerPosX, playerPosY);

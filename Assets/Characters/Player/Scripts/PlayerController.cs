@@ -22,11 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float startDodgeTime;
     [SerializeField] private int side = 0;
     private float dodgeTime;
-    private float dodgeCooldown = 3f;
-    private float nextDodge = 0f;
 
     // For double tapping key
-    [SerializeField] private bool doubleTapped = false;
     private float tapSpeed;
     KeyCode lastKey;
 
@@ -63,7 +60,8 @@ public class PlayerController : MonoBehaviour
                     if (tapSpeed > Time.time && lastKey == KeyCode.D) // If the defined double tap speed > time elapsed & lastkey pressed = 'D'
                     {
                         side = 2;
-                        doubleTapped = true;
+                        // doubleTapped = true;
+                        isDodging = true;
                     }
                     else
                     {
@@ -81,7 +79,8 @@ public class PlayerController : MonoBehaviour
                     if (tapSpeed > Time.time && lastKey == KeyCode.A)
                     {
                         side = 1; // Indicates left side
-                        doubleTapped = true; // Key has been double tapped
+                        // doubleTapped = true; // Key has been double tapped
+                        isDodging = true;
                     }
                     else
                     {
@@ -116,14 +115,7 @@ public class PlayerController : MonoBehaviour
                 run();
             }
 
-            if (doubleTapped == true)
-            {
-                doubleTapped = false;
-                if (Time.time > nextDodge) // Need to work on dodge, work on functionality + cooldown upon use
-                {
-                    dodge();
-                }
-            }
+            dodge();
         }
     }
 
@@ -145,7 +137,6 @@ public class PlayerController : MonoBehaviour
 
     public void dodge()
     {
-        isDodging = true;
         if (side != 0)
         {
             if (dodgeTime <= 0)
@@ -159,28 +150,16 @@ public class PlayerController : MonoBehaviour
                 dodgeTime -= Time.deltaTime;
                 if (side == 1)
                 {
-                    Debug.Log("Dodge initiated (left)");
+                    // Debug.Log("Dodge initiated (left)");
                     rb.velocity = Vector2.left * dodgeSpeed;
                 }
                 else if (side == 2)
                 {
-                    Debug.Log("Dodge initiated (right)");
+                    // Debug.Log("Dodge initiated (right)");
                     rb.velocity = Vector2.right * dodgeSpeed;
                 }
             }
         }
-        nextDodge = Time.time + dodgeCooldown;
-        //if (dodgeTime <= 0)
-        //{
-        //    dodgeTime = startDodgeTime;
-        //    rb.velocity = Vector2.zero * 0;
-        //}
-        //else
-        //{
-        //    dodgeTime -= Time.deltaTime;
-        //    rb.velocity = new Vector2(hMove * dodgeSpeed, vMove * dodgeSpeed);
-        //}
-        //nextDodge = Time.time + dodgeCooldown;
     }
 
     public void action() // Action button can be worked on at later date when items added

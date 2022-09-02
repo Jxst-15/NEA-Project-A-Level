@@ -637,8 +637,8 @@ GameObject:
   - component: {fileID: 1882124952}
   - component: {fileID: 1882124951}
   - component: {fileID: 1882124954}
-  - component: {fileID: 1882124955}
   - component: {fileID: 1882124956}
+  - component: {fileID: 1882124955}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -755,9 +755,10 @@ MonoBehaviour:
   jumpHeight: 3
   onGround: 1
   isDodging: 0
-  dodgeSpeed: 35
+  dodgeSpeed: 200
   startDodgeTime: 0.1
   side: 0
+  doubleTapped: 0
 --- !u!61 &1882124956
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -9,14 +9,19 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private int vSpeed = 2;
     [SerializeField] private int hSpeed = 4;
-    [SerializeField] private int runSpeed = 6;
+    [SerializeField] private int vRunSpeed = 5;
+    [SerializeField] private int hRunSpeed = 7;
+    [SerializeField] private bool isRunning = false;
 
     [SerializeField] private int jumpHeight = 3;
     [SerializeField] private bool onGround = true;
 
-    [SerializeField] private int dodgeSpeed = 45;
-    private float startDodgeTime;
+    [SerializeField] private bool isDodging = false;
+    [SerializeField] private float dodgeSpeed = 8;
+    [SerializeField] private float startDodgeTime;
     private float dodgeTime;
+    private float dodgeCooldown = 2f;
+    private float nextDodge = 0f;
 
     private float tapSpeed;
     KeyCode lastKey;
@@ -31,10 +36,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dodgeTime = startDodgeTime;
+        rb = GetComponent<Rigidbody2D>();
         playerPosX = transform.localScale.x;
         playerPosY = transform.localScale.y;
-        rb = GetComponent<Rigidbody2D>();
+        dodgeTime = startDodgeTime;
     }
 
     // Update is called once per frame
@@ -42,11 +47,7 @@ public class PlayerController : MonoBehaviour
     {
         if (canMove == true)
         {
-            // jump();
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                run();
-            }
+            jump();
             
             vMove = Input.GetAxisRaw("Vertical");
             hMove = Input.GetAxisRaw("Horizontal");       
@@ -85,68 +86,77 @@ public class PlayerController : MonoBehaviour
         }
         
         action();
-        dodge();
+        if (Time.time > nextDodge) // Need to work on dodge, work on functionality + cooldown upon use
+        {
+            dodge();
+        }
     }
 
 
     void FixedUpdate()
     {
+        isRunning = false;
         if (canMove == true)
         {
-            rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed);
+            if (isDodging == false && isRunning == false)
+            {
+                rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed);
+            }
+            
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                isRunning = true;
+                run();
+            }
         }
     }
 
-    //public void jump()
-    //{
-    //    if (Input.GetButtonDown("Jump") && onGround == true)
-    //    {
-    //        this.rb.AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
-    //    }
-    //}
+    public void jump()
+    { 
+        if (Input.GetButtonDown("Jump") && onGround == true)
+        {
+            Debug.Log("Player jumped!");
+            // rb.AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
+        }
+    }
 
     public void run()
     {
-        if (Input.GetButtonDown("Horizontal")) {
-            switch(Input.GetAxisRaw("Horizontal"))
-            {
-                case > 0:
-                    // Move player by runSpeed to the right
-                    break;
-                case < 0:
-                    // Move player by runSpeed to the left
-                    break;
-            }
-        }
+        rb.velocity = new Vector2(hMove * hRunSpeed, vMove * vRunSpeed);
     }
 
     public void dodge()
     {
-            if (side != 0)
+        if (side != 0)
+        {
+            if (dodgeTime <= 0)
             {
-                if (dodgeTime <= 0)
+                side = 0;
+                dodgeTime = startDodgeTime;
+                rb.velocity = Vector2.zero;
+            }
+            else
+            {
+                dodgeTime -= Time.deltaTime;
+                if (side == 1)
                 {
-                    side = 0;
-                    dodgeTime = startDodgeTime;
-                    rb.velocity = Vector2.zero;
+                    rb.velocity = Vector2.left * dodgeSpeed;
                 }
-                else
+                else if (side == 2)
                 {
-                    dodgeTime -= Time.deltaTime;
-                    if (side == 1)
-                    {
-                        rb.velocity = Vector2.left * dodgeSpeed;
-                    }
-                    else if (side == 2)
-                    {
-                        rb.velocity = Vector2.right * dodgeSpeed;
-                    }
+                    rb.velocity = Vector2.right * dodgeSpeed;
                 }
             }
+        }
+        nextDodge = Time.time + dodgeCooldown;
     }
 
-    public void action()
+    public void action() // Action button can be worked on at later date when items added
     {
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            Debug.Log("Player did an action");
+        }
         // Action Button WIP
     }
 }

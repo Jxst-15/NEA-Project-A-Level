@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isRunning = false;
     private float vMove, hMove;
 
-    [SerializeField] private int jumpHeight = 3;
+    [SerializeField] private const int jumpHeight = 3;
     [SerializeField] private bool onGround = true;
 
     // Variables to allow player to dodge
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dodgeSpeed = 35;
     [SerializeField] private float startDodgeTime;
     [SerializeField] private int side = 0;
-    private float dodgeTime;
+    private float dodgeTime;  
 
     // For double tapping key
     private float doubleTapSpeed;

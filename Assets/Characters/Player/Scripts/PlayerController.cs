@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    #region variables 
+    #region Variables 
     [SerializeField] private bool canMove = true;
 
     // Variables for player movement

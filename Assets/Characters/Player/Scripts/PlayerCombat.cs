@@ -8,9 +8,12 @@ public class PlayerCombat : MonoBehaviour
     #region Variables
     [SerializeField] private GameObject weapon; // A weapon that has been picked up
     public GameObject attackBox;
+    public GameObject blockBox;
     // LayerMasks help to identify which objects can be hit
     public LayerMask enemyLayer;
     public LayerMask hittableObject;
+
+    public PlayerAttack playerAttack;
 
     private float nextWAttackTime = 0f;
     private const float wAttackRate = 2f;
@@ -20,7 +23,7 @@ public class PlayerCombat : MonoBehaviour
     private float nextAttackTime = 0f;
 
     private int combatTime = 3;
-    private int comboCount = 0; // How many attacks player has performed without getting hit
+    private int comboCount; // How many attacks player has performed without getting hit (Field)
 
     private const float parryDelay = 0.5f; // 0.5s, time which is needed for a parry to be valid
     
@@ -45,10 +48,15 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private int stamDecBlock;
     [SerializeField] private int stamIncParry;
     [SerializeField] private int healthDecBlock;
-    
+
     #endregion
 
-    #region Getters and Setters
+    #region Getters and 
+    private int _comboCount // Property to get and reset the combo count
+    {
+        get { return comboCount; }
+        set { comboCount = value; }
+    }
     private bool canAttack
     { get; set; }
     private bool canDefend
@@ -68,7 +76,8 @@ public class PlayerCombat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        attackBox.SetActive(false);
+        playerAttack = attackBox.GetComponent<PlayerAttack>(); // Gets the PlayerAttack script from the attackBox GameObject
+
         this.canAttack = true;
         this.canDefend = true;
         this.blocking = false;
@@ -109,14 +118,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 if (Time.time >= nextAttackTime) // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
                 {
-                    if (Input.GetButtonDown("lAttack"))
-                    {
-                        LightAttack();
-                    }
-                    else if (Input.GetButtonDown("hAttack"))
-                    {
-                        HeavyAttack();
-                    }
+                    Attack();
                 }
             }
             if (Input.GetKeyDown(KeyCode.I))      
@@ -157,6 +159,7 @@ public class PlayerCombat : MonoBehaviour
             }
             else // Once key has been released then player is no longer blocking and can attack 
             {
+                blockBox.SetActive(false);
                 this.blocking = false;
                 this.canAttack = true;
             }
@@ -170,13 +173,8 @@ public class PlayerCombat : MonoBehaviour
         {
             Time.timeScale = 1f; // Sets game time back to normal
         }
-    }
-
-    public int GetComboCount()
-    {
-        return comboCount;
-    }
-    
+    }   
+ 
     public void ResetComboCount()
     {
         this.comboCount = 0;
@@ -187,32 +185,39 @@ public class PlayerCombat : MonoBehaviour
         // Combo meter will be configured here
     }
 
-    public void LightAttack()
+    public void Attack()
     {
-        // Light attack performed
-        this.attacking = true;
-        attackBox.SetActive(true);
-        UnityEngine.Debug.Log("Light attack performed");
-        // Code to do damage
-        attackBox.SetActive(false);
-        this.attacking = false;
-
-        attackCount++;
-        nextAttackTime = Time.time + 1f / attackRate;
-    }
-
-    public void HeavyAttack()
-    {
-        // Heavy attack performed
-        this.attacking = true;
-        attackBox.SetActive(true);
-        UnityEngine.Debug.Log("Heavy attack performed");
-        // Code to do damage
-        attackBox.SetActive(false);
-        this.attacking = false;
-
-        attackCount++;
-        nextAttackTime = Time.time + 1f / attackRate;
+        // Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackBoxTransform.position, attackRange, enemyLayer);
+        
+        if (Input.GetButtonDown("lAttack"))
+        {
+            UnityEngine.Debug.Log("Attack Initiated");
+            this.attacking = true;
+            // Light attack performed
+            foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
+            {
+                // Deal light damage to enemy
+                UnityEngine.Debug.Log("Enemy Hit! (L)");
+            }
+            UnityEngine.Debug.Log("Light attack performed");
+            
+            nextAttackTime = Time.time + 1f / attackRate;
+        }
+        else if (Input.GetButtonDown("hAttack"))
+        {
+            UnityEngine.Debug.Log("Attack Initiated");
+            this.attacking = true;
+            // Heavy attack performed
+            foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
+            {
+                // Deal heavy damage to enemy
+                UnityEngine.Debug.Log("Enemy Hit! (H)");
+            }
+            UnityEngine.Debug.Log("Heavy attack performed");
+            
+            nextAttackTime = Time.time + 1f / attackRate;
+        }
+        attacking = false;
     }
 
     public void Throw()
@@ -232,6 +237,7 @@ public class PlayerCombat : MonoBehaviour
         // Block feature will be configured here
         this.blocking = true;
         this.canAttack = false;
+        blockBox.SetActive(true);
     }
 
     public void Parry()

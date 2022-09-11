@@ -13,7 +13,8 @@ public class PlayerCombat : MonoBehaviour
     public LayerMask enemyLayer;
     public LayerMask hittableObject;
 
-    public PlayerAttack playerAttack;
+    public PlayerAttack playerAttack; 
+    public PlayerBlock playerBlock; 
 
     private float nextWAttackTime = 0f;
     private const float wAttackRate = 2f;
@@ -45,10 +46,11 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private int stamDecHAttack;
     [SerializeField] private int stamDecWUAttack;
     [SerializeField] private int stamDecThrow;
-    [SerializeField] private int stamDecBlock;
     [SerializeField] private int stamIncParry;
-    [SerializeField] private int healthDecBlock;
-
+    [SerializeField] private int stamDecBlock
+    { get; set; }
+    [SerializeField] private int healthDecBlock
+    { get; set; }
     #endregion
 
     #region Getters and 
@@ -77,6 +79,7 @@ public class PlayerCombat : MonoBehaviour
     void Start()
     {
         playerAttack = attackBox.GetComponent<PlayerAttack>(); // Gets the PlayerAttack script from the attackBox GameObject
+        playerBlock = blockBox.GetComponent<PlayerBlock>(); // Gets the PlayerBlock script from the blockBox GameObject
 
         this.canAttack = true;
         this.canDefend = true;
@@ -196,10 +199,14 @@ public class PlayerCombat : MonoBehaviour
             // Light attack performed
             foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
             {
-                // Deal light damage to enemy
                 UnityEngine.Debug.Log("Enemy Hit! (L)");
+                // Deal light damage to enemy
+                // Call enemy's take damage method and provide player stats light attack damage as parameter
+                comboCount++;
             }
             UnityEngine.Debug.Log("Light attack performed");
+            // Decrease current stamina by stamDecLAttack
+            attackCount++;
             
             nextAttackTime = Time.time + 1f / attackRate;
         }
@@ -210,10 +217,14 @@ public class PlayerCombat : MonoBehaviour
             // Heavy attack performed
             foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
             {
-                // Deal heavy damage to enemy
                 UnityEngine.Debug.Log("Enemy Hit! (H)");
+                // Deal heavy damage to enemy
+                // Call enemy's take damage method and provide player stats heavy attack damage as parameter
+                comboCount++;
             }
             UnityEngine.Debug.Log("Heavy attack performed");
+            // Decrease current stamina by stamDecHAttack
+            attackCount++;
             
             nextAttackTime = Time.time + 1f / attackRate;
         }
@@ -226,6 +237,7 @@ public class PlayerCombat : MonoBehaviour
         this.throwing = true;
         this.attacking = true;
         // Throw attack performed
+        // Add force to enemy rigid body 
         UnityEngine.Debug.Log("Throw attack performed");
         this.attacking = false;
         

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
+    // Following list stores all enemy colliders within attack range
     private List<Collider2D> enemiesHit = new List<Collider2D>();
     
-    // Start is called before the first frame update
+
+    // When a collider enters the player attack collider trigger box
     void OnTriggerEnter2D(Collider2D enemy)
     {
-        if (!enemiesHit.Contains(enemy) && enemy.gameObject.tag == "Enemies")
+        if (!enemiesHit.Contains(enemy) && enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             Debug.Log("Enemy entered trigger");
             enemiesHit.Add(enemy);
@@ -17,16 +19,18 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
+    // When a collider exits the player attack collider trigger box
     void OnTriggerExit2D(Collider2D enemy)
     {
-        Debug.Log("Enemy exited trigger");
-        if (enemiesHit.Contains(enemy))
+        if (enemiesHit.Contains(enemy) && enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
+            Debug.Log("Enemy exited trigger");
             enemiesHit.Remove(enemy);
             Debug.Log("Enemy removed from list");
         }
     }
 
+    // Returns the list in order to deal damage to players
     public List<Collider2D> GetEnemiesHit()
     {
         if (enemiesHit.Count == 0)

@@ -1,14 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private GameObject weapon; // A weapon that has been picked up
+    // Following is a weapon that has been picked up
+    [SerializeField] private GameObject weapon;
+    
     public GameObject attackBox;
     public GameObject blockBox;
+    public GameObject parryBox;
+    
     // LayerMasks help to identify which objects can be hit
     public LayerMask enemyLayer;
     public LayerMask hittableObject;
@@ -24,9 +26,12 @@ public class PlayerCombat : MonoBehaviour
     private float nextAttackTime = 0f;
 
     private int combatTime = 3;
-    private int comboCount; // How many attacks player has performed without getting hit (Field)
+    
+    // How many attacks player has performed without getting hit (Field)
+    private int comboCount;
 
-    private const float parryDelay = 0.5f; // 0.5s, time which is needed for a parry to be valid
+    // 0.5s, time which is needed for a parry to be valid
+    private const float parryDelay = 0.5f;
     
     private float throwRate = 0.3f;
     private float nextThrowTime = 0f;
@@ -53,8 +58,10 @@ public class PlayerCombat : MonoBehaviour
     { get; set; }
     #endregion
 
-    #region Getters and 
-    private int _comboCount // Property to get and reset the combo count
+    #region Getters and Setters
+
+    // Property to get and reset the combo count
+    private int _comboCount 
     {
         get { return comboCount; }
         set { comboCount = value; }
@@ -78,8 +85,14 @@ public class PlayerCombat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerAttack = attackBox.GetComponent<PlayerAttack>(); // Gets the PlayerAttack script from the attackBox GameObject
-        playerBlock = blockBox.GetComponent<PlayerBlock>(); // Gets the PlayerBlock script from the blockBox GameObject
+        // Gets the PlayerAttack script from the attackBox GameObject
+        playerAttack = attackBox.GetComponent<PlayerAttack>(); 
+        
+        // Gets the PlayerBlock script from the blockBox GameObject
+        playerBlock = blockBox.GetComponent<PlayerBlock>(); 
+
+        blockBox.SetActive(false);
+        parryBox.SetActive(false);
 
         this.canAttack = true;
         this.canDefend = true;
@@ -102,13 +115,15 @@ public class PlayerCombat : MonoBehaviour
     void Update()
     {
         ComboMeter();
-        
-        if (weapon != null && weapon.tag == "Weapons") // Checks if player is holding a weapon, if yes then set weaponHeld to true
+
+        // Checks if player is holding a weapon, if yes then set weaponHeld to true
+        if (weapon != null && weapon.tag == "Weapons") 
         {
             weaponHeld = true;
         }
 
-        if (canAttack == true) // If player is able to attack
+        // If player is able to attack
+        if (canAttack == true) 
         {
             if (weaponHeld == true)
             {
@@ -119,7 +134,8 @@ public class PlayerCombat : MonoBehaviour
             }
             else
             {
-                if (Time.time >= nextAttackTime) // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
+                // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
+                if (Time.time >= nextAttackTime)
                 {
                     Attack();
                 }
@@ -129,19 +145,22 @@ public class PlayerCombat : MonoBehaviour
                 if (Time.time >= nextThrowTime)
                 {
                     UnityEngine.Debug.Log("Throw Initiated");
-                    Throw(); // Throw method called
+                    Throw();
                 }
             }
         }
 
-        if (canDefend == true) // If player is able to defend
+        // If player is able to defend 
+        if (canDefend == true)
         {
             if (Input.GetKeyDown(KeyCode.H))
             {
-                pressedTime = Time.time; // Equal to time elapsed
+                // Equal to time elapsed
+                pressedTime = Time.time;               
                 keyHeld = false;
             }
-            else if (Input.GetKeyUp(KeyCode.H)) // Once key has been released, knows that key has been pressed not held
+            // Once key has been released, knows that key has been pressed not held
+            else if (Input.GetKeyUp(KeyCode.H)) 
             {
                 if (keyHeld == false)
                 {
@@ -153,28 +172,32 @@ public class PlayerCombat : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.H))
             {
-                if (Time.time - pressedTime > minHold) // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
+                // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
+                if (Time.time - pressedTime > minHold)
                 {
-                    UnityEngine.Debug.Log("Block Initiated");
-                    Block(); // Block method called
+                    Block();
                     keyHeld = true;
                 }
             }
-            else // Once key has been released then player is no longer blocking and can attack 
+            // Once key has been released then player is no longer blocking and can attack 
+            else
             {
+                parryBox.SetActive(false);
                 blockBox.SetActive(false);
                 this.blocking = false;
                 this.canAttack = true;
             }
         }
-               
-        if (Input.GetKey(KeyCode.LeftShift)) // If LeftShift is held then will call SwitchStyle method
+
+        // If LeftShift is held then will call SwitchStyle method
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             SwitchStyle();
         }
         else
         {
-            Time.timeScale = 1f; // Sets game time back to normal
+            // Sets game time back to normal
+            Time.timeScale = 1f;
         }
     }   
  
@@ -189,13 +212,12 @@ public class PlayerCombat : MonoBehaviour
     }
 
     public void Attack()
-    {
-        // Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackBoxTransform.position, attackRange, enemyLayer);
-        
+    {   
         if (Input.GetButtonDown("lAttack"))
         {
             UnityEngine.Debug.Log("Attack Initiated");
             this.attacking = true;
+            
             // Light attack performed
             foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
             {
@@ -214,6 +236,7 @@ public class PlayerCombat : MonoBehaviour
         {
             UnityEngine.Debug.Log("Attack Initiated");
             this.attacking = true;
+            
             // Heavy attack performed
             foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
             {
@@ -231,6 +254,7 @@ public class PlayerCombat : MonoBehaviour
         attacking = false;
     }
 
+    // Performs a throw attack on the selected enemy, adds a force to the enemy object and deals damage
     public void Throw()
     {
         // Throw feature will be configured here
@@ -244,6 +268,7 @@ public class PlayerCombat : MonoBehaviour
         nextThrowTime = Time.time + 1f / throwRate;
     }
 
+    // Negates all incoming damage from enemies in direction player facing, deals chip damage and stamina to player
     public void Block()
     {
         // Block feature will be configured here
@@ -252,14 +277,19 @@ public class PlayerCombat : MonoBehaviour
         blockBox.SetActive(true);
     }
 
+    // Allows player to parry incoming enemy attacks, player recieves no damage if successful and regains small stamina
     public void Parry()
     {
         // Parry feature will be configured here
+        this.canAttack = false;
+        parryBox.SetActive(true);
     }
 
     public void SwitchStyle()
     {
-        Time.timeScale = 0.5f; // Slows down game time by half
+        // Slows down game time by half
+        Time.timeScale = 0.5f;
+        
         if (Input.GetKeyDown(KeyCode.UpArrow)) {
             fightStyle = "Iron Fist";
             
@@ -302,6 +332,7 @@ public class PlayerCombat : MonoBehaviour
         {
             UnityEngine.Debug.Log("Weapon Attack Initiated");
             this.attacking = true;
+            
             // Light attack performed
             UnityEngine.Debug.Log("Light weapon attack performed");
             nextWAttackTime = Time.time + 1f / wAttackRate;
@@ -310,6 +341,7 @@ public class PlayerCombat : MonoBehaviour
         {
             UnityEngine.Debug.Log("Weapon Attack Initiated");
             this.attacking = true;
+            
             // Heavy attack performed
             UnityEngine.Debug.Log("Heavy weapon attack performed");
             nextWAttackTime = Time.time + 1f / wAttackRate;
@@ -318,6 +350,7 @@ public class PlayerCombat : MonoBehaviour
         {
             UnityEngine.Debug.Log("Weapon Attack Initiated");
             this.attacking = true;
+            
             // Gets the type of the weapon to determine which attack to perform
             UnityEngine.Debug.Log("Unique weapon attack performed");
             nextWAttackTime = Time.time + 1f / wAttackRate;

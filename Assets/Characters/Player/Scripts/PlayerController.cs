@@ -40,13 +40,16 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerPosX = transform.localScale.x;
         playerPosY = transform.localScale.y;
-        dodgeTime = startDodgeTime; // Sets dodgeTime = to 0.1 as default
+        
+        // Following sets dodgeTime = to 0.1 as default
+        dodgeTime = startDodgeTime; 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (canMove == true) // If player able to move
+        // If player able to move
+        if (canMove == true) 
         {
             // Gets raw number value of axis
             vMove = Input.GetAxisRaw("Vertical"); 
@@ -56,7 +59,8 @@ public class PlayerController : MonoBehaviour
                 facingRight = true;
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    if (doubleTapSpeed > Time.time && lastKey == KeyCode.D) // If the defined double tap speed > time elapsed & lastkey pressed = 'D'
+                    // If the defined double tap speed > time elapsed & lastkey pressed = 'D'
+                    if (doubleTapSpeed > Time.time && lastKey == KeyCode.D) 
                     {
                         side = 2;
                         // doubleTapped = true;
@@ -64,19 +68,22 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        doubleTapSpeed = Time.time + 0.3f; // Double tap speed updated to time elapsed + 0.3 seconds
+                        // Double tap speed updated to time elapsed + 0.3 seconds
+                        doubleTapSpeed = Time.time + 0.3f;
                     }
                     lastKey = KeyCode.D;
                 }
             }
-            else if (hMove < 0) // If player moving left as x axis < 0 (-1) means player facing left left
+            // If player moving left as x axis < 0 (-1) means player facing left
+            else if (hMove < 0) 
             {
                 facingRight = false;
                 if (Input.GetKeyDown(KeyCode.A))
                 {
                     if (doubleTapSpeed > Time.time && lastKey == KeyCode.A)
                     {
-                        side = 1; // Indicates left side
+                        // Indicates left side
+                        side = 1;
                         // doubleTapped = true; // Key has been double tapped
                         isDodging = true;
                     }
@@ -84,10 +91,11 @@ public class PlayerController : MonoBehaviour
                     {
                         doubleTapSpeed = Time.time + 0.3f;
                     }
-                    lastKey = KeyCode.A; // Last key pressed is set to A
+                    // Last key pressed is set to A
+                    lastKey = KeyCode.A;
                 }
             }
-            Flip(facingRight); // Flip method runs
+            Flip(facingRight); 
         }
         Action();
     }
@@ -100,15 +108,17 @@ public class PlayerController : MonoBehaviour
         isDodging = false;
         if (canMove == true)
         {
-            Jump(); // Jump method called
+            Jump();
 
-            if (isDodging == false && isRunning == false) // If player not currently dodging or running
+            // If player not currently dodging or running
+            if (isDodging == false && isRunning == false) 
             {
-                rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed); // Player can move, adds velocity to rigidbody
-                                                                           // (val x axis * hSpeed, val y axis * vSpeed)
+                // Player can move, adds velocity to rigidbody (value x axis * hSpeed, value y axis * vSpeed)
+                rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed); 
             }
-            
-            if (Input.GetKey(KeyCode.LeftControl)) // If player wants to sprint
+
+            // If player wants to sprint
+            if (Input.GetKey(KeyCode.LeftControl)) 
             {
                 isRunning = true;
                 Run();
@@ -131,7 +141,8 @@ public class PlayerController : MonoBehaviour
 
     public void Run()
     {
-        rb.velocity = new Vector2(hMove * hRunSpeed, vMove * vRunSpeed); // Similar to normal movement but speed values replaced with run speed values
+        // Similar to normal movement but speed values replaced with run speed values
+        rb.velocity = new Vector2(hMove * hRunSpeed, vMove * vRunSpeed);
     }
 
     public void Dodge()
@@ -161,22 +172,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Action() // Action button can be worked on at later date when items added
+    // Action button can be worked on at later date when items added
+    // Allows for the player to pick up an item on the floor by pressing an input
+    public void Action()
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
             Debug.Log("Player did an action");
         }
-        // Action Button WIP
     }
 
-    public void Flip(bool facingRight) // Takes in bool flag to determine which direction player facing
+    // Takes in bool flag to determine which direction player facing and flips player accordingly
+    public void Flip(bool facingRight) 
     {
         if (facingRight == true) {
             this.transform.localScale = new Vector2(playerPosX, playerPosY);
         }
-        else {
-            this.transform.localScale = new Vector2(-playerPosX, playerPosY); // Flips player on the x axis so it is negative
+        else 
+        {
+            // Flips player on the x axis so it is negative
+            this.transform.localScale = new Vector2(-playerPosX, playerPosY);
         }
     }
 }

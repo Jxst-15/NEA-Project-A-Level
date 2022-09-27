@@ -7,6 +7,10 @@ TagManager:
   - Ground
   - Enemies
   - Weapons
+  - NormalEnemies
+  - BulkyEnemies
+  - NimbleEnemies
+  - BossEnemies
   layers:
   - Default
   - TransparentFX

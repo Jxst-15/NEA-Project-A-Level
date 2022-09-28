@@ -21,8 +21,10 @@ public class EnemyAI : EnemyFSM
     [SerializeField] private int side = 0;
     private float dodgeTime;
 
+    private float distanceFromTarget;
+    private float maxTrackDistance = 14f;
     private float runDistance = 8f;
-    private float attackDistance = 3f;
+    private float attackDistance = 2.5f;
 
     private Rigidbody2D rb;
     #endregion
@@ -38,8 +40,8 @@ public class EnemyAI : EnemyFSM
     {
         if (canMove == true)
         {
-            enemyPosX = transform.localScale.x;
-            enemyPosY = transform.localScale.y;
+            enemyPosX = this.transform.localScale.x;
+            enemyPosY = this.transform.localScale.y;
 
             // Run action method
             
@@ -52,6 +54,7 @@ public class EnemyAI : EnemyFSM
     {
         if (canMove == true)
         {
+            distanceFromTarget = Vector2.Distance(transform.position, target.position);
             switch(TrackPlayer())
             {
                 case 0:
@@ -77,15 +80,15 @@ public class EnemyAI : EnemyFSM
 
     private int TrackPlayer()
     {
-        if (Vector2.Distance(transform.position, target.position) >= runDistance)
+        if (distanceFromTarget >= runDistance && distanceFromTarget < maxTrackDistance)
         {
             return 0;
         }
-        else if (Vector2.Distance(transform.position, target.position) < runDistance && Vector2.Distance(transform.position, target.position) > attackDistance)
+        else if (distanceFromTarget < runDistance && distanceFromTarget > attackDistance)
         {
             return 1;
         }
-        else if (Vector2.Distance(transform.position, target.position)  <= attackDistance)
+        else if (distanceFromTarget  <= attackDistance)
         {
             return 2;
         }
@@ -113,11 +116,11 @@ public class EnemyAI : EnemyFSM
     {
         if (transform.position.x > target.position.x)
         {
-            this.transform.localScale = new Vector2(enemyPosX, enemyPosY);
+            this.transform.localScale = new Vector2(-1.89751f, enemyPosY);
         }
-        else if (transform.position.x <= target.position.x)
+        else
         {
-            this.transform.localScale = new Vector2(-enemyPosX, enemyPosY);
+            this.transform.localScale = new Vector2(1.89751f, enemyPosY);
         }
     }
 }

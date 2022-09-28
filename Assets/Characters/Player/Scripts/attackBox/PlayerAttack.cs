@@ -6,7 +6,6 @@ public class PlayerAttack : MonoBehaviour
 {
     // Following list stores all enemy colliders within attack range
     private List<Collider2D> enemiesHit = new List<Collider2D>();
-    
 
     // When a collider enters the player attack collider trigger box
     void OnTriggerEnter2D(Collider2D enemy)
@@ -40,8 +39,8 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-        Debug.Log("List Returned");
-        return enemiesHit;
+            Debug.Log("List Returned");
+            return enemiesHit;
         }
     }
 }

@@ -222,8 +222,7 @@ public class PlayerCombat : MonoBehaviour
             foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
             {
                 UnityEngine.Debug.Log("Enemy Hit! (L)");
-                // Deal light damage to enemy
-                // Call enemy's take damage method and provide player stats light attack damage as parameter
+                enemy.GetComponent<EnemyStats>().takeDamage(50);
                 comboCount++;
             }
             UnityEngine.Debug.Log("Light attack performed");
@@ -241,8 +240,7 @@ public class PlayerCombat : MonoBehaviour
             foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
             {
                 UnityEngine.Debug.Log("Enemy Hit! (H)");
-                // Deal heavy damage to enemy
-                // Call enemy's take damage method and provide player stats heavy attack damage as parameter
+                enemy.GetComponent<EnemyStats>().takeDamage(75);
                 comboCount++;
             }
             UnityEngine.Debug.Log("Heavy attack performed");
@@ -251,7 +249,7 @@ public class PlayerCombat : MonoBehaviour
             
             nextAttackTime = Time.time + 1f / attackRate;
         }
-        attacking = false;
+        this.attacking = false;
     }
 
     // Performs a throw attack on the selected enemy, adds a force to the enemy object and deals damage

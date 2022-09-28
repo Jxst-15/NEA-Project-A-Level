@@ -190,7 +190,7 @@ public class PlayerController : MonoBehaviour
         }
         else 
         {
-            // Flips player on the x axis so it is negative
+            // Flips player on the x axis so it is negative so player faces left
             this.transform.localScale = new Vector2(-playerPosX, playerPosY);
         }
     }

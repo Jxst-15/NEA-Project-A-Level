@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour
 {
-
     #region Variables
     [SerializeField] private int maxHealth, currentHealth;
 

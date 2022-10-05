@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ICharacterController
 {
     #region Variables 
     [SerializeField] private bool canMove = true;
@@ -53,48 +53,8 @@ public class PlayerController : MonoBehaviour
         {
             // Gets raw number value of axis
             vMove = Input.GetAxisRaw("Vertical"); 
-            hMove = Input.GetAxisRaw("Horizontal");       
-            if (hMove > 0)
-            {
-                facingRight = true;
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    // If the defined double tap speed > time elapsed & lastkey pressed = 'D'
-                    if (doubleTapSpeed > Time.time && lastKey == KeyCode.D) 
-                    {
-                        side = 2;
-                        // doubleTapped = true;
-                        isDodging = true;
-                    }
-                    else
-                    {
-                        // Double tap speed updated to time elapsed + 0.3 seconds
-                        doubleTapSpeed = Time.time + 0.3f;
-                    }
-                    lastKey = KeyCode.D;
-                }
-            }
-            // If player moving left as x axis < 0 (-1) means player facing left
-            else if (hMove < 0) 
-            {
-                facingRight = false;
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    if (doubleTapSpeed > Time.time && lastKey == KeyCode.A)
-                    {
-                        // Indicates left side
-                        side = 1;
-                        // doubleTapped = true; // Key has been double tapped
-                        isDodging = true;
-                    }
-                    else
-                    {
-                        doubleTapSpeed = Time.time + 0.3f;
-                    }
-                    // Last key pressed is set to A
-                    lastKey = KeyCode.A;
-                }
-            }
+            hMove = Input.GetAxisRaw("Horizontal");
+            DoubleTappingMovement();
             Flip(facingRight); 
         }
         Action();
@@ -114,7 +74,7 @@ public class PlayerController : MonoBehaviour
             if (isDodging == false && isRunning == false) 
             {
                 // Player can move, adds velocity to rigidbody (value x axis * hSpeed, value y axis * vSpeed)
-                rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed); 
+                Movement(); 
             }
 
             // If player wants to sprint
@@ -137,6 +97,56 @@ public class PlayerController : MonoBehaviour
             // rb.AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
             // onGround = true;
         }
+    }
+
+    public void DoubleTappingMovement()
+    {
+        if (hMove > 0)
+        {
+            facingRight = true;
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                // If the defined double tap speed > time elapsed & lastkey pressed = 'D'
+                if (doubleTapSpeed > Time.time && lastKey == KeyCode.D)
+                {
+                    side = 2;
+                    // doubleTapped = true;
+                    isDodging = true;
+                }
+                else
+                {
+                    // Double tap speed updated to time elapsed + 0.3 seconds
+                    doubleTapSpeed = Time.time + 0.3f;
+                }
+                lastKey = KeyCode.D;
+            }
+        }
+        // If player moving left as x axis < 0 (-1) means player facing left
+        else if (hMove < 0)
+        {
+            facingRight = false;
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                if (doubleTapSpeed > Time.time && lastKey == KeyCode.A)
+                {
+                    // Indicates left side
+                    side = 1;
+                    // doubleTapped = true; // Key has been double tapped
+                    isDodging = true;
+                }
+                else
+                {
+                    doubleTapSpeed = Time.time + 0.3f;
+                }
+                // Last key pressed is set to A
+                lastKey = KeyCode.A;
+            }
+        }
+    }
+
+    public void Movement()
+    {
+        rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed);
     }
 
     public void Run()

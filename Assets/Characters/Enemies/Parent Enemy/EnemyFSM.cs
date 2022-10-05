@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class EnemyFSM : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public EnemyFSM () : base () 
     {
         FiniteStateMachine EnemyFSM = new FiniteStateMachine();
     }

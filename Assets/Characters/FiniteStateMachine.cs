@@ -37,13 +37,15 @@ public class FiniteStateMachine
         }
     }
 
+    // Will store the transitions for the FSM
     Dictionary<StateTransition, EnemyStates> transitions;
     public EnemyStates currentState { get; private set; }
     public EnemyStates previousState { get; private set; }
 
     public FiniteStateMachine()
     {
-        currentState = EnemyStates.Inactive;
+        currentState = EnemyStates.Active;
+        // Actual transitions
         transitions = new Dictionary<StateTransition, EnemyStates>
         {
             { new StateTransition(EnemyStates.Active, Command.Spawned), EnemyStates.Idle },
@@ -58,6 +60,7 @@ public class FiniteStateMachine
         };
     }
 
+    // Get whichever state is next after transition
     public EnemyStates GetNext(Command command)
     {
         StateTransition transition = new StateTransition(currentState, command);
@@ -68,6 +71,7 @@ public class FiniteStateMachine
         return nextState;
     }
 
+    // Actually moving states 
     public EnemyStates MoveStates(Command command)
     {
         previousState = currentState;

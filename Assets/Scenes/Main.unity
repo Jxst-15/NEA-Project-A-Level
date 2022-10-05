@@ -414,6 +414,7 @@ GameObject:
   - component: {fileID: 313470739}
   - component: {fileID: 313470741}
   - component: {fileID: 313470742}
+  - component: {fileID: 313470743}
   m_Layer: 9
   m_Name: BulkyEnemy
   m_TagString: BulkyEnemies
@@ -613,6 +614,25 @@ MonoBehaviour:
   dodgeSpeed: 35
   startDodgeTime: 0
   side: 0
+--- !u!114 &313470743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313470738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12906c8361992bb489216870023e8ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
+  lDmg: 0
+  hDmg: 0
+  uDmg: 0
+  maxStamina: 0
+  currentStamina: 0
 --- !u!1 &517696842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,8 +1045,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1074082900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5086, y: -0.01724, z: 0}
-  m_LocalScale: {x: 0.01661, y: 1.03448, z: 1}
+  m_LocalPosition: {x: -0.5086, y: -0.00284, z: 0}
+  m_LocalScale: {x: 0.01661, y: 1.0056882, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1559435939}

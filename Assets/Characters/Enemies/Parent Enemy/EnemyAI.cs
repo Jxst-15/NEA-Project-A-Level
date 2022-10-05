@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : EnemyFSM
+public class EnemyAI : MonoBehaviour, ICharacterController
 {
     #region Variables
     [SerializeField] private bool canMove = true;
+    private bool facingRight = false;
 
     public Transform target;
     [SerializeField] private int vSpeed = 2;
@@ -45,17 +46,22 @@ public class EnemyAI : EnemyFSM
 
             // Run action method
             
-            Flip();
+            Flip(facingRight);
         }
         
     }
 
     private void FixedUpdate()
     {
+        Movement();
+    }
+
+    public void Movement()
+    {
         if (canMove == true)
         {
             distanceFromTarget = Vector2.Distance(transform.position, target.position);
-            switch(TrackPlayer())
+            switch (TrackPlayer())
             {
                 case 0:
                     // Make enemy run towards player
@@ -70,12 +76,10 @@ public class EnemyAI : EnemyFSM
                     // Also random chance of dodging whenever player attacks
                     break;
                 case -1:
-                    // Debug.Log("Enemy out of range");
                     // Enemy will stand still waiting for player to get in range
                     break;
             }
         }
-        
     }
 
     private int TrackPlayer()
@@ -97,22 +101,22 @@ public class EnemyAI : EnemyFSM
     }
 
     // Method to make enemy run towards player
-    private void Run()
+    public void Run()
     {
         transform.position = Vector2.MoveTowards(transform.position, target.position, hRunSpeed * Time.deltaTime);
     }
 
-    private void Dodge()
+    public void Dodge()
     {
         // Method to make enemy randomly dodge when player is attacking 
     }
 
-    private void Action()
+    public void Action()
     {
         // Method to make enemy randomly pick up item whenever near one
     }
 
-    public void Flip()
+    public void Flip(bool facingRight)
     {
         if (transform.position.x > target.position.x)
         {

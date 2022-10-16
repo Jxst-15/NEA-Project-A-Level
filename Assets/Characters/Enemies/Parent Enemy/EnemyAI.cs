@@ -6,7 +6,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
 {
     #region Variables
     [SerializeField] private bool canMove = true;
-    private bool facingRight = false;
+    private bool notNeeded = false;
 
     public Transform target;
     [SerializeField] private int vSpeed = 2;
@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     // Start is called before the first frame update
     void Start()
     {      
+        // Finds the target by searching for its given tag "Player" and gets the Transform component 
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
@@ -46,7 +47,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
 
             // Run action method
             
-            Flip(facingRight);
+            Flip(notNeeded);
         }
         
     }
@@ -56,6 +57,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
         Movement();
     }
 
+    // Actually moving this object towards the target
     public void Movement()
     {
         if (canMove == true)
@@ -82,6 +84,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
         }
     }
 
+    // Determining the distance between this object and the player
     private int TrackPlayer()
     {
         if (distanceFromTarget >= runDistance && distanceFromTarget < maxTrackDistance)
@@ -106,17 +109,20 @@ public class EnemyAI : MonoBehaviour, ICharacterController
         transform.position = Vector2.MoveTowards(transform.position, target.position, hRunSpeed * Time.deltaTime);
     }
 
+    // Method to make enemy randomly dodge when player is attacking 
     public void Dodge()
     {
-        // Method to make enemy randomly dodge when player is attacking 
+
     }
 
+    // Method to make enemy randomly pick up item whenever near one
     public void Action()
     {
-        // Method to make enemy randomly pick up item whenever near one
+
     }
 
-    public void Flip(bool facingRight)
+    // Flips game object depending on the direction the player is
+    public void Flip(bool notNeeded)
     {
         if (transform.position.x > target.position.x)
         {

@@ -79,6 +79,23 @@ public class EnemyStats : MonoBehaviour
     }
     #endregion
 
+    public void decCurrentHealth(int h)
+    {
+        currentHealth -= h;
+    }
+
+    public void affectCurrentStamina (int stam, string incOrDec)
+    {
+        if (incOrDec == "Decrease")
+        {
+            currentStamina -= stam;
+        }
+        else if (incOrDec == "Increase")
+        {
+            currentStamina += stam;
+        }
+    }
+
     public void takeDamage(int dmg)
     {
         // currentHealth is affected by the damage given as the parameter

@@ -1,19 +1,16 @@
 using System.Diagnostics;
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombat : MonoBehaviour, ICharacterCombat
 {
     #region Variables
     // Following is a weapon that has been picked up
     [SerializeField] private GameObject weapon;
-    
-    public GameObject attackBox;
-    public GameObject blockBox;
-    public GameObject parryBox;
+
+    public GameObject attackBox, blockBox, parryBox;
     
     // LayerMasks help to identify which objects can be hit
-    public LayerMask enemyLayer;
-    public LayerMask hittableObject;
+    public LayerMask enemyLayer, hittableObject;
 
     public PlayerAttack playerAttack; 
     public PlayerBlock playerBlock; 
@@ -21,11 +18,11 @@ public class PlayerCombat : MonoBehaviour
     private float nextWAttackTime = 0f;
     private const float wAttackRate = 2f;
 
-    [SerializeField] private float attackRange = 1.5f;
-    [SerializeField] private int attackCount = 0;
-    private float nextAttackTime = 0f;
+    [SerializeField] private float attackRange;
+    [SerializeField] private int attackCount;
+    private float nextAttackTime;
 
-    private int combatTime = 3;
+    private int comboTime;
     
     // How many attacks player has performed without getting hit (Field)
     private int comboCount;
@@ -33,13 +30,12 @@ public class PlayerCombat : MonoBehaviour
     // 0.5s, time which is needed for a parry to be valid
     private const float parryDelay = 0.5f;
     
-    private float throwRate = 0.3f;
-    private float nextThrowTime = 0f;
+    private float throwRate, nextThrowTime;
 
     // For determining whether 'H' is being held or pressed
     private const float minHold = 0.2f;
-    private float pressedTime = 0f;
-    private bool keyHeld = false;
+    private float pressedTime;
+    private bool keyHeld;
     
     private float tapSpeed;
     KeyCode lastKey;
@@ -47,19 +43,14 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private string fightStyle;
 
     // Variables for decreasing stat factors
-    [SerializeField] private int stamDecLAttack;
-    [SerializeField] private int stamDecHAttack;
-    [SerializeField] private int stamDecWUAttack;
-    [SerializeField] private int stamDecThrow;
-    [SerializeField] private int stamIncParry;
+    [SerializeField] private int stamDecLAttack, stamDecHAttack, stamDecWUAttack, stamDecThrow, stamIncParry;
+    #endregion
+
+    #region Getters and Setters
     [SerializeField] private int stamDecBlock
     { get; set; }
     [SerializeField] private int healthDecBlock
     { get; set; }
-    #endregion
-
-    #region Getters and Setters
-
     // Property to get and reset the combo count
     private int _comboCount 
     {
@@ -94,9 +85,21 @@ public class PlayerCombat : MonoBehaviour
         blockBox.SetActive(false);
         parryBox.SetActive(false);
 
-        this.canAttack = true;
-        this.canDefend = true;
-        this.blocking = false;
+        canAttack = true;
+        canDefend = true;
+        blocking = false;
+
+        attackRange = 1.5f;
+        attackCount = 0;
+        nextAttackTime = 0f;
+
+        comboTime = 3;
+
+        throwRate = 0.3f;
+        nextThrowTime = 0f;
+
+        pressedTime = 0f;
+        keyHeld = false;
 
         fightStyle = "Iron Fist";
         
@@ -109,6 +112,8 @@ public class PlayerCombat : MonoBehaviour
         stamDecBlock = 10;
         stamIncParry = 20;
         healthDecBlock = 4;
+
+        weaponHeld = false;
     }
 
     // Update is called once per frame
@@ -127,26 +132,16 @@ public class PlayerCombat : MonoBehaviour
         {
             if (weaponHeld == true)
             {
-                if (Time.time >= nextWAttackTime)
-                {
-                    WeaponAttack();
-                }
+                WeaponAttack();
             }
             else
             {
-                // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
-                if (Time.time >= nextAttackTime)
-                {
-                    Attack();
-                }
+                Attack();
             }
             if (Input.GetKeyDown(KeyCode.I))      
             {
-                if (Time.time >= nextThrowTime)
-                {
-                    UnityEngine.Debug.Log("Throw Initiated");
-                    Throw();
-                }
+                UnityEngine.Debug.Log("Throw Initiated");
+                Throw();
             }
         }
 
@@ -184,8 +179,8 @@ public class PlayerCombat : MonoBehaviour
             {
                 parryBox.SetActive(false);
                 blockBox.SetActive(false);
-                this.blocking = false;
-                this.canAttack = true;
+                blocking = false;
+                canAttack = true;
             }
         }
 
@@ -203,7 +198,7 @@ public class PlayerCombat : MonoBehaviour
  
     public void ResetComboCount()
     {
-        this.comboCount = 0;
+        comboCount = 0;
     }
 
     public void ComboMeter()
@@ -212,66 +207,73 @@ public class PlayerCombat : MonoBehaviour
     }
 
     public void Attack()
-    {   
-        if (Input.GetButtonDown("lAttack"))
+    {
+        // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
+        if (Time.time >= nextAttackTime)
         {
-            UnityEngine.Debug.Log("Attack Initiated");
-            this.attacking = true;
-            
-            // Light attack performed
-            foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
+            if (Input.GetButtonDown("lAttack"))
             {
-                UnityEngine.Debug.Log("Enemy Hit! (L)");
-                enemy.GetComponent<EnemyStats>().takeDamage(50);
-                comboCount++;
+                UnityEngine.Debug.Log("Attack Initiated");
+                attacking = true;
+
+                // Light attack performed
+                foreach (Collider2D enemy in playerAttack.GetEnemiesHit())
+                {
+                    UnityEngine.Debug.Log("Enemy Hit! (L)");
+                    enemy.GetComponent<EnemyStats>().takeDamage(50);
+                    comboCount++;
+                }
+                UnityEngine.Debug.Log("Light attack performed");
+                // Decrease current stamina by stamDecLAttack
+                attackCount++;
+
+                nextAttackTime = Time.time + 1f / attackRate;
             }
-            UnityEngine.Debug.Log("Light attack performed");
-            // Decrease current stamina by stamDecLAttack
-            attackCount++;
-            
-            nextAttackTime = Time.time + 1f / attackRate;
-        }
-        else if (Input.GetButtonDown("hAttack"))
-        {
-            UnityEngine.Debug.Log("Attack Initiated");
-            this.attacking = true;
-            
-            // Heavy attack performed
-            foreach(Collider2D enemy in playerAttack.GetEnemiesHit())
+            else if (Input.GetButtonDown("hAttack"))
             {
-                UnityEngine.Debug.Log("Enemy Hit! (H)");
-                enemy.GetComponent<EnemyStats>().takeDamage(75);
-                comboCount++;
+                UnityEngine.Debug.Log("Attack Initiated");
+                attacking = true;
+
+                // Heavy attack performed
+                foreach (Collider2D enemy in playerAttack.GetEnemiesHit())
+                {
+                    UnityEngine.Debug.Log("Enemy Hit! (H)");
+                    enemy.GetComponent<EnemyStats>().takeDamage(75);
+                    comboCount++;
+                }
+                UnityEngine.Debug.Log("Heavy attack performed");
+                // Decrease current stamina by stamDecHAttack
+                attackCount++;
+
+                nextAttackTime = Time.time + 1f / attackRate;
             }
-            UnityEngine.Debug.Log("Heavy attack performed");
-            // Decrease current stamina by stamDecHAttack
-            attackCount++;
-            
-            nextAttackTime = Time.time + 1f / attackRate;
         }
-        this.attacking = false;
+        attacking = false;
     }
 
     // Performs a throw attack on the selected enemy, adds a force to the enemy object and deals damage
     public void Throw()
     {
-        // Throw feature will be configured here
-        this.throwing = true;
-        this.attacking = true;
-        // Throw attack performed
-        // Add force to enemy rigid body 
-        UnityEngine.Debug.Log("Throw attack performed");
-        this.attacking = false;
-        
-        nextThrowTime = Time.time + 1f / throwRate;
+        if (Time.time >= nextThrowTime)
+        {
+            // Throw feature will be configured here
+            throwing = true;
+            attacking = true;
+            // Throw attack performed
+            // Add force to enemy rigid body 
+            UnityEngine.Debug.Log("Throw attack performed");
+            attacking = false;
+
+            nextThrowTime = Time.time + 1f / throwRate;
+        }
     }
 
     // Negates all incoming damage from enemies in direction player facing, deals chip damage and stamina to player
     public void Block()
     {
         // Block feature will be configured here
-        this.blocking = true;
-        this.canAttack = false;
+        blocking = true;
+        canAttack = false;
         blockBox.SetActive(true);
     }
 
@@ -279,7 +281,7 @@ public class PlayerCombat : MonoBehaviour
     public void Parry()
     {
         // Parry feature will be configured here
-        this.canAttack = false;
+        canAttack = false;
         parryBox.SetActive(true);
     }
 
@@ -325,33 +327,36 @@ public class PlayerCombat : MonoBehaviour
 
     public void WeaponAttack()
     {
-        // Weapon attack feature will be configured here
-        if (Input.GetButtonDown("lAttack"))
+        if (Time.time >= nextWAttackTime)
         {
-            UnityEngine.Debug.Log("Weapon Attack Initiated");
-            this.attacking = true;
-            
-            // Light attack performed
-            UnityEngine.Debug.Log("Light weapon attack performed");
-            nextWAttackTime = Time.time + 1f / wAttackRate;
-        }
-        else if (Input.GetButtonDown("hAttack"))
-        {
-            UnityEngine.Debug.Log("Weapon Attack Initiated");
-            this.attacking = true;
-            
-            // Heavy attack performed
-            UnityEngine.Debug.Log("Heavy weapon attack performed");
-            nextWAttackTime = Time.time + 1f / wAttackRate;
-        }
-        else if (Input.GetKeyDown(KeyCode.L))
-        {
-            UnityEngine.Debug.Log("Weapon Attack Initiated");
-            this.attacking = true;
-            
-            // Gets the type of the weapon to determine which attack to perform
-            UnityEngine.Debug.Log("Unique weapon attack performed");
-            nextWAttackTime = Time.time + 1f / wAttackRate;
+            // Weapon attack feature will be configured here
+            if (Input.GetButtonDown("lAttack"))
+            {
+                UnityEngine.Debug.Log("Weapon Attack Initiated");
+                attacking = true;
+
+                // Light attack performed
+                UnityEngine.Debug.Log("Light weapon attack performed");
+                nextWAttackTime = Time.time + 1f / wAttackRate;
+            }
+            else if (Input.GetButtonDown("hAttack"))
+            {
+                UnityEngine.Debug.Log("Weapon Attack Initiated");
+                attacking = true;
+
+                // Heavy attack performed
+                UnityEngine.Debug.Log("Heavy weapon attack performed");
+                nextWAttackTime = Time.time + 1f / wAttackRate;
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
+            {
+                UnityEngine.Debug.Log("Weapon Attack Initiated");
+                attacking = true;
+
+                // Gets the type of the weapon to determine which attack to perform
+                UnityEngine.Debug.Log("Unique weapon attack performed");
+                nextWAttackTime = Time.time + 1f / wAttackRate;
+            }
         }
     }
 }

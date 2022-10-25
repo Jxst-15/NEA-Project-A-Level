@@ -6,6 +6,6 @@ public interface ICharacterController
     void Run();
     void Dodge();
     void Action();
-    void Flip(bool value);
+    void Flip(bool value, float posX, float posY);
 }
 

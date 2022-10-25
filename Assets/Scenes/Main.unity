@@ -413,15 +413,17 @@ GameObject:
   - component: {fileID: 313470740}
   - component: {fileID: 313470739}
   - component: {fileID: 313470744}
+  - component: {fileID: 313470745}
   - component: {fileID: 313470742}
   - component: {fileID: 313470743}
+  - component: {fileID: 313470746}
   m_Layer: 9
   m_Name: BulkyEnemy
   m_TagString: BulkyEnemies
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &313470739
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -496,13 +498,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313470738}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c851ada9bc4e98a4b87d8e82a6140583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
-  target: {fileID: 0}
+  targetPos: {fileID: 0}
   vSpeed: 1
   hSpeed: 2
   vRunSpeed: 3
@@ -557,6 +559,46 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.21, y: 2.62}
   m_EdgeRadius: 0
+--- !u!114 &313470745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313470738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19847e10cb7dcc49be4bee820b15b54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &313470746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313470738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b30c8316a4b62c4e8b87ad2ad0b2876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
+  attackBox: {fileID: 0}
+  blockBox: {fileID: 0}
+  parryBox: {fileID: 0}
+  hittableObject:
+    serializedVersion: 2
+    m_Bits: 0
+  enemyAttack: {fileID: 0}
+  attackRange: 0
+  attackCount: 0
+  stamDecLAttack: 0
+  stamDecHAttack: 0
+  stamDecUAttack: 0
+  stamDecWUAttack: 0
+  stamDecThrow: 0
+  stamIncParry: 0
 --- !u!1 &517696842
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,8 +610,10 @@ GameObject:
   - component: {fileID: 517696844}
   - component: {fileID: 517696843}
   - component: {fileID: 517696849}
+  - component: {fileID: 517696850}
   - component: {fileID: 517696847}
   - component: {fileID: 517696848}
+  - component: {fileID: 517696851}
   m_Layer: 9
   m_Name: NormalEnemy
   m_TagString: NormalEnemies
@@ -640,7 +684,8 @@ Transform:
   m_LocalPosition: {x: 6.95, y: -4.64, z: 0.39922184}
   m_LocalScale: {x: -1.89751, y: 1.89751, z: 1.89751}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1595549132}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -657,7 +702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMove: 1
-  target: {fileID: 0}
+  targetPos: {fileID: 0}
   vSpeed: 2
   hSpeed: 3
   vRunSpeed: 4
@@ -712,6 +757,46 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2008731, y: 2.625991}
   m_EdgeRadius: 0
+--- !u!114 &517696850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517696842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19847e10cb7dcc49be4bee820b15b54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &517696851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517696842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b30c8316a4b62c4e8b87ad2ad0b2876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
+  attackBox: {fileID: 0}
+  blockBox: {fileID: 0}
+  parryBox: {fileID: 0}
+  hittableObject:
+    serializedVersion: 2
+    m_Bits: 1024
+  enemyAttack: {fileID: 0}
+  attackRange: 0
+  attackCount: 0
+  stamDecLAttack: 0
+  stamDecHAttack: 0
+  stamDecUAttack: 0
+  stamDecWUAttack: 0
+  stamDecThrow: 0
+  stamIncParry: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1878,6 +1963,64 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1.1888984, y: 2.5820134}
+  m_EdgeRadius: 0
+--- !u!1 &1595549131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595549132}
+  - component: {fileID: 1595549133}
+  m_Layer: 8
+  m_Name: attackBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1595549132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595549131}
+  m_LocalRotation: {x: -0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.753, y: 1.4000003, z: -0.02575003}
+  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 517696844}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1595549133
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595549131}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.22405368, y: 0.37273738}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.8070023, y: 0.30328757}
   m_EdgeRadius: 0
 --- !u!1 &1633175162
 GameObject:

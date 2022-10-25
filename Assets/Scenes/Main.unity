@@ -782,7 +782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
-  attackBox: {fileID: 0}
+  attackBox: {fileID: 1595549131}
   blockBox: {fileID: 0}
   parryBox: {fileID: 0}
   hittableObject:

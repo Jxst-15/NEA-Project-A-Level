@@ -2,14 +2,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(EnemyStats))]
 [RequireComponent(typeof(EnemyAI))]
-// [RequireComponent(typeof(EnemyCombat))]
+[RequireComponent(typeof(EnemyCombat))]
 
 public class EnemyScript : MonoBehaviour
 {
     #region Script References
-    EnemyStats enemyStats;
-    EnemyAI enemyAI;
-    // EnemyCombat enemyCombat;
+    protected EnemyStats enemyStats;
+    protected EnemyAI enemyAI;
+    protected EnemyCombat enemyCombat;
     #endregion
 
     #region Variables 
@@ -30,13 +30,13 @@ public class EnemyScript : MonoBehaviour
 
         enemyStats = GetComponent<EnemyStats>();
         enemyAI = GetComponent<EnemyAI>();
-        // enemyCombat = GetComponent<EnemyCombat>();
+        enemyCombat = GetComponent<EnemyCombat>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-    
+
     }
 
     // Update is called once per frame

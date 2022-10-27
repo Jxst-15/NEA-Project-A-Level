@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyAI : EnemyScript, ICharacterController
 {
     #region Variables
-    [SerializeField] private bool canMove = true;
     private const bool notNeeded = false;
+    [SerializeField] private bool canMove = true;
 
     public Transform targetPos;
     [SerializeField] private int vSpeed = 2;
@@ -28,6 +28,11 @@ public class EnemyAI : EnemyScript, ICharacterController
     private float attackDistance = 2.5f;
 
     private Rigidbody2D rb;
+    #endregion
+
+    #region Getters and Setters
+    [SerializeField] public bool inRange
+    { get; set; }
     #endregion
 
     // Start is called before the first frame update
@@ -77,18 +82,22 @@ public class EnemyAI : EnemyScript, ICharacterController
             {
                 case 0:
                     // Make enemy run towards player
+                    inRange = false;
                     Run();
                     break;
                 case 1:
                     // Make enemy walk towards player
+                    inRange = false;
                     transform.position = Vector2.MoveTowards(transform.position, targetPos.position, hSpeed * Time.deltaTime);
                     break;
                 case 2:
                     // Enemy in attack range, make enemy attack and stop moving
+                    inRange = true;
                     // Also random chance of dodging whenever player attacks
                     break;
                 case -1:
                     // Enemy will stand still waiting for player to get in range
+                    inRange = false;
                     break;
             }
         }

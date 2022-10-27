@@ -19,6 +19,9 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     public LayerMask hittableObject;
 
     public EnemyAttack enemyAttack;
+    
+    // 0.5s, time which is needed for a parry to be valid
+    private const float parryDelay = 0.5f;
 
     private float nextWAttackTime = 0f;
     private const float wAttackRate = 2f;
@@ -28,8 +31,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     [SerializeField] private int attackCount;
     private float nextAttackTime;
 
-    // 0.5s, time which is needed for a parry to be valid
-    private const float parryDelay = 0.5f;
+    private float uaRate, nextUATime;
 
     private float throwRate, nextThrowTime;
 
@@ -75,12 +77,15 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
 
         attackRange = 1.5f;
         attackCount = 0;
+        attackRate = 2;
         nextAttackTime = 0f;
+
+        uaRate = 0.1f;
+        nextUATime = 0f;
 
         throwRate = 0.3f;
         nextThrowTime = 0f;
 
-        attackRate = 2;
 
         stamDecLAttack = 15;
         stamDecHAttack = 20;
@@ -98,29 +103,32 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     // Update is called once per frame
     void Update()
     {
-        randNum = 0;
-        randNum = Random.Range(1, 11);
-        if (weapon != null && weapon.tag == "Weapons")
+        if (enemyAI.inRange == true)
         {
-            weaponHeld = true;
-        }
+            randNum = 0;
+            randNum = Random.Range(1, 11);
+            if (weapon != null && weapon.tag == "Weapons")
+            {
+                weaponHeld = true;
+            }
 
-        if (canAttack == true && canDefend == true)
-        {
-            if (1 <= randNum && randNum <= 7)
+            if (canAttack == true && canDefend == true && weaponHeld == false)
             {
-                // Attack methods
-                Attack();
-            }
-            else if (randNum == 8 || randNum == 9)
-            {
-                // Block method
-                Block();
-            }
-            else if (randNum == 10)
-            {
-                // Parry Method
-                Parry();
+                if (1 <= randNum && randNum <= 7)
+                {
+                    // Attack methods
+                    Attack();
+                }
+                else if (randNum == 8 || randNum == 9 && targetAttackStatus.attacking == true)
+                {
+                    // Block method
+                    Block();
+                }
+                else if (randNum == 10 && targetAttackStatus.parryable == true)
+                {
+                    // Parry Method
+                    Parry();
+                }
             }
         }
     }
@@ -135,8 +143,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
             if (1 <= randNum && randNum <= 6)
             {
                 // Light attack
-                Debug.Log("(E) Light attack performed");
-                
+                Debug.Log("(E) Light attack performed");     
             }
             else if (randNum == 7 || randNum == 8)
             {
@@ -160,7 +167,11 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
 
     public void UnblockableAttack()
     {
-        Debug.Log("(E) Unblockable attack performed");
+        if (Time.time >= nextUATime)
+        {
+            Debug.Log("(E) Unblockable attack performed");
+            nextUATime = Time.time + 1f / uaRate;
+        }
     }
 
     public void Throw()
@@ -168,6 +179,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
         if (Time.time >= nextThrowTime)
         {
             Debug.Log("(E) Throw attack performed");
+            nextThrowTime = Time.time + 1f / throwRate;
         }
     }
 

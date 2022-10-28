@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour, ICharacterCombat
 {
+    #region Script References
+    public PlayerStats stats;
+    #endregion
+
     #region Variables
     // Following is a weapon that has been picked up
     [SerializeField] private GameObject weapon;
@@ -10,7 +14,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     public GameObject attackBox, blockBox, parryBox;
     
     // LayerMasks help to identify which objects can be hit
-    public LayerMask enemyLayer, hittableObject;
+    public LayerMask enemyLayer, canHit;
 
     public PlayerAttack playerAttack; 
     public PlayerBlock playerBlock; 
@@ -78,6 +82,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     // Start is called before the first frame update
     void Start()
     {
+        stats = GetComponent<PlayerStats>();
+
         // Gets the PlayerAttack script from the attackBox GameObject
         playerAttack = attackBox.GetComponent<PlayerAttack>(); 
         
@@ -145,7 +151,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             }
             if (Input.GetKeyDown(KeyCode.I))      
             {
-                UnityEngine.Debug.Log("Throw Initiated");
                 Throw();
             }
         }
@@ -218,15 +223,14 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         {
             if (Input.GetButtonDown("lAttack"))
             {
-                UnityEngine.Debug.Log("Attack Initiated");
                 attacking = true;
                 parryable = true;
 
                 // Light attack performed
-                foreach (Collider2D enemy in playerAttack.GetEnemiesHit())
+                foreach (Collider2D hittableObj in playerAttack.GetObjectsHit())
                 {
-                    UnityEngine.Debug.Log("Enemy Hit! (L)");
-                    enemy.GetComponent<EnemyStats>().takeDamage(50);
+                    UnityEngine.Debug.Log("Object Hit! (L)");
+                    hittableObj.GetComponent<EnemyStats>().takeDamage(stats.lDmg);
                     comboCount++;
                 }
                 UnityEngine.Debug.Log("Light attack performed");
@@ -234,18 +238,18 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                 attackCount++;
 
                 nextAttackTime = Time.time + 1f / attackRate;
+                UnityEngine.Debug.Log("Next attack time is in " + nextAttackTime);
             }
             else if (Input.GetButtonDown("hAttack"))
             {
-                UnityEngine.Debug.Log("Attack Initiated");
                 attacking = true;
                 parryable = true;
 
                 // Heavy attack performed
-                foreach (Collider2D enemy in playerAttack.GetEnemiesHit())
+                foreach (Collider2D hittableObj in playerAttack.GetObjectsHit())
                 {
-                    UnityEngine.Debug.Log("Enemy Hit! (H)");
-                    enemy.GetComponent<EnemyStats>().takeDamage(75);
+                    UnityEngine.Debug.Log("Object Hit! (H)");
+                    hittableObj.GetComponent<EnemyStats>().takeDamage(stats.hDmg);
                     comboCount++;
                 }
                 UnityEngine.Debug.Log("Heavy attack performed");
@@ -253,6 +257,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                 attackCount++;
 
                 nextAttackTime = Time.time + 1f / attackRate;
+                UnityEngine.Debug.Log("Next attack time is in " + nextAttackTime);
             }
         }
         attacking = false;
@@ -300,6 +305,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         
         if (Input.GetKeyDown(KeyCode.UpArrow)) {
             fightStyle = "Iron Fist";
+            stats.lDmg = 50;
+            stats.lDmg = 75;
             
             attackRate = 2;
             
@@ -311,6 +318,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
             fightStyle = "Boulder Style";
+            stats.lDmg = 70;
+            stats.hDmg = 95;
 
             attackRate = 1f;
 
@@ -322,6 +331,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow)) {
             fightStyle = "Grass Style";
+            stats.lDmg = 30;
+            stats.hDmg = 55;
 
             attackRate = 3f;
 

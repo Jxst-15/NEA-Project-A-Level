@@ -79,11 +79,6 @@ public class EnemyStats : EnemyScript
     }
     #endregion
 
-    public void decCurrentHealth(int h)
-    {
-        currentHealth -= h;
-    }
-
     public void affectCurrentStamina (int stam, string incOrDec)
     {
         if (incOrDec == "Decrease")

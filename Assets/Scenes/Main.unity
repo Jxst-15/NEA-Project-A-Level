@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 308243319}
   - component: {fileID: 308243318}
   - component: {fileID: 308243317}
+  - component: {fileID: 308243323}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -240,6 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0435a7412a34f540855fbc4354d0d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 0}
   weapon: {fileID: 0}
   attackBox: {fileID: 707379911}
   blockBox: {fileID: 1549039188}
@@ -247,9 +249,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
-  hittableObject:
+  canHit:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   playerAttack: {fileID: 707379914}
   playerBlock: {fileID: 0}
   attackRange: 1.5
@@ -402,6 +404,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &308243323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308243316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7baae4fd9f03b2746952a586084cc825, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
+  maxStamina: 0
+  currentStamina: 0
 --- !u!1 &313470738
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,7 +910,7 @@ GameObject:
   - component: {fileID: 707379913}
   - component: {fileID: 707379912}
   - component: {fileID: 707379914}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: attackBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1096,6 +1114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0435a7412a34f540855fbc4354d0d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 0}
   weapon: {fileID: 0}
   attackBox: {fileID: 1776570332}
   blockBox: {fileID: 2112129201}
@@ -1103,9 +1122,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
-  hittableObject:
+  canHit:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   playerAttack: {fileID: 1776570333}
   playerBlock: {fileID: 0}
   attackRange: 1.5
@@ -1661,7 +1680,7 @@ GameObject:
   - component: {fileID: 1549039189}
   - component: {fileID: 1549039190}
   - component: {fileID: 1549039191}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: blockBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1974,7 +1993,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1595549132}
   - component: {fileID: 1595549133}
-  m_Layer: 8
+  - component: {fileID: 1595549134}
+  m_Layer: 0
   m_Name: attackBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2022,6 +2042,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8070023, y: 0.30328757}
   m_EdgeRadius: 0
+--- !u!114 &1595549134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595549131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8c82d226420554d8ac2b17b9db9439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1633175162
 GameObject:
   m_ObjectHideFlags: 0
@@ -2188,7 +2220,7 @@ GameObject:
   - component: {fileID: 1915963555}
   - component: {fileID: 1915963554}
   - component: {fileID: 1915963553}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: parryBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2258,7 +2290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2055731182}
   - component: {fileID: 2055731183}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: hitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

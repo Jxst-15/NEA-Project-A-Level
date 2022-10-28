@@ -6,14 +6,15 @@ public class PlayerStats : MonoBehaviour
 {
     #region Variables
     [SerializeField] private int maxHealth, currentHealth;
-
-    [SerializeField] private int lDmg, hDmg;
-    
     [SerializeField] private int maxStamina, currentStamina;
     #endregion
 
     #region Getters and Setters
-    [SerializeField] public bool dead
+    public int lDmg
+    { get; set; }
+    public int hDmg
+    { set; get; }
+    public bool dead
     { get; set; }
     #endregion
     // Start is called before the first frame update
@@ -50,26 +51,21 @@ public class PlayerStats : MonoBehaviour
         currentHealth = h;
     }
 
-    public void setLDmg(int dmg)
-    {
-        lDmg = dmg;
-    }
+    //public void setLDmg(int dmg)
+    //{
+    //    lDmg = dmg;
+    //}
 
-    public void setHDmg(int dmg)
-    {
-        hDmg = dmg;
-    }
+    //public void setHDmg(int dmg)
+    //{
+    //    hDmg = dmg;
+    //}
 
     public void setCurrentStamina(int stam)
     {
         currentStamina = stam;
     }
     #endregion
-
-    public void decCurrentHealth(int h)
-    {
-        currentHealth -= h;
-    }
 
     public void affectCurrentStamima(int stam, string incOrDec) 
     {

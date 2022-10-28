@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttack : EnemyCombat
+public class EnemyAttack : MonoBehaviour
 {
     private List<Collider2D> objectsHit = new List<Collider2D>();
 
@@ -12,6 +12,7 @@ public class EnemyAttack : EnemyCombat
         //{
         //    objectsHit.Add(player);
         //}
+        Debug.Log("Player entered attack box");
     }
 
     void OnTriggerExit2D(Collider2D player)
@@ -20,6 +21,7 @@ public class EnemyAttack : EnemyCombat
         //{
         //    objectsHit.Remove(player);
         //}
+        Debug.Log("Player exited attack box");
     }
 
     //public List<Collider2D> GetObjectsHit()

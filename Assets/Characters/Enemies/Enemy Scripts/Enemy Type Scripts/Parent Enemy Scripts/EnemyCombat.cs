@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyCombat : EnemyScript, ICharacterCombat
 {
-    #region Script References
+    #region Player Script References
     protected PlayerCombat targetAttackStatus;
     protected PlayerStats targetStats;
     #endregion
@@ -105,6 +105,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     {
         if (enemyAI.inRange == true)
         {
+            attackBox.SetActive(true);
             randNum = 0;
             randNum = Random.Range(1, 11);
             if (weapon != null && weapon.tag == "Weapons")
@@ -131,24 +132,27 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
                 }
             }
         }
+        else
+        {
+            attackBox.SetActive(false);
+        }
     }
 
     public void Attack()
     {
         if (Time.time >= nextAttackTime)
         {
-            attackBox.SetActive(true);
             attacking = true;
             randNum = Random.Range(1, 11);
             if (1 <= randNum && randNum <= 6)
             {
                 // Light attack
-                Debug.Log("(E) Light attack performed");     
+                // Debug.Log("(E) Light attack performed");     
             }
             else if (randNum == 7 || randNum == 8)
             {
                 // Heavy attack
-                Debug.Log("(E) Heavy attack performed");
+                // Debug.Log("(E) Heavy attack performed");
             }
             else if (randNum == 9)
             {
@@ -161,7 +165,6 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
                 Throw();
             }
             nextAttackTime = Time.time + 1f / attackRate;
-            attackBox.SetActive(false);
         }
     }
 
@@ -169,7 +172,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     {
         if (Time.time >= nextUATime)
         {
-            Debug.Log("(E) Unblockable attack performed");
+            // Debug.Log("(E) Unblockable attack performed");
             nextUATime = Time.time + 1f / uaRate;
         }
     }
@@ -178,7 +181,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     {
         if (Time.time >= nextThrowTime)
         {
-            Debug.Log("(E) Throw attack performed");
+            // Debug.Log("(E) Throw attack performed");
             nextThrowTime = Time.time + 1f / throwRate;
         }
     }

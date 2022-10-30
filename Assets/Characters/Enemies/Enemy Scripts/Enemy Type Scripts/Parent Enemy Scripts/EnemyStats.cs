@@ -6,14 +6,18 @@ public class EnemyStats : EnemyScript
 {
     #region Variables
     [SerializeField] private int maxHealth, currentHealth;
-
-    [SerializeField] private int lDmg, hDmg, uDmg;
     
     [SerializeField] private int maxStamina, currentStamina;
     #endregion
 
     #region Getters and Setters
-    [SerializeField] public bool dead
+    public int lDmg
+    { get; set; }
+    public int hDmg
+    { get; set; }
+    public int uDmg
+    { get; set; }
+    public bool dead
     { get; set; }
     #endregion
 
@@ -105,7 +109,7 @@ public class EnemyStats : EnemyScript
     {
         dead = true;
         // Disable the game object 
-        this.enabled = false;
+        gameObject.SetActive(false);
         // Destroy the game object helps to manage memory and declutter screen
         Destroy(gameObject);
         Debug.Log("Enemy Died");

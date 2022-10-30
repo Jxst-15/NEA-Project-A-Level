@@ -10,27 +10,27 @@ public class PlayerAttack : MonoBehaviour
     // When a collider enters the player attack collider trigger box
     void OnTriggerEnter2D(Collider2D hittableObj)
     {
-        if (!objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (!objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Enemy") || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit")) 
         {
             objectsHit.Add(hittableObj);
-            // Debug.Log("Object added to list");
+            // Debug.Log("Object added to list (P)");
         }
     }
 
     // When a collider exits the player attack collider trigger box
     void OnTriggerExit2D(Collider2D hittableObj)
     {
-        if (objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Enemy") || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit"))
         {
             objectsHit.Remove(hittableObj);
-            // Debug.Log("Object removed from list");
+            // Debug.Log("Object removed from list (P)");
         }
     }
 
     // Returns the list in order to deal damage to players
     public List<Collider2D> GetObjectsHit()
     {
-        Debug.Log("List returned");
+        // Debug.Log("List returned "+ objectsHit.Count);
         return objectsHit;
     }
 }

@@ -16,7 +16,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     public GameObject attackBox, blockBox, parryBox;
 
     // LayerMasks help to identify which objects can be hit
-    public LayerMask hittableObject;
+    public LayerMask player, hittableObject;
 
     public EnemyAttack enemyAttack;
     
@@ -147,11 +147,21 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
             if (1 <= randNum && randNum <= 6)
             {
                 // Light attack
+                foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+                {
+                    hittableObj.GetComponent<PlayerStats>().takeDamage(50);
+                    Debug.Log("Player hit (L)");
+                }
                 // Debug.Log("(E) Light attack performed");     
             }
             else if (randNum == 7 || randNum == 8)
             {
                 // Heavy attack
+                foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+                {
+                    hittableObj.GetComponent<PlayerStats>().takeDamage(75);
+                    Debug.Log("Player hit (H)");
+                }
                 // Debug.Log("(E) Heavy attack performed");
             }
             else if (randNum == 9)
@@ -173,6 +183,11 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
         if (Time.time >= nextUATime)
         {
             // Debug.Log("(E) Unblockable attack performed");
+            foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+            {
+                hittableObj.GetComponent<PlayerStats>().takeDamage(enemyStats.uDmg);
+                Debug.Log("Player hit (U), next U time is: "+ nextUATime);
+            }
             nextUATime = Time.time + 1f / uaRate;
         }
     }
@@ -181,7 +196,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     {
         if (Time.time >= nextThrowTime)
         {
-            // Debug.Log("(E) Throw attack performed");
+            Debug.Log("(E) Throw attack performed");
             nextThrowTime = Time.time + 1f / throwRate;
         }
     }

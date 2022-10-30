@@ -93,6 +93,9 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         blockBox.SetActive(false);
         parryBox.SetActive(false);
 
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        canHit = LayerMask.NameToLayer("CanHit");
+
         canAttack = true;
         canDefend = true;
         attacking = false;

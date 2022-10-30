@@ -94,7 +94,7 @@ public class PlayerStats : MonoBehaviour
     {
         dead = true;
         // Disable the game object
-        this.enabled = false;
+        gameObject.SetActive(false);
         Debug.Log("Player was defeated");
     }
 }

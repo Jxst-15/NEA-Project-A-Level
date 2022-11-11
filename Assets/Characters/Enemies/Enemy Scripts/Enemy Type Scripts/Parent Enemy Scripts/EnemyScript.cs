@@ -14,6 +14,8 @@ public class EnemyScript : MonoBehaviour
 
     #region Variables 
     protected GameObject target;
+
+    protected string type;
     #endregion
 
     #region Getters and Setters
@@ -22,7 +24,6 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] public int scoreToGive
     { get ; set; }
     #endregion
-
 
     private void Awake()
     {
@@ -34,19 +35,10 @@ public class EnemyScript : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void FixedUpdate()
-    {
-       
+        // Sets the enemy type to the tag which is given in the editor
+        type = gameObject.tag;
+        Debug.Log(type);
     }
 }

@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 308243319}
   - component: {fileID: 308243318}
   - component: {fileID: 308243317}
+  - component: {fileID: 308243324}
   - component: {fileID: 308243323}
   m_Layer: 8
   m_Name: Player
@@ -242,6 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 0}
+  playerStyleSwitch: {fileID: 0}
   weapon: {fileID: 0}
   attackBox: {fileID: 707379911}
   blockBox: {fileID: 1549039188}
@@ -257,11 +259,6 @@ MonoBehaviour:
   attackRange: 1.5
   attackCount: 0
   fightStyle: Iron Fist
-  stamDecLAttack: 15
-  stamDecHAttack: 20
-  stamDecWUAttack: 30
-  stamDecThrow: 35
-  stamIncParry: 0
 --- !u!114 &308243318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,6 +417,20 @@ MonoBehaviour:
   currentHealth: 0
   maxStamina: 0
   currentStamina: 0
+--- !u!114 &308243324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308243316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14628a847c72884c8ede90eb7ee447a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 0}
+  combat: {fileID: 0}
 --- !u!1 &313470738
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,6 +1126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 0}
+  playerStyleSwitch: {fileID: 0}
   weapon: {fileID: 0}
   attackBox: {fileID: 1776570332}
   blockBox: {fileID: 2112129201}
@@ -1130,11 +1142,6 @@ MonoBehaviour:
   attackRange: 1.5
   attackCount: 0
   fightStyle: Iron Fist
-  stamDecLAttack: 15
-  stamDecHAttack: 20
-  stamDecWUAttack: 30
-  stamDecThrow: 35
-  stamIncParry: 0
 --- !u!114 &1209967903
 MonoBehaviour:
   m_ObjectHideFlags: 0

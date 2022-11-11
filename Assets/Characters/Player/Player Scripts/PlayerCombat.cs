@@ -5,6 +5,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 {
     #region Script References
     public PlayerStats stats;
+    public PlayerStyleSwitch playerStyleSwitch;
     #endregion
 
     #region Variables
@@ -44,16 +45,24 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     private float tapSpeed;
     KeyCode lastKey;
     
-    [SerializeField] private string fightStyle;
-
-    // Variables for decreasing stat factors
-    [SerializeField] private int stamDecLAttack, stamDecHAttack, stamDecWUAttack, stamDecThrow, stamIncParry;
+    [SerializeField] public string fightStyle;
     #endregion
 
     #region Getters and Setters
-    [SerializeField] public int stamDecBlock
+    // Variables for decreasing/increasing stat factors
+    public int stamDecLAttack
     { get; set; }
-    [SerializeField] public int healthDecBlock
+    public int stamDecHAttack
+    { get; set; }
+    public int stamDecWUAttack
+    { get; set; }
+    public int stamDecThrow
+    { get; set; }
+    public int stamIncParry
+    { get; set; }
+    public int stamDecBlock
+    { get; set; }
+    public int healthDecBlock
     { get; set; }
     // Property to get and reset the combo count
     public int _comboCount 
@@ -79,17 +88,23 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     { get; set; }
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
+    // Used for getting the required scripts
+    void Awake()
     {
         stats = GetComponent<PlayerStats>();
-
+        playerStyleSwitch = GetComponent<PlayerStyleSwitch>();
+        
         // Gets the PlayerAttack script from the attackBox GameObject
         playerAttack = attackBox.GetComponent<PlayerAttack>(); 
         
         // Gets the PlayerBlock script from the blockBox GameObject
         playerBlock = blockBox.GetComponent<PlayerBlock>(); 
+        
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    { 
         blockBox.SetActive(false);
         parryBox.SetActive(false);
 
@@ -206,6 +221,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         {
             // Sets game time back to normal
             Time.timeScale = 1f;
+            canAttack = true;
+            canDefend = true;
         }
     }   
  
@@ -303,48 +320,10 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     public void SwitchStyle()
     {
-        // Slows down game time by half
-        Time.timeScale = 0.5f;
-        
-        if (Input.GetKeyDown(KeyCode.UpArrow)) {
-            fightStyle = "Iron Fist";
-            stats.lDmg = 50;
-            stats.lDmg = 75;
-            
-            attackRate = 2;
-            
-            stamDecLAttack = 15;
-            stamDecHAttack = 20;
-            stamDecThrow = 35;
-            healthDecBlock = 4;
-            UnityEngine.Debug.Log("Current Style Is: " + fightStyle);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-            fightStyle = "Boulder Style";
-            stats.lDmg = 70;
-            stats.hDmg = 95;
+        canAttack = false;
+        canDefend = false;
+        playerStyleSwitch.SwitchStyle();
 
-            attackRate = 1f;
-
-            stamDecLAttack = 25;
-            stamDecHAttack = 30;
-            stamDecThrow = 45;
-            healthDecBlock = 2;
-            UnityEngine.Debug.Log("Current Style Is: " + fightStyle);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow)) {
-            fightStyle = "Grass Style";
-            stats.lDmg = 30;
-            stats.hDmg = 55;
-
-            attackRate = 3f;
-
-            stamDecLAttack = 5;
-            stamDecHAttack = 10;
-            stamDecThrow = 25;
-            healthDecBlock = 6;
-            UnityEngine.Debug.Log("Current Style Is: " + fightStyle);
-        }
     }
 
     public void WeaponAttack()

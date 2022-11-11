@@ -51,16 +51,6 @@ public class PlayerStats : MonoBehaviour
         currentHealth = h;
     }
 
-    //public void setLDmg(int dmg)
-    //{
-    //    lDmg = dmg;
-    //}
-
-    //public void setHDmg(int dmg)
-    //{
-    //    hDmg = dmg;
-    //}
-
     public void setCurrentStamina(int stam)
     {
         currentStamina = stam;

@@ -38,7 +38,7 @@ public class EnemyAI : EnemyScript, ICharacterController
     // Start is called before the first frame update
     void Start()
     {
-        // Finds the target by getting the target variable from the inherited class and gets the Transform component 
+        // Finds the target by getting the target variable from the EnemyScript parent class and gets the transform component 
         targetPos = target.transform;
     }
 
@@ -52,6 +52,7 @@ public class EnemyAI : EnemyScript, ICharacterController
 
             // Run action method
 
+            // For flipping the sprite
             Flip(notNeeded, enemyPosX, enemyPosY);
         }
 
@@ -60,16 +61,6 @@ public class EnemyAI : EnemyScript, ICharacterController
     private void FixedUpdate()
     {
         Movement();
-    }
-
-    public float ReturnPosX()
-    {
-        return this.transform.localScale.x;
-    }
-
-    public float ReturnPosY()
-    {
-        return this.transform.localScale.y;
     }
 
     // Actually moving this object towards the target

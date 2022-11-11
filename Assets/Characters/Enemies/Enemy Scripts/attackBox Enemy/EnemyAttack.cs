@@ -8,7 +8,7 @@ public class EnemyAttack : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hittableObj)
     {
-        if (!objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (!objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Player") || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit"))
         {
             objectsHit.Add(hittableObj);
             // Debug.Log("Object removed from list (E)");

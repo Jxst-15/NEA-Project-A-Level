@@ -7,10 +7,17 @@ public class PlayerStyleSwitch : MonoBehaviour
     public PlayerCombat combat;
     #endregion
 
+    [SerializeField] private string fightStyle;
+
     void Awake()
     {
         stats = GetComponent<PlayerStats>();
         combat = GetComponent<PlayerCombat>();
+    }
+
+    private void Start()
+    {
+        fightStyle = "Iron Fist";
     }
 
     public void SwitchStyle()
@@ -20,7 +27,7 @@ public class PlayerStyleSwitch : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            combat.fightStyle = "Iron Fist";
+            fightStyle = "Iron Fist";
             stats.lDmg = 50;
             stats.lDmg = 75;
 
@@ -30,11 +37,11 @@ public class PlayerStyleSwitch : MonoBehaviour
             combat.stamDecHAttack = 20;
             combat.stamDecThrow = 35;
             combat.healthDecBlock = 4;
-            Debug.Log("Current Style Is: " + combat.fightStyle);
+            Debug.Log("Current Style Is: " + fightStyle);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            combat.fightStyle = "Boulder Style";
+            fightStyle = "Boulder Style";
             stats.lDmg = 70;
             stats.hDmg = 95;
 
@@ -44,11 +51,11 @@ public class PlayerStyleSwitch : MonoBehaviour
             combat.stamDecHAttack = 30;
             combat.stamDecThrow = 45;
             combat.healthDecBlock = 2;
-            Debug.Log("Current Style Is: " + combat.fightStyle);
+            Debug.Log("Current Style Is: " + fightStyle);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            combat.fightStyle = "Grass Style";
+            fightStyle = "Grass Style";
             stats.lDmg = 30;
             stats.hDmg = 55;
 
@@ -58,7 +65,7 @@ public class PlayerStyleSwitch : MonoBehaviour
             combat.stamDecHAttack = 10;
             combat.stamDecThrow = 25;
             combat.healthDecBlock = 6;
-            Debug.Log("Current Style Is: " + combat.fightStyle);
+            Debug.Log("Current Style Is: " + fightStyle);
         }
     }
 }

@@ -44,8 +44,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     
     private float tapSpeed;
     KeyCode lastKey;
-    
-    [SerializeField] public string fightStyle;
+
+    private bool lightAtk;
     #endregion
 
     #region Getters and Setters
@@ -130,7 +130,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         pressedTime = 0f;
         keyHeld = false;
 
-        fightStyle = "Iron Fist";
+        lightAtk = false;
         
         attackRate = 2;
         
@@ -163,8 +163,16 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             {
                 WeaponAttack();
             }
-            else
+            else if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
             {
+                if (Input.GetButtonDown("lAttack"))
+                {
+                    lightAtk = true;
+                }
+                else if (Input.GetButtonDown("hAttack"))
+                {
+                    lightAtk = false;
+                }
                 Attack();
             }
             if (Input.GetKeyDown(KeyCode.I))      
@@ -241,44 +249,38 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
         if (Time.time >= nextAttackTime)
         {
-            if (Input.GetButtonDown("lAttack"))
-            {
-                attacking = true;
-                parryable = true;
+            attacking = true;
+            parryable = true;
 
-                // Light attack performed
-                foreach (Collider2D hittableObj in playerAttack.GetObjectsHit())
+            foreach (Collider2D hittableObj in playerAttack.GetObjectsHit())
+            {
+                if (lightAtk == true)
                 {
                     UnityEngine.Debug.Log("Object Hit! (L)");
                     hittableObj.GetComponent<EnemyStats>().takeDamage(stats.lDmg);
-                    comboCount++;
                 }
-                UnityEngine.Debug.Log("Light attack performed");
-                // Decrease current stamina by stamDecLAttack
-                attackCount++;
-
-                nextAttackTime = Time.time + 1f / attackRate;
-                UnityEngine.Debug.Log("Next attack time is in " + nextAttackTime);
-            }
-            else if (Input.GetButtonDown("hAttack"))
-            {
-                attacking = true;
-                parryable = true;
-
-                // Heavy attack performed
-                foreach (Collider2D hittableObj in playerAttack.GetObjectsHit())
+                else
                 {
                     UnityEngine.Debug.Log("Object Hit! (H)");
                     hittableObj.GetComponent<EnemyStats>().takeDamage(stats.hDmg);
-                    comboCount++;
                 }
-                UnityEngine.Debug.Log("Heavy attack performed");
-                // Decrease current stamina by stamDecHAttack
-                attackCount++;
-
-                nextAttackTime = Time.time + 1f / attackRate;
-                UnityEngine.Debug.Log("Next attack time is in " + nextAttackTime);
+                comboCount++;
             }
+            attackCount++;
+            switch (lightAtk)
+            {
+                case true:
+                    UnityEngine.Debug.Log("Light Attack Performed");
+                    // Decrease current stamina by stamDecLAttack
+                    stats.affectCurrentStamima(stamDecLAttack, "dec");
+                    break;
+                case false:
+                    UnityEngine.Debug.Log("Heavy Attack Performed");
+                    // Decrease current stamina by stamDecHAttack
+                    stats.affectCurrentStamima(stamDecHAttack, "dec");
+                    break;
+            }
+            nextAttackTime = Time.time + 1f / attackRate;
         }
         attacking = false;
         parryable = false;

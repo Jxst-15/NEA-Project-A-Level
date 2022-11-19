@@ -24,15 +24,18 @@ public class EnemyStats : EnemyScript
     // Start is called before the first frame update
     void Start()
     {
-        // Sets values for variables
-        dead = false;
-        maxHealth = 400;
-        currentHealth = maxHealth;
-        lDmg = 40;
-        hDmg = 60;
-        uDmg = 80;
-        maxStamina = 200;
-        currentStamina = maxStamina;
+        if (type == "NormalEnemies")
+        {
+            // Sets values for variables
+            dead = false;
+            maxHealth = 400;
+            currentHealth = maxHealth;
+            lDmg = 40;
+            hDmg = 60;
+            uDmg = 80;
+            maxStamina = 200;
+            currentStamina = maxStamina;
+        }
         
     }
 
@@ -83,15 +86,31 @@ public class EnemyStats : EnemyScript
     }
     #endregion
 
-    public void affectCurrentStamina (int stam, string incOrDec)
+    public void affectCurrentStamima(int stam, string incOrDec)
     {
-        if (incOrDec == "Decrease")
+        if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
         {
-            currentStamina -= stam;
+            if (incOrDec == "dec")
+            {
+                currentStamina -= stam;
+            }
+            else if (incOrDec == "inc")
+            {
+                currentStamina += stam;
+            }
         }
-        else if (incOrDec == "Increase")
+        StaminaCheck(currentStamina);
+    }
+
+    public void StaminaCheck(int stam)
+    {
+        if (currentStamina > maxStamina)
         {
-            currentStamina += stam;
+            currentStamina = maxStamina;
+        }
+        else if (currentStamina < 0)
+        {
+            currentStamina = 0;
         }
     }
 

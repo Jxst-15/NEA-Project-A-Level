@@ -7,6 +7,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     #region Player Script References
     protected PlayerCombat targetAttackStatus;
     protected PlayerStats targetStats;
+    private EnemyAttack enemyAttack;
     #endregion
 
     #region Variables
@@ -18,7 +19,6 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     // LayerMasks help to identify which objects can be hit
     public LayerMask player, hittableObject;
 
-    public EnemyAttack enemyAttack;
     
     // 0.5s, time which is needed for a parry to be valid
     private const float parryDelay = 0.5f;
@@ -142,27 +142,59 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     {
         if (Time.time >= nextAttackTime)
         {
+            //attacking = true;
+            //randNum = Random.Range(1, 11);
+            //if (1 <= randNum && randNum <= 6)
+            //{
+            //    // Light attack
+            //    foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+            //    {
+            //        hittableObj.GetComponent<PlayerStats>().takeDamage(50);
+            //        Debug.Log("Player hit (L)");
+            //    }
+            //    // Debug.Log("(E) Light attack performed");     
+            //}
+            //else if (randNum == 7 || randNum == 8)
+            //{
+            //    // Heavy attack
+            //    foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+            //    {
+            //        hittableObj.GetComponent<PlayerStats>().takeDamage(75);
+            //        Debug.Log("Player hit (H)");
+            //    }
+            //    // Debug.Log("(E) Heavy attack performed");
+            //}
+            //else if (randNum == 9)
+            //{
+            //    // Unblockable attack
+            //    UnblockableAttack();
+            //}
+            //else if (randNum == 10)
+            //{
+            //    // Throw attack
+            //    Throw();
+            //}
+
             attacking = true;
             randNum = Random.Range(1, 11);
-            if (1 <= randNum && randNum <= 6)
+            if (1 <= randNum && randNum <= 8)
             {
-                // Light attack
-                foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+                // Normal attacks
+                foreach (Collider2D hittableobj in enemyAttack.GetObjectsHit())
                 {
-                    hittableObj.GetComponent<PlayerStats>().takeDamage(50);
-                    Debug.Log("Player hit (L)");
+                    if (1 <= randNum && randNum <= 6)
+                    {
+                        // Light attack
+                        hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.lDmg);
+                        Debug.Log("Player hit (L)");
+                    }
+                    else if (randNum == 7 || randNum == 8)
+                    {
+                        // Heavy attack
+                        hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.hDmg);
+                        Debug.Log("Player hit (H)");
+                    }
                 }
-                // Debug.Log("(E) Light attack performed");     
-            }
-            else if (randNum == 7 || randNum == 8)
-            {
-                // Heavy attack
-                foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
-                {
-                    hittableObj.GetComponent<PlayerStats>().takeDamage(75);
-                    Debug.Log("Player hit (H)");
-                }
-                // Debug.Log("(E) Heavy attack performed");
             }
             else if (randNum == 9)
             {
@@ -175,6 +207,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
                 Throw();
             }
             nextAttackTime = Time.time + 1f / attackRate;
+            // Debug.Log("Next attack time is: " + nextAttackTime);
         }
     }
 

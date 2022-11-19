@@ -32,13 +32,8 @@ public class EnemyScript : MonoBehaviour
         enemyStats = GetComponent<EnemyStats>();
         enemyAI = GetComponent<EnemyAI>();
         enemyCombat = GetComponent<EnemyCombat>();
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
+        
         // Sets the enemy type to the tag which is given in the editor
         type = gameObject.tag;
-        Debug.Log(type);
     }
 }

@@ -37,7 +37,6 @@ public class PlayerStats : MonoBehaviour
         {
             death();
         }
-        
     }
 
     #region Set Methods
@@ -59,14 +58,31 @@ public class PlayerStats : MonoBehaviour
 
     public void affectCurrentStamima(int stam, string incOrDec) 
     {
-        // Uses if else if statement to decide what to do with stamina value
-        if (incOrDec == "Decrease")
+        if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
         {
-            currentStamina -= stam;
+            if (incOrDec == "dec")
+            {
+                currentStamina -= stam;
+            }
+            else if (incOrDec == "inc")
+            {
+                currentStamina += stam;
+            }
         }
-        else if (incOrDec == "Increase")
+        StaminaCheck(currentStamina);
+    }
+
+    public void StaminaCheck(int stam)
+    {
+        if (currentStamina > maxStamina)
         {
-            currentStamina += stam;
+            Debug.Log("Current stamina has exceeded the max value, setting to max value");
+            currentStamina = maxStamina;
+        }
+        else if (currentStamina < 0)
+        {
+            Debug.Log("Stamina is less than 0, cannot decrease further, setting value to 0");
+            currentStamina = 0;
         }
     }
 

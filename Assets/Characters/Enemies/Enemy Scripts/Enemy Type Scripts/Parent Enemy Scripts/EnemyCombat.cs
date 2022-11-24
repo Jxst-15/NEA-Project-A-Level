@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyCombat : EnemyScript, ICharacterCombat
 {
-    #region Player Script References
-    public PlayerCombat targetAttackStatus;
-    public PlayerStats targetStats;
-    public PlayerBlock targetBlockStats;
+    #region Script References
+    //public PlayerCombat targetAttackStatus;
+    //public PlayerStats targetStats;
+    //public PlayerBlock targetBlockStats;
     private EnemyAttack enemyAttack;
     #endregion
 
@@ -62,10 +60,19 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     public bool weaponHeld
     { get; set; }
     #endregion
+
+    //void Awake()
+    //{
+    //    this.enemyAttack = attackBox.GetComponent<EnemyAttack>();
+    //    this.targetAttackStatus = target.GetComponent<PlayerCombat>();
+    //    this.targetBlockStats = target.GetComponent<PlayerBlock>();
+    //    this.targetStats = target.GetComponentInChildren<PlayerStats>();
+    //}
+
     // Start is called before the first frame update
     void Start()
     {
-        enemyAttack = attackBox.GetComponent<EnemyAttack>();
+        this.enemyAttack = attackBox.GetComponent<EnemyAttack>();
 
         attackBox.SetActive(false);
 
@@ -97,45 +104,47 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
         stamIncParry = 20;
         healthDecBlock = 5;
 
-        targetAttackStatus = target.GetComponent<PlayerCombat>();
-        targetStats = target.GetComponent<PlayerStats>();
+        //this.targetAttackStatus = target.GetComponent<PlayerCombat>();
+        //this.targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
+        //this.targetStats = target.GetComponent<PlayerStats>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (enemyAI.inRange == true)
+        switch (enemyAI.inRange)
         {
-            attackBox.SetActive(true);
-            randNum = 0;
-            randNum = Random.Range(1, 11);
-            if (weapon != null && weapon.tag == "Weapons")
-            {
-                weaponHeld = true;
-            }
+            case true:
+                attackBox.SetActive(true);
+                randNum = 0;
+                randNum = Random.Range(1, 11);
+                if (weapon != null && weapon.tag == "Weapons")
+                {
+                    weaponHeld = true;
+                }
 
-            if (canAttack == true && canDefend == true && weaponHeld == false)
-            {
-                if (1 <= randNum && randNum <= 7)
+                if (canAttack == true && canDefend == true && weaponHeld == false)
                 {
-                    // Attack methods
-                    Attack();
+                    if (1 <= randNum && randNum <= 7)
+                    {
+                        // Attack methods
+                        Attack();
+                    }
+                    else if (randNum == 8 || randNum == 9 && targetAttackStatus.attacking == true)
+                    {
+                        // Block method
+                        Block();
+                    }
+                    else if (randNum == 10 && targetAttackStatus.parryable == true)
+                    {
+                        // Parry Method
+                        Parry();
+                    }
                 }
-                else if (randNum == 8 || randNum == 9 && targetAttackStatus.attacking == true)
-                {
-                    // Block method
-                    Block();
-                }
-                else if (randNum == 10 && targetAttackStatus.parryable == true)
-                {
-                    // Parry Method
-                    Parry();
-                }
-            }
-        }
-        else
-        {
-            attackBox.SetActive(false);
+                break;
+            default:
+                attackBox.SetActive(false);
+                break;
         }
     }
 

@@ -14,6 +14,7 @@ public class PlayerStyleSwitch : MonoBehaviour
     {
         stats = GetComponent<PlayerStats>();
         combat = GetComponent<PlayerCombat>();
+        blockStats = GetComponentInChildren<PlayerBlock>();
     }
 
     private void Start()

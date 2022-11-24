@@ -23,14 +23,6 @@ public class PlayerBlock : MonoBehaviour
     {
         stamDecBlock = 10;
         healthDecBlock = 4;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Negate all damage taken by enemy attacks
-        // For each attack that hits player in this state
-        // Reduce stamina by stamDecBlock
-        // Reduce health by healthDecBlock
+        this.gameObject.SetActive(false);
     }
 }

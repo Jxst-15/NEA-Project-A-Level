@@ -24,19 +24,46 @@ public class EnemyStats : EnemyScript
     // Start is called before the first frame update
     void Start()
     {
-        if (type == "NormalEnemies")
+        dead = false;
+        // Sets values for variables depending on tag
+        switch (type)
         {
-            // Sets values for variables
-            dead = false;
-            maxHealth = 400;
-            currentHealth = maxHealth;
-            lDmg = 40;
-            hDmg = 60;
-            uDmg = 80;
-            maxStamina = 200;
-            currentStamina = maxStamina;
+            case "NormalEnemies":
+                maxHealth = 400;
+                lDmg = 40;
+                hDmg = 60;
+                uDmg = 80;
+                maxStamina = 200;
+                enemyAI.vSpeed = 2;
+                enemyAI.hSpeed = 3;
+                enemyAI.vRunSpeed = 4;
+                enemyAI.hRunSpeed = 5;
+                break;
+            case "NimbleEnemies":
+                maxHealth = 200;
+                lDmg = 20;
+                hDmg = 30;
+                uDmg = 50;
+                maxStamina = 300;
+                enemyAI.vSpeed = 3;
+                enemyAI.hSpeed = 4;
+                enemyAI.vRunSpeed = 5;
+                enemyAI.hRunSpeed = 6;
+                break;
+            case "BulkyEnemies":
+                maxHealth = 600;
+                lDmg = 60;
+                hDmg = 80;
+                uDmg = 100;
+                maxStamina = 100;
+                enemyAI.vSpeed = 1;
+                enemyAI.hSpeed = 2;
+                enemyAI.vRunSpeed = 3;
+                enemyAI.hRunSpeed = 4;
+                break;
         }
-        
+        currentHealth = maxHealth;
+        currentStamina = maxStamina;
     }
 
     // Update is called once per frame

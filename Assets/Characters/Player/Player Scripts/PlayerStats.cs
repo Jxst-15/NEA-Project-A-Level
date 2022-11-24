@@ -79,7 +79,7 @@ public class PlayerStats : MonoBehaviour
             Debug.Log("Current stamina has exceeded the max value, setting to max value");
             currentStamina = maxStamina;
         }
-        else if (currentStamina < 0)
+        else if (currentStamina <= 0)
         {
             Debug.Log("Stamina is less than 0, cannot decrease further, setting value to 0");
             currentStamina = 0;

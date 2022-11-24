@@ -10,11 +10,14 @@ public class EnemyScript : MonoBehaviour
     protected EnemyStats enemyStats;
     protected EnemyAI enemyAI;
     protected EnemyCombat enemyCombat;
+
+    public PlayerCombat targetAttackStatus;
+    public PlayerStats targetStats;
+    public PlayerBlock targetBlockStats;
     #endregion
 
     #region Variables 
     protected GameObject target;
-
     protected string type;
     #endregion
 
@@ -29,10 +32,14 @@ public class EnemyScript : MonoBehaviour
     {
         target = GameObject.FindGameObjectWithTag("Player");
 
-        enemyStats = GetComponent<EnemyStats>();
-        enemyAI = GetComponent<EnemyAI>();
-        enemyCombat = GetComponent<EnemyCombat>();
-        
+        this.enemyStats = GetComponent<EnemyStats>();
+        this.enemyAI = GetComponent<EnemyAI>();
+        this.enemyCombat = GetComponent<EnemyCombat>();
+
+        this.targetAttackStatus = target.GetComponent<PlayerCombat>();
+        this.targetStats = target.GetComponent<PlayerStats>();
+        this.targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
+
         // Sets the enemy type to the tag which is given in the editor
         type = gameObject.tag;
     }

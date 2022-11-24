@@ -9,10 +9,10 @@ public class EnemyAI : EnemyScript, ICharacterController
     [SerializeField] private bool canMove = true;
 
     public Transform targetPos;
-    [SerializeField] private int vSpeed = 2;
-    [SerializeField] private int hSpeed = 3;
-    [SerializeField] private int vRunSpeed = 4;
-    [SerializeField] private int hRunSpeed = 5;
+    //[SerializeField] private int vSpeed = 2;
+    //[SerializeField] private int hSpeed = 3;
+    //[SerializeField] private int vRunSpeed = 4;
+    //[SerializeField] private int hRunSpeed = 5;
     [SerializeField] private bool isRunning = false;
     private float enemyPosX, enemyPosY;
 
@@ -31,6 +31,14 @@ public class EnemyAI : EnemyScript, ICharacterController
     #endregion
 
     #region Getters and Setters
+    public int vSpeed
+    { get; set; }
+    public int hSpeed
+    { get; set; }
+    public int vRunSpeed
+    { get; set; }
+    public int hRunSpeed
+    { get; set; }
     [SerializeField] public bool inRange
     { get; set; }
     #endregion

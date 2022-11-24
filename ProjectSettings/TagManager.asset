@@ -11,6 +11,7 @@ TagManager:
   - BulkyEnemies
   - NimbleEnemies
   - BossEnemies
+  - Boundary
   layers:
   - Default
   - TransparentFX

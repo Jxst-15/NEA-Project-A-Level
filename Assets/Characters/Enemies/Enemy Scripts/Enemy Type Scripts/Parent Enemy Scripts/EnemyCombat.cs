@@ -5,8 +5,9 @@ using UnityEngine;
 public class EnemyCombat : EnemyScript, ICharacterCombat
 {
     #region Player Script References
-    protected PlayerCombat targetAttackStatus;
-    protected PlayerStats targetStats;
+    public PlayerCombat targetAttackStatus;
+    public PlayerStats targetStats;
+    public PlayerBlock targetBlockStats;
     private EnemyAttack enemyAttack;
     #endregion
 
@@ -142,6 +143,50 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     {
         if (Time.time >= nextAttackTime)
         {
+            attacking = true;
+            if (targetAttackStatus.blocking != true)
+            {
+                randNum = Random.Range(1, 11);
+                if (1 <= randNum && randNum <= 8)
+                {
+                    // Normal attacks
+                    foreach (Collider2D hittableobj in enemyAttack.GetObjectsHit())
+                    {
+
+                        if (1 <= randNum && randNum <= 6)
+                        {
+                            // Light attack
+                            hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.lDmg);
+                            Debug.Log("Player hit (L)");
+                        }
+                        else if (randNum == 7 || randNum == 8)
+                        {
+                            // Heavy attack
+                            hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.hDmg);
+                            Debug.Log("Player hit (H)");
+                        }
+                    }
+                }
+                else if (randNum == 9)
+                {
+                    // Unblockable attack
+                    UnblockableAttack();
+                }
+                else if (randNum == 10)
+                {
+                    // Throw attack
+                    Throw();
+                }
+            }
+            else
+            {
+                Debug.Log("Attack was blocked!");
+                targetStats.affectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
+                targetStats.takeDamage(targetBlockStats.healthDecBlock);
+            }
+            nextAttackTime = Time.time + 1f / attackRate;
+            // Debug.Log("Next attack time is: " + nextAttackTime);
+            
             //attacking = true;
             //randNum = Random.Range(1, 11);
             //if (1 <= randNum && randNum <= 6)
@@ -175,39 +220,6 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
             //    Throw();
             //}
 
-            attacking = true;
-            randNum = Random.Range(1, 11);
-            if (1 <= randNum && randNum <= 8)
-            {
-                // Normal attacks
-                foreach (Collider2D hittableobj in enemyAttack.GetObjectsHit())
-                {
-                    if (1 <= randNum && randNum <= 6)
-                    {
-                        // Light attack
-                        hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.lDmg);
-                        Debug.Log("Player hit (L)");
-                    }
-                    else if (randNum == 7 || randNum == 8)
-                    {
-                        // Heavy attack
-                        hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.hDmg);
-                        Debug.Log("Player hit (H)");
-                    }
-                }
-            }
-            else if (randNum == 9)
-            {
-                // Unblockable attack
-                UnblockableAttack();
-            }
-            else if (randNum == 10)
-            {
-                // Throw attack
-                Throw();
-            }
-            nextAttackTime = Time.time + 1f / attackRate;
-            // Debug.Log("Next attack time is: " + nextAttackTime);
         }
     }
 

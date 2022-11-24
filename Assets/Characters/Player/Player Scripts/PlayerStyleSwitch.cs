@@ -5,6 +5,7 @@ public class PlayerStyleSwitch : MonoBehaviour
     #region Script References
     public PlayerStats stats;
     public PlayerCombat combat;
+    public PlayerBlock blockStats;
     #endregion
 
     [SerializeField] private string fightStyle;
@@ -36,7 +37,7 @@ public class PlayerStyleSwitch : MonoBehaviour
             combat.stamDecLAttack = 15;
             combat.stamDecHAttack = 20;
             combat.stamDecThrow = 35;
-            combat.healthDecBlock = 4;
+            blockStats.healthDecBlock = 4;
             Debug.Log("Current Style Is: " + fightStyle);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -50,7 +51,7 @@ public class PlayerStyleSwitch : MonoBehaviour
             combat.stamDecLAttack = 25;
             combat.stamDecHAttack = 30;
             combat.stamDecThrow = 45;
-            combat.healthDecBlock = 2;
+            blockStats.healthDecBlock = 2;
             Debug.Log("Current Style Is: " + fightStyle);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -64,7 +65,7 @@ public class PlayerStyleSwitch : MonoBehaviour
             combat.stamDecLAttack = 5;
             combat.stamDecHAttack = 10;
             combat.stamDecThrow = 25;
-            combat.healthDecBlock = 6;
+            blockStats.healthDecBlock = 6;
             Debug.Log("Current Style Is: " + fightStyle);
         }
     }

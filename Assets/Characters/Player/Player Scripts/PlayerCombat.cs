@@ -60,10 +60,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     { get; set; }
     public int stamIncParry
     { get; set; }
-    public int stamDecBlock
-    { get; set; }
-    public int healthDecBlock
-    { get; set; }
     // Property to get and reset the combo count
     public int _comboCount 
     {
@@ -138,9 +134,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         stamDecHAttack = 20;
         stamDecWUAttack = 30;
         stamDecThrow = 35;
-        stamDecBlock = 10;
         stamIncParry = 20;
-        healthDecBlock = 4;
 
         weaponHeld = false;
     }

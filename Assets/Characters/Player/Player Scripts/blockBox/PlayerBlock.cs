@@ -5,13 +5,24 @@ using UnityEngine;
 public class PlayerBlock : MonoBehaviour
 {
     private PlayerCombat combatScript;
-    private int stamDecBlock;
-    private int healthDecBlock;
+
+    #region Getters and Setters
+    public int stamDecBlock
+    { get; set; }
+    public int healthDecBlock
+    { get; set; }
+    #endregion
+
+    private void Awake()
+    {
+        combatScript = GetComponentInParent<PlayerCombat>();
+    }
 
     // Start is called before the first frame update
     private void Start()
     {
-        combatScript = GetComponentInParent<PlayerCombat>();
+        stamDecBlock = 10;
+        healthDecBlock = 4;
     }
 
     // Update is called once per frame

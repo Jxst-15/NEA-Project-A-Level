@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyAI : EnemyScript, ICharacterController
@@ -51,7 +49,22 @@ public class EnemyAI : EnemyScript, ICharacterController
     }
 
     // Update is called once per frame
-    void Update()
+    //void Update()
+    //{
+    //    if (canMove == true)
+    //    {
+    //        enemyPosX = this.transform.localScale.x;
+    //        enemyPosY = this.transform.localScale.y;
+
+    //        // Run action method
+
+    //        // For flipping the sprite
+    //        Flip(notNeeded, enemyPosX, enemyPosY);
+    //    }
+
+    //}
+
+    public void EAIUpdate()
     {
         if (canMove == true)
         {
@@ -63,7 +76,6 @@ public class EnemyAI : EnemyScript, ICharacterController
             // For flipping the sprite
             Flip(notNeeded, enemyPosX, enemyPosY);
         }
-
     }
 
     private void FixedUpdate()
@@ -72,7 +84,7 @@ public class EnemyAI : EnemyScript, ICharacterController
     }
 
     // Actually moving this object towards the target
-    public void Movement()
+    public virtual void Movement()
     {
         if (canMove == true)
         {

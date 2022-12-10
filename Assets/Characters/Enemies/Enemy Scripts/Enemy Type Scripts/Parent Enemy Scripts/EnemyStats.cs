@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyStats : EnemyScript
@@ -67,13 +65,18 @@ public class EnemyStats : EnemyScript
     }
 
     // Update is called once per frame
-    void Update()
+    //void Update()
+    //{
+    //    // Checks if enemy's current health is 0 or lower
+    //   if (currentHealth <= 0)
+    //    {
+    //        death();
+    //    } 
+    //}
+
+    public void EStatsUpdate()
     {
-        // Checks if enemy's current health is 0 or lower
-       if (currentHealth <= 0)
-        {
-            death();
-        } 
+        DeathCheck();
     }
 
     #region Set Methods
@@ -145,6 +148,11 @@ public class EnemyStats : EnemyScript
     {
         // currentHealth is affected by the damage given as the parameter
         currentHealth -= dmg;
+        DeathCheck();
+    }
+
+    private void DeathCheck()
+    {
         if (currentHealth <= 0)
         {
             death();

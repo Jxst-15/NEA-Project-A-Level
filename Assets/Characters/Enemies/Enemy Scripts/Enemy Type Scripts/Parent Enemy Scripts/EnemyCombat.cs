@@ -3,9 +3,6 @@ using UnityEngine;
 public class EnemyCombat : EnemyScript, ICharacterCombat
 {
     #region Script References
-    //public PlayerCombat targetAttackStatus;
-    //public PlayerStats targetStats;
-    //public PlayerBlock targetBlockStats;
     private EnemyAttack enemyAttack;
     #endregion
 
@@ -61,14 +58,6 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     { get; set; }
     #endregion
 
-    //void Awake()
-    //{
-    //    this.enemyAttack = attackBox.GetComponent<EnemyAttack>();
-    //    this.targetAttackStatus = target.GetComponent<PlayerCombat>();
-    //    this.targetBlockStats = target.GetComponent<PlayerBlock>();
-    //    this.targetStats = target.GetComponentInChildren<PlayerStats>();
-    //}
-
     // Start is called before the first frame update
     void Start()
     {
@@ -110,7 +99,45 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     }
 
     // Update is called once per frame
-    void Update()
+    //void Update()
+    //{
+    //    switch (enemyAI.inRange)
+    //    {
+    //        case true:
+    //            attackBox.SetActive(true);
+    //            randNum = 0;
+    //            randNum = Random.Range(1, 11);
+    //            if (weapon != null && weapon.tag == "Weapons")
+    //            {
+    //                weaponHeld = true;
+    //            }
+
+    //            if (canAttack == true && canDefend == true && weaponHeld == false)
+    //            {
+    //                if (1 <= randNum && randNum <= 7)
+    //                {
+    //                    // Attack methods
+    //                    Attack();
+    //                }
+    //                else if (randNum == 8 || randNum == 9 && targetAttackStatus.attacking == true)
+    //                {
+    //                    // Block method
+    //                    Block();
+    //                }
+    //                else if (randNum == 10 && targetAttackStatus.parryable == true)
+    //                {
+    //                    // Parry Method
+    //                    Parry();
+    //                }
+    //            }
+    //            break;
+    //        default:
+    //            attackBox.SetActive(false);
+    //            break;
+    //    }
+    //}
+
+    public void ECombatUpdate()
     {
         switch (enemyAI.inRange)
         {
@@ -153,9 +180,11 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
         if (Time.time >= nextAttackTime)
         {
             attacking = true;
+            // The probability of attacking
+            randNum = Random.Range(1, 11); 
+            
             if (targetAttackStatus.blocking != true)
             {
-                randNum = Random.Range(1, 11);
                 if (1 <= randNum && randNum <= 8)
                 {
                     // Normal attacks
@@ -176,22 +205,25 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
                         }
                     }
                 }
-                else if (randNum == 9)
-                {
-                    // Unblockable attack
-                    UnblockableAttack();
-                }
-                else if (randNum == 10)
-                {
-                    // Throw attack
-                    Throw();
-                }
             }
             else
             {
                 Debug.Log("Attack was blocked!");
+                // The following decreases the targets current stamina and deals a small amount of damage
                 targetStats.affectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
                 targetStats.takeDamage(targetBlockStats.healthDecBlock);
+
+            }
+
+            if (randNum == 9)
+            {
+                // Unblockable attack
+                UnblockableAttack();
+            }
+            else if (randNum == 10)
+            {
+                // Throw attack
+                Throw();
             }
             nextAttackTime = Time.time + 1f / attackRate;
             // Debug.Log("Next attack time is: " + nextAttackTime);
@@ -261,11 +293,6 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     }
 
     public void Parry()
-    {
-
-    }
-
-    public void WeaponAtack()
     {
 
     }

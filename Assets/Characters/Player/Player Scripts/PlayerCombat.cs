@@ -153,21 +153,20 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         // If player is able to attack
         if (canAttack == true) 
         {
-            if (weaponHeld == true)
+            if (weaponHeld != true)
             {
-                WeaponAttack();
-            }
-            else if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
-            {
-                if (Input.GetButtonDown("lAttack"))
+                if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
                 {
-                    lightAtk = true;
+                    if (Input.GetButtonDown("lAttack"))
+                    {
+                        lightAtk = true;
+                    }
+                    else if (Input.GetButtonDown("hAttack"))
+                    {
+                        lightAtk = false;
+                    }
+                    Attack();
                 }
-                else if (Input.GetButtonDown("hAttack"))
-                {
-                    lightAtk = false;
-                }
-                Attack();
             }
             if (Input.GetKeyDown(KeyCode.I))      
             {
@@ -319,7 +318,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         canAttack = false;
         canDefend = false;
         playerStyleSwitch.SwitchStyle();
-
     }
 
     public void WeaponAttack()

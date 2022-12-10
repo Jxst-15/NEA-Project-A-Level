@@ -43,4 +43,11 @@ public class EnemyScript : MonoBehaviour
         // Sets the enemy type to the tag which is given in the editor
         type = gameObject.tag;
     }
+
+    private void Update()
+    {
+        enemyAI.EAIUpdate();
+        enemyCombat.ECombatUpdate();
+        enemyStats.EStatsUpdate();
+    }
 }

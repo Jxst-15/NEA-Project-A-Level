@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour, ICharacterController
         Action();
     }
 
-
     // Similar to Update but runs depending on device framerate (default 0.02s), better to use with physics
     void FixedUpdate()
     {

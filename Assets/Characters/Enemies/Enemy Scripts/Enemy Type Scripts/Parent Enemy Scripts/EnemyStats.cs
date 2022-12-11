@@ -1,14 +1,29 @@
 using UnityEngine;
 
-public class EnemyStats : EnemyScript
+public class EnemyStats : MonoBehaviour
 {
+    #region Script References
+    private EnemyScript enemyScript;
+    #endregion
+
+    #region Script Reference Variables
+    [SerializeField] private string type;
+    #endregion
+
     #region Variables
     [SerializeField] private int maxHealth, currentHealth;
-    
     [SerializeField] private int maxStamina, currentStamina;
     #endregion
 
     #region Getters and Setters
+    public int vSpeed
+    { get; set; }
+    public int hSpeed
+    { get; set; }
+    public int vRunSpeed
+    { get; set; }
+    public int hRunSpeed
+    { get; set; }
     public int lDmg
     { get; set; }
     public int hDmg
@@ -19,11 +34,22 @@ public class EnemyStats : EnemyScript
     { get; set; }
     #endregion
 
+    void Awake()
+    {
+        enemyScript = GetComponent<EnemyScript>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         dead = false;
         // Sets values for variables depending on tag
+        SetVariables();
+    }
+    
+    private void SetVariables()
+    {
+        type = enemyScript.type;
         switch (type)
         {
             case "NormalEnemies":
@@ -32,10 +58,10 @@ public class EnemyStats : EnemyScript
                 hDmg = 60;
                 uDmg = 80;
                 maxStamina = 200;
-                enemyAI.vSpeed = 2;
-                enemyAI.hSpeed = 3;
-                enemyAI.vRunSpeed = 4;
-                enemyAI.hRunSpeed = 5;
+                vSpeed = 2;
+                hSpeed = 3;
+                vRunSpeed = 4;
+                hRunSpeed = 5;
                 break;
             case "NimbleEnemies":
                 maxHealth = 200;
@@ -43,10 +69,10 @@ public class EnemyStats : EnemyScript
                 hDmg = 30;
                 uDmg = 50;
                 maxStamina = 300;
-                enemyAI.vSpeed = 3;
-                enemyAI.hSpeed = 4;
-                enemyAI.vRunSpeed = 5;
-                enemyAI.hRunSpeed = 6;
+                vSpeed = 3;
+                hSpeed = 4;
+                vRunSpeed = 5;
+                hRunSpeed = 6;
                 break;
             case "BulkyEnemies":
                 maxHealth = 600;
@@ -54,25 +80,15 @@ public class EnemyStats : EnemyScript
                 hDmg = 80;
                 uDmg = 100;
                 maxStamina = 100;
-                enemyAI.vSpeed = 1;
-                enemyAI.hSpeed = 2;
-                enemyAI.vRunSpeed = 3;
-                enemyAI.hRunSpeed = 4;
+                vSpeed = 1;
+                hSpeed = 2;
+                vRunSpeed = 3;
+                hRunSpeed = 4;
                 break;
         }
         currentHealth = maxHealth;
         currentStamina = maxStamina;
-    }
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    // Checks if enemy's current health is 0 or lower
-    //   if (currentHealth <= 0)
-    //    {
-    //        death();
-    //    } 
-    //}
+    }    
 
     public void EStatsUpdate()
     {

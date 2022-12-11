@@ -1,27 +1,22 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyStats))]
-[RequireComponent(typeof(EnemyAI))]
-[RequireComponent(typeof(EnemyCombat))]
+//[RequireComponent(typeof(EnemyStats))]
+//[RequireComponent(typeof(EnemyAI))]
+//[RequireComponent(typeof(EnemyCombat))]
 
 public class EnemyScript : MonoBehaviour
 {
     #region Script References
-    protected EnemyStats enemyStats;
-    protected EnemyAI enemyAI;
-    protected EnemyCombat enemyCombat;
-
-    public PlayerCombat targetAttackStatus;
-    public PlayerStats targetStats;
-    public PlayerBlock targetBlockStats;
-    #endregion
-
-    #region Variables 
-    protected GameObject target;
-    protected string type;
+    private EnemyStats enemyStats;
+    private EnemyCombat enemyCombat;
+    private EnemyAI enemyAI;
     #endregion
 
     #region Getters and Setters
+    public GameObject target
+    { get; set; }
+    public string type
+    { get; set; }
     [SerializeField] public float points
     { get; set; }
     [SerializeField] public int scoreToGive
@@ -32,13 +27,9 @@ public class EnemyScript : MonoBehaviour
     {
         target = GameObject.FindGameObjectWithTag("Player");
 
-        this.enemyStats = GetComponent<EnemyStats>();
-        this.enemyAI = GetComponent<EnemyAI>();
-        this.enemyCombat = GetComponent<EnemyCombat>();
-
-        this.targetAttackStatus = target.GetComponent<PlayerCombat>();
-        this.targetStats = target.GetComponent<PlayerStats>();
-        this.targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
+        enemyStats = GetComponent<EnemyStats>();
+        enemyAI = GetComponent<EnemyAI>();
+        enemyCombat = GetComponent<EnemyCombat>();
 
         // Sets the enemy type to the tag which is given in the editor
         type = gameObject.tag;
@@ -46,8 +37,13 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
+        enemyStats.EStatsUpdate();
         enemyAI.EAIUpdate();
         enemyCombat.ECombatUpdate();
-        enemyStats.EStatsUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        enemyAI.Movement();
     }
 }

@@ -1,11 +1,22 @@
 using UnityEngine;
 
-public class EnemyCombat : EnemyScript, ICharacterCombat
+public class EnemyCombat : MonoBehaviour, ICharacterCombat
 {
     #region Script References
+    private EnemyScript enemyScript;
     private EnemyAttack enemyAttack;
+    private EnemyAI enemyAI;
+    private EnemyStats enemyStats;
+
+    private PlayerCombat targetAttackStatus;
+    private PlayerStats targetStats;
+    private PlayerBlock targetBlockStats;
     #endregion
 
+    #region Target
+    private GameObject target;
+    #endregion
+    
     #region Variables
     // Following is a weapon that has been picked up
     [SerializeField] private GameObject weapon;
@@ -15,7 +26,6 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     // LayerMasks help to identify which objects can be hit
     public LayerMask player, hittableObject;
 
-    
     // 0.5s, time which is needed for a parry to be valid
     private const float parryDelay = 0.5f;
 
@@ -58,13 +68,29 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
     { get; set; }
     #endregion
 
+    void Awake()
+    {
+        enemyScript = GetComponent<EnemyScript>();
+        enemyAttack = attackBox.GetComponent<EnemyAttack>();
+        enemyAI = GetComponent<EnemyAI>();
+        enemyStats = GetComponent<EnemyStats>();
+        
+        target = enemyScript.target;
+
+        targetAttackStatus = target.GetComponent<PlayerCombat>();
+        targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
+        targetStats = target.GetComponent<PlayerStats>();
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
-        this.enemyAttack = attackBox.GetComponent<EnemyAttack>();
-
         attackBox.SetActive(false);
+        SetVariables();
+    }
 
+    private void SetVariables()
+    {
         canAttack = true;
         canDefend = true;
         attacking = false;
@@ -92,50 +118,7 @@ public class EnemyCombat : EnemyScript, ICharacterCombat
         stamDecBlock = 10;
         stamIncParry = 20;
         healthDecBlock = 5;
-
-        //this.targetAttackStatus = target.GetComponent<PlayerCombat>();
-        //this.targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
-        //this.targetStats = target.GetComponent<PlayerStats>();
     }
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    switch (enemyAI.inRange)
-    //    {
-    //        case true:
-    //            attackBox.SetActive(true);
-    //            randNum = 0;
-    //            randNum = Random.Range(1, 11);
-    //            if (weapon != null && weapon.tag == "Weapons")
-    //            {
-    //                weaponHeld = true;
-    //            }
-
-    //            if (canAttack == true && canDefend == true && weaponHeld == false)
-    //            {
-    //                if (1 <= randNum && randNum <= 7)
-    //                {
-    //                    // Attack methods
-    //                    Attack();
-    //                }
-    //                else if (randNum == 8 || randNum == 9 && targetAttackStatus.attacking == true)
-    //                {
-    //                    // Block method
-    //                    Block();
-    //                }
-    //                else if (randNum == 10 && targetAttackStatus.parryable == true)
-    //                {
-    //                    // Parry Method
-    //                    Parry();
-    //                }
-    //            }
-    //            break;
-    //        default:
-    //            attackBox.SetActive(false);
-    //            break;
-    //    }
-    //}
 
     public void ECombatUpdate()
     {

@@ -1,68 +1,78 @@
 using UnityEngine;
 
-public class EnemyAI : EnemyScript, ICharacterController
+public class EnemyAI : MonoBehaviour, ICharacterController
 {
+    #region Script References
+    private EnemyScript enemyScript;
+    private EnemyStats enemyStats;
+    #endregion
+
+    #region Script Reference Variables
+    [SerializeField] private int vSpeed, hSpeed, vRunSpeed, hRunSpeed;
+    #endregion
+
+    #region Target
+    private Transform targetPos;
+    #endregion
+    
     #region Variables
     private const bool notNeeded = false;
-    [SerializeField] private bool canMove = true;
+    [SerializeField] private bool canMove;
 
-    public Transform targetPos;
-    //[SerializeField] private int vSpeed = 2;
-    //[SerializeField] private int hSpeed = 3;
-    //[SerializeField] private int vRunSpeed = 4;
-    //[SerializeField] private int hRunSpeed = 5;
-    [SerializeField] private bool isRunning = false;
+    [SerializeField] private bool isRunning;
     private float enemyPosX, enemyPosY;
 
-    [SerializeField] private bool isDodging = false;
-    [SerializeField] private float dodgeSpeed = 35;
+    [SerializeField] private bool isDodging;
+    [SerializeField] private float dodgeSpeed;
     [SerializeField] private float startDodgeTime;
-    [SerializeField] private int side = 0;
+    [SerializeField] private int side;
     private float dodgeTime;
 
-    private float distanceFromTarget;
-    private float maxTrackDistance = 14f;
-    private float runDistance = 8f;
-    private float attackDistance = 2.5f;
+    private float maxTrackDistance;
+    private float runDistance;
+    private float attackDistance;
 
     private Rigidbody2D rb;
     #endregion
 
     #region Getters and Setters
-    public int vSpeed
-    { get; set; }
-    public int hSpeed
-    { get; set; }
-    public int vRunSpeed
-    { get; set; }
-    public int hRunSpeed
-    { get; set; }
     [SerializeField] public bool inRange
     { get; set; }
     #endregion
+
+    void Awake()
+    {
+        enemyScript = GetComponent<EnemyScript>();
+        enemyStats = GetComponent<EnemyStats>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         // Finds the target by getting the target variable from the EnemyScript parent class and gets the transform component 
-        targetPos = target.transform;
+        targetPos = enemyScript.target.transform;
+        SetVariables();
     }
+    
+    private void SetVariables()
+    {
+        vSpeed = enemyStats.vSpeed;
+        hSpeed = enemyStats.hSpeed;
+        vRunSpeed = enemyStats.vRunSpeed;
+        hRunSpeed = enemyStats.hRunSpeed;
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    if (canMove == true)
-    //    {
-    //        enemyPosX = this.transform.localScale.x;
-    //        enemyPosY = this.transform.localScale.y;
+        canMove = true;
+        isRunning = false;
 
-    //        // Run action method
+        isDodging = false;
+        dodgeSpeed = 35;
+        side = 0;
 
-    //        // For flipping the sprite
-    //        Flip(notNeeded, enemyPosX, enemyPosY);
-    //    }
+        maxTrackDistance = 14f;
+        runDistance = 8f;
+        attackDistance = 2.5f;
 
-    //}
+    }
 
     public void EAIUpdate()
     {
@@ -78,18 +88,13 @@ public class EnemyAI : EnemyScript, ICharacterController
         }
     }
 
-    private void FixedUpdate()
-    {
-        Movement();
-    }
-
     // Actually moving this object towards the target
     public virtual void Movement()
     {
         if (canMove == true)
         {
-            distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
-            switch (TrackPlayer())
+            float distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
+            switch (TrackPlayer(distanceFromTarget))
             {
                 case 0:
                     // Make enemy run towards player
@@ -115,7 +120,7 @@ public class EnemyAI : EnemyScript, ICharacterController
     }
 
     // Determining the distance between this object and the player
-    private int TrackPlayer()
+    private int TrackPlayer(float distanceFromTarget)
     {
         if (distanceFromTarget >= runDistance && distanceFromTarget < maxTrackDistance)
         {

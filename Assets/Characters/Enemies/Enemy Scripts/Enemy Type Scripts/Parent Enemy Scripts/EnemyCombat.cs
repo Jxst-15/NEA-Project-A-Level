@@ -9,8 +9,8 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     private EnemyStats enemyStats;
 
     private PlayerCombat targetAttackStatus;
-    private PlayerStats targetStats;
     private PlayerBlock targetBlockStats;
+    private PlayerStats targetStats;
     #endregion
 
     #region Target
@@ -89,6 +89,12 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         SetVariables();
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        ECombatUpdate();
+    }
+
     private void SetVariables()
     {
         canAttack = true;
@@ -126,31 +132,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         {
             case true:
                 attackBox.SetActive(true);
-                randNum = 0;
-                randNum = Random.Range(1, 11);
-                if (weapon != null && weapon.tag == "Weapons")
-                {
-                    weaponHeld = true;
-                }
-
-                if (canAttack == true && canDefend == true && weaponHeld == false)
-                {
-                    if (1 <= randNum && randNum <= 7)
-                    {
-                        // Attack methods
-                        Attack();
-                    }
-                    else if (randNum == 8 || randNum == 9 && targetAttackStatus.attacking == true)
-                    {
-                        // Block method
-                        Block();
-                    }
-                    else if (randNum == 10 && targetAttackStatus.parryable == true)
-                    {
-                        // Parry Method
-                        Parry();
-                    }
-                }
+                ProbabilityOfActions();
                 break;
             default:
                 attackBox.SetActive(false);
@@ -158,8 +140,39 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         }
     }
 
+    public void ProbabilityOfActions()
+    {
+        // To determine which action to do
+        randNum = 0;
+        randNum = Random.Range(1, 11);
+        if (weapon != null && weapon.tag == "Weapons")
+        {
+            weaponHeld = true;
+        }
+
+        if (canAttack == true && canDefend == true && weaponHeld == false)
+        {
+            if (1 <= randNum && randNum <= 7)
+            {
+                // Attack method
+                Attack();
+            }
+            else if (randNum == 8 || randNum == 9 && targetAttackStatus.attacking == true)
+            {
+                // Block method
+                Block();
+            }
+            else if (randNum == 10 && targetAttackStatus.parryable == true)
+            {
+                // Parry Method
+                Parry();
+            }
+        }
+    }
+
     public void Attack()
     {
+        int dmgToDeal = 0;
         if (Time.time >= nextAttackTime)
         {
             attacking = true;
@@ -177,24 +190,26 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
                         if (1 <= randNum && randNum <= 6)
                         {
                             // Light attack
-                            hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.lDmg);
+                            dmgToDeal = enemyStats.lDmg;
                             Debug.Log("Player hit (L)");
                         }
                         else if (randNum == 7 || randNum == 8)
                         {
                             // Heavy attack
-                            hittableobj.GetComponent<PlayerStats>().takeDamage(enemyStats.hDmg);
+                            dmgToDeal = enemyStats.hDmg;
                             Debug.Log("Player hit (H)");
                         }
+                        DealDamage(hittableobj, dmgToDeal);
                     }
                 }
             }
             else
             {
                 Debug.Log("Attack was blocked!");
+                
                 // The following decreases the targets current stamina and deals a small amount of damage
-                targetStats.affectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
-                targetStats.takeDamage(targetBlockStats.healthDecBlock);
+                targetStats.AffectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
+                targetStats.TakeDamage(targetBlockStats.healthDecBlock);
 
             }
 
@@ -210,40 +225,6 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             }
             nextAttackTime = Time.time + 1f / attackRate;
             // Debug.Log("Next attack time is: " + nextAttackTime);
-            
-            //attacking = true;
-            //randNum = Random.Range(1, 11);
-            //if (1 <= randNum && randNum <= 6)
-            //{
-            //    // Light attack
-            //    foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
-            //    {
-            //        hittableObj.GetComponent<PlayerStats>().takeDamage(50);
-            //        Debug.Log("Player hit (L)");
-            //    }
-            //    // Debug.Log("(E) Light attack performed");     
-            //}
-            //else if (randNum == 7 || randNum == 8)
-            //{
-            //    // Heavy attack
-            //    foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
-            //    {
-            //        hittableObj.GetComponent<PlayerStats>().takeDamage(75);
-            //        Debug.Log("Player hit (H)");
-            //    }
-            //    // Debug.Log("(E) Heavy attack performed");
-            //}
-            //else if (randNum == 9)
-            //{
-            //    // Unblockable attack
-            //    UnblockableAttack();
-            //}
-            //else if (randNum == 10)
-            //{
-            //    // Throw attack
-            //    Throw();
-            //}
-
         }
     }
 
@@ -254,11 +235,16 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             // Debug.Log("(E) Unblockable attack performed");
             foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
             {
-                hittableObj.GetComponent<PlayerStats>().takeDamage(enemyStats.uDmg);
+                DealDamage(hittableObj, enemyStats.uDmg);
                 Debug.Log("Player hit (U), next U time is: "+ nextUATime);
             }
             nextUATime = Time.time + 1f / uaRate;
         }
+    }
+
+    public void DealDamage(Collider2D hittableObj, int dmgToDeal)
+    {
+        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
     }
 
     public void Throw()

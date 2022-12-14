@@ -100,43 +100,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     // Start is called before the first frame update
     void Start()
-    { 
-        blockBox.SetActive(false);
-        parryBox.SetActive(false);
-
-        enemyLayer = LayerMask.NameToLayer("Enemy");
-        canHit = LayerMask.NameToLayer("CanHit");
-
-        canAttack = true;
-        canDefend = true;
-        attacking = false;
-        blocking = false;
-        throwing = false;
-        parryable = false;
-
-        attackRange = 1.5f;
-        attackCount = 0;
-        nextAttackTime = 0f;
-
-        comboTime = 3;
-
-        throwRate = 0.3f;
-        nextThrowTime = 0f;
-
-        pressedTime = 0f;
-        keyHeld = false;
-
-        lightAtk = false;
-        
-        attackRate = 2;
-        
-        stamDecLAttack = 15;
-        stamDecHAttack = 20;
-        stamDecWUAttack = 30;
-        stamDecThrow = 35;
-        stamIncParry = 20;
-
-        weaponHeld = false;
+    {
+        SetVariables();
     }
 
     // Update is called once per frame
@@ -226,6 +191,46 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             canDefend = true;
         }
     }   
+
+    private void SetVariables()
+    {
+        blockBox.SetActive(false);
+        parryBox.SetActive(false);
+
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        canHit = LayerMask.NameToLayer("CanHit");
+
+        canAttack = true;
+        canDefend = true;
+        attacking = false;
+        blocking = false;
+        throwing = false;
+        parryable = false;
+
+        attackRange = 1.5f;
+        attackCount = 0;
+        nextAttackTime = 0f;
+
+        comboTime = 3;
+
+        throwRate = 0.3f;
+        nextThrowTime = 0f;
+
+        pressedTime = 0f;
+        keyHeld = false;
+
+        lightAtk = false;
+
+        attackRate = 2;
+
+        stamDecLAttack = 15;
+        stamDecHAttack = 20;
+        stamDecWUAttack = 30;
+        stamDecThrow = 35;
+        stamIncParry = 20;
+
+        weaponHeld = false;
+    }
  
     public void ResetComboCount()
     {
@@ -239,6 +244,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     public void Attack()
     {
+        int dmgToDeal = 0;
         // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
         if (Time.time >= nextAttackTime)
         {
@@ -250,33 +256,43 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                 if (lightAtk == true)
                 {
                     UnityEngine.Debug.Log("Object Hit! (L)");
-                    hittableObj.GetComponent<EnemyStats>().takeDamage(stats.lDmg);
+                    dmgToDeal = stats.lDmg;
                 }
                 else
                 {
                     UnityEngine.Debug.Log("Object Hit! (H)");
-                    hittableObj.GetComponent<EnemyStats>().takeDamage(stats.hDmg);
+                    dmgToDeal = stats.hDmg;
                 }
+                DealDamage(hittableObj, dmgToDeal);
                 comboCount++;
             }
+            
             attackCount++;
+            
             switch (lightAtk)
             {
                 case true:
                     UnityEngine.Debug.Log("Light Attack Performed");
                     // Decrease current stamina by stamDecLAttack
-                    stats.affectCurrentStamima(stamDecLAttack, "dec");
+                    stats.AffectCurrentStamima(stamDecLAttack, "dec");
                     break;
                 case false:
                     UnityEngine.Debug.Log("Heavy Attack Performed");
                     // Decrease current stamina by stamDecHAttack
-                    stats.affectCurrentStamima(stamDecHAttack, "dec");
+                    stats.AffectCurrentStamima(stamDecHAttack, "dec");
                     break;
             }
+            
             nextAttackTime = Time.time + 1f / attackRate;
         }
         attacking = false;
         parryable = false;
+    }
+
+    // Actually dealing the damage to the targeted objects
+    private void DealDamage(Collider2D hittableObj, int dmgToDeal)
+    {
+        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
     }
 
     // Performs a throw attack on the selected enemy, adds a force to the enemy object and deals damage
@@ -313,7 +329,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         parryBox.SetActive(true);
     }
 
-    public void SwitchStyle()
+    private void SwitchStyle()
     {
         canAttack = false;
         canDefend = false;

@@ -35,15 +35,21 @@ public class EnemyScript : MonoBehaviour
         type = gameObject.tag;
     }
 
-    private void Update()
+    public float GivePoints(float points)
     {
-        enemyStats.EStatsUpdate();
-        enemyAI.EAIUpdate();
-        enemyCombat.ECombatUpdate();
+        // Give player points
+        return points;
     }
 
-    private void FixedUpdate()
-    {
-        enemyAI.Movement();
-    }
+    //private void Update()
+    //{
+    //    enemyStats.EStatsUpdate();
+    //    enemyAI.EAIUpdate();
+    //    enemyCombat.ECombatUpdate();
+    //}
+
+    //private void FixedUpdate()
+    //{
+    //    enemyAI.Movement();
+    //}
 }

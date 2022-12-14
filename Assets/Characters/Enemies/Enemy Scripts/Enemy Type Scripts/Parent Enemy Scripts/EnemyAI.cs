@@ -53,7 +53,18 @@ public class EnemyAI : MonoBehaviour, ICharacterController
         targetPos = enemyScript.target.transform;
         SetVariables();
     }
-    
+
+    // Update is called once per frame
+    void Update()
+    {
+        EAIUpdate();
+    }
+
+    void FixedUpdate()
+    {
+        Movement();
+    }
+
     private void SetVariables()
     {
         vSpeed = enemyStats.vSpeed;

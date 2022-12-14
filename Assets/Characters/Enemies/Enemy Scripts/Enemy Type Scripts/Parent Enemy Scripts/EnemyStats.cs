@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyStats : MonoBehaviour
+public class EnemyStats : MonoBehaviour, IDamageable
 {
     #region Script References
     private EnemyScript enemyScript;
@@ -8,6 +8,7 @@ public class EnemyStats : MonoBehaviour
 
     #region Script Reference Variables
     [SerializeField] private string type;
+    [SerializeField] private float points;
     #endregion
 
     #region Variables
@@ -37,6 +38,7 @@ public class EnemyStats : MonoBehaviour
     void Awake()
     {
         enemyScript = GetComponent<EnemyScript>();
+        SetVariables();
     }
 
     // Start is called before the first frame update
@@ -44,12 +46,18 @@ public class EnemyStats : MonoBehaviour
     {
         dead = false;
         // Sets values for variables depending on tag
-        SetVariables();
     }
-    
+
+    // Update is called once per frame
+    void Update()
+    {
+        EStatsUpdate();
+    }
+
     private void SetVariables()
     {
         type = enemyScript.type;
+        // Based on the tag of the game object, sets the stats accordingly
         switch (type)
         {
             case "NormalEnemies":
@@ -84,6 +92,17 @@ public class EnemyStats : MonoBehaviour
                 hSpeed = 2;
                 vRunSpeed = 3;
                 hRunSpeed = 4;
+                break;
+            case "BossEnemies":
+                maxHealth = 700;
+                lDmg = 70;
+                hDmg = 90;
+                uDmg = 110;
+                maxStamina = 400;
+                vSpeed = 2;
+                hSpeed = 3;
+                vRunSpeed = 4;
+                hRunSpeed = 5;
                 break;
         }
         currentHealth = maxHealth;
@@ -121,9 +140,9 @@ public class EnemyStats : MonoBehaviour
         uDmg = dmg;
     }
 
-    public void setStamina(int stam)
+    public void setMaxStamina(int stam)
     {
-        currentStamina = stam;
+        maxStamina = stam;
     }
 
     public void setCurrentStamina(int stam)
@@ -132,7 +151,7 @@ public class EnemyStats : MonoBehaviour
     }
     #endregion
 
-    public void affectCurrentStamima(int stam, string incOrDec)
+    public void AffectCurrentStamima(int stam, string incOrDec)
     {
         if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
         {
@@ -148,7 +167,8 @@ public class EnemyStats : MonoBehaviour
         StaminaCheck(currentStamina);
     }
 
-    public void StaminaCheck(int stam)
+    // Runs a check to make sure stamina does not go above or below allowed levels
+    private void StaminaCheck(int stam)
     {
         if (currentStamina > maxStamina)
         {
@@ -160,24 +180,26 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
-    public void takeDamage(int dmg)
+    public void TakeDamage(int dmg)
     {
         // currentHealth is affected by the damage given as the parameter
         currentHealth -= dmg;
-        DeathCheck();
     }
 
     private void DeathCheck()
     {
         if (currentHealth <= 0)
         {
-            death();
+            Death();
         }
     }
 
-    private void death()
+    // Runs when this game object has been defeated
+    private void Death()
     {
         dead = true;
+        enemyScript.points = points;
+        enemyScript.GivePoints(points);
         // Disable the game object 
         gameObject.SetActive(false);
         // Destroy the game object helps to manage memory and declutter screen

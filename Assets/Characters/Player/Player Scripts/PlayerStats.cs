@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, IDamageable
 {
+    #region Script References
+    private PlayerCombat combatScript;
+    #endregion
+
     #region Variables
     [SerializeField] private int maxHealth, currentHealth;
     [SerializeField] private int maxStamina, currentStamina;
@@ -17,6 +19,12 @@ public class PlayerStats : MonoBehaviour
     public bool dead
     { get; set; }
     #endregion
+
+    void Awake()
+    {
+        combatScript = GetComponent<PlayerCombat>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,10 +41,7 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentHealth <= 0)
-        {
-            death();
-        }
+        DeathCheck();
     }
 
     #region Set Methods
@@ -56,7 +61,7 @@ public class PlayerStats : MonoBehaviour
     }
     #endregion
 
-    public void affectCurrentStamima(int stam, string incOrDec) 
+    public void AffectCurrentStamima(int stam, string incOrDec) 
     {
         if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
         {
@@ -72,7 +77,8 @@ public class PlayerStats : MonoBehaviour
         StaminaCheck(currentStamina);
     }
 
-    public void StaminaCheck(int stam)
+    // Runs a check to make sure stamina does not go above or below allowed levels
+    private void StaminaCheck(int stam)
     {
         if (currentStamina > maxStamina)
         {
@@ -83,20 +89,29 @@ public class PlayerStats : MonoBehaviour
         {
             Debug.Log("Stamina is less than 0, cannot decrease further, setting value to 0");
             currentStamina = 0;
+            //Debug.Log("Player can no longer block");
+            //combatScript.canDefend = false;
+            //combatScript.blocking = false;
         }
     }
 
-    public void takeDamage(int dmg)
+    public void TakeDamage(int dmg)
     {
         // currentHealth is affected by the damage given as a parameter
         currentHealth -= dmg;
+        DeathCheck();
+    }
+
+    private void DeathCheck()
+    {
         if (currentHealth <= 0)
         {
-            death();
+            Death();
         }
     }
 
-    private void death()
+    // Runs when this game object has been defeated
+    private void Death()
     {
         dead = true;
         // Disable the game object

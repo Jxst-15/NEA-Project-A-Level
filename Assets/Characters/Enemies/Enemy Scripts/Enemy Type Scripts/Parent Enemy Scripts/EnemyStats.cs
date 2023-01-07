@@ -3,12 +3,12 @@ using UnityEngine;
 public class EnemyStats : MonoBehaviour, IDamageable
 {
     #region Script References
-    private EnemyScript enemyScript;
+    [SerializeField] private EnemyScript enemyScript;
     #endregion
 
     #region Script Reference Variables
     [SerializeField] private string type;
-    [SerializeField] private float points;
+    // [SerializeField] private int points;
     #endregion
 
     #region Variables
@@ -37,15 +37,14 @@ public class EnemyStats : MonoBehaviour, IDamageable
 
     void Awake()
     {
-        enemyScript = GetComponent<EnemyScript>();
-        SetVariables();
+        dead = false;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        dead = false;
-        // Sets values for variables depending on tag
+        enemyScript = GetComponent<EnemyScript>();
+        SetVariables();
     }
 
     // Update is called once per frame
@@ -198,12 +197,12 @@ public class EnemyStats : MonoBehaviour, IDamageable
     private void Death()
     {
         dead = true;
-        enemyScript.points = points;
-        enemyScript.GivePoints(points);
+        // enemyScript.points = points;
+        enemyScript.GivePoints();
         // Disable the game object 
         gameObject.SetActive(false);
         // Destroy the game object helps to manage memory and declutter screen
-        Destroy(gameObject);
+        // Destroy(gameObject);
         Debug.Log("Enemy Died");
     }
 }

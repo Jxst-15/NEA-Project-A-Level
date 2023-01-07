@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, ICharacterController
+public class PlayerController : CharMovement, ICharacterController
 {
     #region Variables 
     [SerializeField] private bool canMove = true;
@@ -48,42 +48,48 @@ public class PlayerController : MonoBehaviour, ICharacterController
     // Update is called once per frame
     void Update()
     {
-        // If player able to move
-        if (canMove == true) 
+        if (PauseMenu.isPaused == false)
         {
-            // Gets raw number value of axis
-            vMove = Input.GetAxisRaw("Vertical"); 
-            hMove = Input.GetAxisRaw("Horizontal");
-            DoubleTappingMovement();
-            Flip(facingRight, playerPosX, playerPosY); 
+            // If player able to move
+            if (canMove == true)
+            {
+                // Gets raw number value of axis
+                vMove = Input.GetAxisRaw("Vertical");
+                hMove = Input.GetAxisRaw("Horizontal");
+                DoubleTappingMovement();
+                Flip(facingRight, playerPosX, playerPosY);
+            }
+            Action();
         }
-        Action();
     }
 
     // Similar to Update but runs depending on device framerate (default 0.02s), better to use with physics
     void FixedUpdate()
     {
-        isRunning = false;
-        isDodging = false;
-        if (canMove == true)
+        if (PauseMenu.isPaused == false)
         {
-            Jump();
-
-            // If player not currently dodging or running
-            if (isDodging == false && isRunning == false) 
+            isRunning = false;
+            isDodging = false;
+            if (canMove == true)
             {
-                // Player can move, adds velocity to rigidbody (value x axis * hSpeed, value y axis * vSpeed)
-                Movement(); 
-            }
+                Jump();
 
-            // If player wants to sprint
-            if (Input.GetKey(KeyCode.LeftControl)) 
-            {
-                isRunning = true;
-                Run();
-            }
+                // If player not currently dodging or running
+                if (isDodging == false && isRunning == false)
+                {
+                    // Player can move, adds velocity to rigidbody (value x axis * hSpeed, value y axis * vSpeed)
+                    Movement();
+                }
 
-            Dodge();
+                // If player wants to sprint
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
+                    isRunning = true;
+                    Run();
+                }
+
+                Dodge();
+            }
         }
     }
 

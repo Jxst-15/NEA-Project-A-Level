@@ -3,14 +3,14 @@ using UnityEngine;
 public class EnemyCombat : MonoBehaviour, ICharacterCombat
 {
     #region Script References
-    private EnemyScript enemyScript;
-    private EnemyAttack enemyAttack;
-    private EnemyAI enemyAI;
-    private EnemyStats enemyStats;
+    [SerializeField] private EnemyScript enemyScript;
+    [SerializeField] private EnemyAttack enemyAttack;
+    [SerializeField] private EnemyAI enemyAI;
+    [SerializeField] private EnemyStats enemyStats;
 
-    private PlayerCombat targetAttackStatus;
-    private PlayerBlock targetBlockStats;
-    private PlayerStats targetStats;
+    [SerializeField] private PlayerCombat targetAttackStatus;
+    [SerializeField] private PlayerBlock targetBlockStats;
+    [SerializeField] private PlayerStats targetStats;
     #endregion
 
     #region Target
@@ -70,29 +70,34 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
 
     void Awake()
     {
-        enemyScript = GetComponent<EnemyScript>();
-        enemyAttack = attackBox.GetComponent<EnemyAttack>();
-        enemyAI = GetComponent<EnemyAI>();
-        enemyStats = GetComponent<EnemyStats>();
-        
-        target = enemyScript.target;
-
-        targetAttackStatus = target.GetComponent<PlayerCombat>();
-        targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
-        targetStats = target.GetComponent<PlayerStats>();
+        SetVariables();      
     }
     
     // Start is called before the first frame update
     void Start()
     {
+        enemyScript = GetComponent<EnemyScript>();
+        target = enemyScript.target;
+        
+        enemyAttack = attackBox.GetComponent<EnemyAttack>();
+        enemyAI = GetComponent<EnemyAI>();
+        enemyStats = GetComponent<EnemyStats>();
+
+        
+        targetAttackStatus = target.GetComponent<PlayerCombat>();
+        targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
+        targetStats = target.GetComponent<PlayerStats>();
+        
         attackBox.SetActive(false);
-        SetVariables();
     }
 
     // Update is called once per frame
     void Update()
     {
-        ECombatUpdate();
+        if (PauseMenu.isPaused == false)
+        {
+            ECombatUpdate();
+        }
     }
 
     private void SetVariables()

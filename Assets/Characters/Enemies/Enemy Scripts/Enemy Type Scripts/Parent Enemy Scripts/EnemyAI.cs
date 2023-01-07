@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour, ICharacterController
+public class EnemyAI : CharMovement, ICharacterController
 {
     #region Script References
-    private EnemyScript enemyScript;
-    private EnemyStats enemyStats;
+    [SerializeField] private EnemyScript enemyScript;
+    [SerializeField] private EnemyStats enemyStats;
     #endregion
 
     #region Script Reference Variables
@@ -40,29 +40,31 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     { get; set; }
     #endregion
 
-    void Awake()
-    {
-        enemyScript = GetComponent<EnemyScript>();
-        enemyStats = GetComponent<EnemyStats>();
-    }
-
     // Start is called before the first frame update
     void Start()
     {
+        enemyStats = GetComponent<EnemyStats>();
+        enemyScript = GetComponent<EnemyScript>();
+        SetVariables();
         // Finds the target by getting the target variable from the EnemyScript parent class and gets the transform component 
         targetPos = enemyScript.target.transform;
-        SetVariables();
     }
 
     // Update is called once per frame
     void Update()
     {
-        EAIUpdate();
+        if (PauseMenu.isPaused == false)
+        {
+            EAIUpdate();
+        }
     }
 
     void FixedUpdate()
     {
-        Movement();
+        if (PauseMenu.isPaused == false)
+        {
+            Movement();
+        }
     }
 
     private void SetVariables()
@@ -99,6 +101,25 @@ public class EnemyAI : MonoBehaviour, ICharacterController
         }
     }
 
+    // Determining the distance between this object and the player
+    private int TrackPlayer(float distanceFromTarget)
+    {
+        if (distanceFromTarget >= runDistance && distanceFromTarget < maxTrackDistance)
+        {
+            return 0;
+        }
+        else if (distanceFromTarget < runDistance && distanceFromTarget > attackDistance)
+        {
+            return 1;
+        }
+        else if (distanceFromTarget  <= attackDistance)
+        {
+            return 2;
+        }
+        
+        return -1;
+    }
+    
     // Actually moving this object towards the target
     public virtual void Movement()
     {
@@ -128,25 +149,6 @@ public class EnemyAI : MonoBehaviour, ICharacterController
                     break;
             }
         }
-    }
-
-    // Determining the distance between this object and the player
-    private int TrackPlayer(float distanceFromTarget)
-    {
-        if (distanceFromTarget >= runDistance && distanceFromTarget < maxTrackDistance)
-        {
-            return 0;
-        }
-        else if (distanceFromTarget < runDistance && distanceFromTarget > attackDistance)
-        {
-            return 1;
-        }
-        else if (distanceFromTarget  <= attackDistance)
-        {
-            return 2;
-        }
-        
-        return -1;
     }
 
     // Method to make enemy run towards player

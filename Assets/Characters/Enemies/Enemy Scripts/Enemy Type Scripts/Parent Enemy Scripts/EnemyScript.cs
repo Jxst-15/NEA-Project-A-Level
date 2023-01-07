@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 //[RequireComponent(typeof(EnemyStats))]
@@ -7,9 +8,9 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     #region Script References
-    private EnemyStats enemyStats;
-    private EnemyCombat enemyCombat;
-    private EnemyAI enemyAI;
+    //[SerializeField] private EnemyStats enemyStats;
+    //[SerializeField] private EnemyCombat enemyCombat;
+    //[SerializeField] private EnemyAI enemyAI;
     #endregion
 
     #region Getters and Setters
@@ -17,39 +18,49 @@ public class EnemyScript : MonoBehaviour
     { get; set; }
     public string type
     { get; set; }
-    [SerializeField] public float points
+    public int points
     { get; set; }
-    [SerializeField] public int scoreToGive
+    public int scoreToGive
     { get ; set; }
     #endregion
 
+    private enum EnemyPoints
+    {
+        NormalEnemy = 1,
+        NimbleEnemy = 2,
+        BulkyEnemy = 3,
+        BossEnemy = 6
+    }
+
     private void Awake()
     {
-        target = GameObject.FindGameObjectWithTag("Player");
-
-        enemyStats = GetComponent<EnemyStats>();
-        enemyAI = GetComponent<EnemyAI>();
-        enemyCombat = GetComponent<EnemyCombat>();
-
         // Sets the enemy type to the tag which is given in the editor
         type = gameObject.tag;
+
+        // Sets the points depending on the type using the EnemyPoints enum
+        switch(type)
+        {
+            case "NormalEnemies":
+                points = Convert.ToInt32(EnemyPoints.NormalEnemy);
+                break;
+            case "NimbleEnemies":
+                points = Convert.ToInt32(EnemyPoints.NimbleEnemy);
+                break;
+            case "BulkyEnemies":
+                points = Convert.ToInt32(EnemyPoints.BulkyEnemy);
+                break;
+            case "BossEnemies":
+                points = Convert.ToInt32(EnemyPoints.BossEnemy);
+                break;
+        }
+        
+        target = GameObject.FindGameObjectWithTag("Player");
+        
     }
 
-    public float GivePoints(float points)
+    public void GivePoints()
     {
         // Give player points
-        return points;
+        target.GetComponent<PlayerPoints>().ChangePoints(points, "inc");
     }
-
-    //private void Update()
-    //{
-    //    enemyStats.EStatsUpdate();
-    //    enemyAI.EAIUpdate();
-    //    enemyCombat.ECombatUpdate();
-    //}
-
-    //private void FixedUpdate()
-    //{
-    //    enemyAI.Movement();
-    //}
 }

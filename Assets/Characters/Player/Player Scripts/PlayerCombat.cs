@@ -107,88 +107,91 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     // Update is called once per frame
     void Update()
     {
-        ComboMeter();
-
-        // Checks if player is holding a weapon, if yes then set weaponHeld to true
-        if (weapon != null && weapon.tag == "Weapons") 
+        if (PauseMenu.isPaused == false)
         {
-            weaponHeld = true;
-        }
+            ComboMeter();
 
-        // If player is able to attack
-        if (canAttack == true) 
-        {
-            if (weaponHeld != true)
+            // Checks if player is holding a weapon, if yes then set weaponHeld to true
+            if (weapon != null && weapon.tag == "Weapons")
             {
-                if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
+                weaponHeld = true;
+            }
+
+            // If player is able to attack
+            if (canAttack == true)
+            {
+                if (weaponHeld != true)
                 {
-                    if (Input.GetButtonDown("lAttack"))
+                    if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
                     {
-                        lightAtk = true;
+                        if (Input.GetButtonDown("lAttack"))
+                        {
+                            lightAtk = true;
+                        }
+                        else if (Input.GetButtonDown("hAttack"))
+                        {
+                            lightAtk = false;
+                        }
+                        Attack();
                     }
-                    else if (Input.GetButtonDown("hAttack"))
+                }
+                if (Input.GetKeyDown(KeyCode.I))
+                {
+                    Throw();
+                }
+            }
+
+            // If player is able to defend 
+            if (canDefend == true)
+            {
+                if (Input.GetKeyDown(KeyCode.H))
+                {
+                    // Equal to time elapsed
+                    pressedTime = Time.time;
+                    keyHeld = false;
+                }
+                // Once key has been released, knows that key has been pressed not held
+                else if (Input.GetKeyUp(KeyCode.H))
+                {
+                    if (keyHeld == false)
                     {
-                        lightAtk = false;
+                        UnityEngine.Debug.Log("Parry initiated");
+                        Parry();
+
                     }
-                    Attack();
+                    keyHeld = false;
                 }
-            }
-            if (Input.GetKeyDown(KeyCode.I))      
-            {
-                Throw();
-            }
-        }
-
-        // If player is able to defend 
-        if (canDefend == true)
-        {
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                // Equal to time elapsed
-                pressedTime = Time.time;               
-                keyHeld = false;
-            }
-            // Once key has been released, knows that key has been pressed not held
-            else if (Input.GetKeyUp(KeyCode.H)) 
-            {
-                if (keyHeld == false)
+                if (Input.GetKey(KeyCode.H))
                 {
-                    UnityEngine.Debug.Log("Parry initiated");
-                    Parry();
-
+                    // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
+                    if (Time.time - pressedTime > minHold)
+                    {
+                        Block();
+                        keyHeld = true;
+                    }
                 }
-                keyHeld = false;
-            }
-            if (Input.GetKey(KeyCode.H))
-            {
-                // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
-                if (Time.time - pressedTime > minHold)
+                // Once key has been released then player is no longer blocking and can attack 
+                else
                 {
-                    Block();
-                    keyHeld = true;
+                    parryBox.SetActive(false);
+                    blockBox.SetActive(false);
+                    blocking = false;
+                    canAttack = true;
                 }
             }
-            // Once key has been released then player is no longer blocking and can attack 
+
+            // If LeftShift is held then will call SwitchStyle method
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                SwitchStyle();
+            }
             else
             {
-                parryBox.SetActive(false);
-                blockBox.SetActive(false);
-                blocking = false;
+                // Sets game time back to normal
+                Time.timeScale = 1f;
                 canAttack = true;
+                canDefend = true;
             }
-        }
-
-        // If LeftShift is held then will call SwitchStyle method
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            SwitchStyle();
-        }
-        else
-        {
-            // Sets game time back to normal
-            Time.timeScale = 1f;
-            canAttack = true;
-            canDefend = true;
         }
     }   
 

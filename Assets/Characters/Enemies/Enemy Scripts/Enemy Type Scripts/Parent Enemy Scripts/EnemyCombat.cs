@@ -83,10 +83,10 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         enemyAI = GetComponent<EnemyAI>();
         enemyStats = GetComponent<EnemyStats>();
 
+        //targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
+        //targetAttackStatus = target.GetComponent<PlayerCombat>();
+        //targetStats = target.GetComponent<PlayerStats>();
         
-        targetAttackStatus = target.GetComponent<PlayerCombat>();
-        targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
-        targetStats = target.GetComponent<PlayerStats>();
         
         attackBox.SetActive(false);
     }

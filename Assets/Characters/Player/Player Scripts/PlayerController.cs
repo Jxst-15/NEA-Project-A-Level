@@ -2,9 +2,15 @@ using UnityEngine;
 
 public class PlayerController : CharMovement, ICharacterController
 {
-    #region Variables 
-    [SerializeField] private bool canMove = true;
+    #region GameObjects
+    public GameObject actionBox;
+    #endregion
 
+    #region Script References
+    public PlayerAction playerAction;
+    #endregion
+
+    #region Variables 
     // Variables for player movement
     [SerializeField] private int vSpeed = 2;
     [SerializeField] private int hSpeed = 3;
@@ -34,6 +40,11 @@ public class PlayerController : CharMovement, ICharacterController
     private Rigidbody2D rb;
     #endregion
 
+    #region Getters and Setters
+    public bool canMove
+    { get; set; }
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +54,10 @@ public class PlayerController : CharMovement, ICharacterController
         
         // Following sets dodgeTime = to 0.1 as default
         dodgeTime = startDodgeTime; 
+
+        playerAction = actionBox.GetComponent<PlayerAction>();
+
+        canMove = true;
     }
 
     // Update is called once per frame

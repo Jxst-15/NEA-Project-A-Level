@@ -4,11 +4,17 @@ public class PlayerStats : MonoBehaviour, IDamageable
 {
     #region Script References
     private PlayerCombat combatScript;
+    private PlayerController controllerScript;
     #endregion
 
     #region Variables
     [SerializeField] private int maxHealth, currentHealth;
     [SerializeField] private int maxStamina, currentStamina;
+
+    private float nextRegen;
+    
+    private bool stun;
+    private float timeStunnedFor;
     #endregion
 
     #region Getters and Setters
@@ -23,25 +29,25 @@ public class PlayerStats : MonoBehaviour, IDamageable
     void Awake()
     {
         combatScript = GetComponent<PlayerCombat>();
+        controllerScript = GetComponent<PlayerController>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        // Sets values for variables
-        dead = false;
-        maxHealth = 550;
-        currentHealth = maxHealth;
-        lDmg = 50;
-        hDmg = 75;
-        maxStamina = 200;
-        currentStamina = maxStamina;
+        SetVariables();
     }
 
     // Update is called once per frame
     void Update()
     {
-        DeathCheck();
+        if (DeathCheck() == false)
+        {
+            if (stun == false)
+            {
+                StaminaRegen();
+            }
+        }
     }
 
     #region Set Methods
@@ -61,6 +67,19 @@ public class PlayerStats : MonoBehaviour, IDamageable
     }
     #endregion
 
+    private void SetVariables()
+    {
+        // Sets values for variables
+        dead = false;
+        maxHealth = 550;
+        currentHealth = maxHealth;
+        lDmg = 50;
+        hDmg = 75;
+        maxStamina = 200;
+        currentStamina = maxStamina;
+        nextRegen = 0f;
+    }
+
     public void AffectCurrentStamima(int stam, string incOrDec) 
     {
         if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
@@ -74,11 +93,11 @@ public class PlayerStats : MonoBehaviour, IDamageable
                 currentStamina += stam;
             }
         }
-        StaminaCheck(currentStamina);
+        StaminaCheck();
     }
 
     // Runs a check to make sure stamina does not go above or below allowed levels
-    private void StaminaCheck(int stam)
+    private void StaminaCheck()
     {
         if (currentStamina > maxStamina)
         {
@@ -87,11 +106,32 @@ public class PlayerStats : MonoBehaviour, IDamageable
         }
         else if (currentStamina <= 0)
         {
-            Debug.Log("Stamina is less than 0, cannot decrease further, setting value to 0");
+            // Debug.Log("Stamina is less than 0, cannot decrease further, setting value to 0");
             currentStamina = 0;
-            //Debug.Log("Player can no longer block");
-            //combatScript.canDefend = false;
-            //combatScript.blocking = false;
+            // Debug.Log("Player can no longer block");
+            Stunned();
+        }
+    }
+
+    // WIP
+    private void StaminaRegen()
+    {
+        if (Time.time >= nextRegen)
+        {
+            int toIncBy = 0;
+                if (currentStamina < maxStamina && currentStamina > maxStamina / 2)
+                {
+                    // and set next regen time to time elapsed + 3.5 seconds
+                    toIncBy = 5;
+                    nextRegen = Time.time + 5f;
+                }
+                else if (currentStamina < maxStamina && currentStamina <= maxStamina / 2)
+                {
+                    toIncBy = 20;
+                    nextRegen = Time.time + 2.5f;
+                }
+            // If the time elapsed is more than or equal to whenever the next regen time is, increase stamina by set amount
+            AffectCurrentStamima(toIncBy, "inc");
         }
     }
 
@@ -102,12 +142,33 @@ public class PlayerStats : MonoBehaviour, IDamageable
         DeathCheck();
     }
 
-    private void DeathCheck()
+    public void Stunned()
+    {
+        stun = true;
+        timeStunnedFor = Time.time + 5f;
+
+        if (Time.time < timeStunnedFor)
+        {
+            combatScript.canAttack = false;
+            combatScript.canDefend = false;
+            combatScript.blocking = false;
+
+            controllerScript.canMove = false;
+        }
+        else
+        {
+            stun = false;
+        }
+    }
+
+    private bool DeathCheck()
     {
         if (currentHealth <= 0)
         {
             Death();
+            return true;
         }
+        return false;
     }
 
     // Runs when this game object has been defeated

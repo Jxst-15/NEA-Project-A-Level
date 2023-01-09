@@ -38,6 +38,7 @@ public class Throwable : Weapon
 
     public override void Attack()
     {
+        base.Attack();
         // Code for attacking with this weapon
     }
 

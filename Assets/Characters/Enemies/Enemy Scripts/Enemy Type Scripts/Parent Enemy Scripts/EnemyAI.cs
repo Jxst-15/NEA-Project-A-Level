@@ -31,8 +31,6 @@ public class EnemyAI : CharMovement, ICharacterController
     private float maxTrackDistance;
     private float runDistance;
     private float attackDistance;
-
-    private Rigidbody2D rb;
     #endregion
 
     #region Getters and Setters
@@ -131,21 +129,25 @@ public class EnemyAI : CharMovement, ICharacterController
                 case 0:
                     // Make enemy run towards player
                     inRange = false;
+                    isRunning = true;
                     Run();
                     break;
                 case 1:
                     // Make enemy walk towards player
                     inRange = false;
+                    isRunning = false;
                     transform.position = Vector2.MoveTowards(transform.position, targetPos.position, hSpeed * Time.deltaTime);
                     break;
                 case 2:
                     // Enemy in attack range, make enemy attack and stop moving
                     inRange = true;
+                    isRunning = false;
                     // Also random chance of dodging whenever player attacks
                     break;
                 case -1:
                     // Enemy will stand still waiting for player to get in range
                     inRange = false;
+                    isRunning = false;
                     break;
             }
         }

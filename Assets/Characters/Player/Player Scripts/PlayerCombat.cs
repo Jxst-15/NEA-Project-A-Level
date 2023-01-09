@@ -6,19 +6,19 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     #region Script References
     public PlayerStats stats;
     public PlayerStyleSwitch playerStyleSwitch;
+    
+    public PlayerAttack playerAttack; 
+    public PlayerBlock playerBlock; 
     #endregion
 
     #region Variables
     // Following is a weapon that has been picked up
-    [SerializeField] private GameObject weapon;
+    [SerializeField] public GameObject weapon;
 
     public GameObject attackBox, blockBox, parryBox;
     
     // LayerMasks help to identify which objects can be hit
     public LayerMask enemyLayer, canHit;
-
-    public PlayerAttack playerAttack; 
-    public PlayerBlock playerBlock; 
 
     private float nextWAttackTime = 0f;
     private const float wAttackRate = 2f;
@@ -135,6 +135,23 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                         Attack();
                     }
                 }
+                else
+                {
+                    // For weapon attacks
+                    if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
+                    {
+                        UnityEngine.Debug.Log("Now attacking with weapon!");
+                        if (Input.GetButtonDown("lAttack"))
+                        {
+                            lightAtk = true;
+                        }
+                        else if (Input.GetButtonDown("hAttack"))
+                        {
+                            lightAtk = false;
+                        }
+                        weapon.GetComponent<Weapon>().Attack();
+                    }
+                }
                 if (Input.GetKeyDown(KeyCode.I))
                 {
                     Throw();
@@ -191,6 +208,12 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                 Time.timeScale = 1f;
                 canAttack = true;
                 canDefend = true;
+            }
+
+            // TEMPORARY
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                DropWeapon();
             }
         }
     }   
@@ -304,14 +327,26 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         if (Time.time >= nextThrowTime)
         {
             // Throw feature will be configured here
-            throwing = true;
-            attacking = true;
-            // Throw attack performed
-            // Add force to enemy rigid body 
-            UnityEngine.Debug.Log("Throw attack performed");
-            attacking = false;
+            if (playerAttack.GetObjectsHit().Count == 0 || playerAttack.GetObjectsHit()[0].gameObject.layer != enemyLayer)
+            {
+                UnityEngine.Debug.Log("No valid object to throw");
+            }
+            else if (playerAttack.GetObjectsHit()[0] != null && playerAttack.GetObjectsHit()[0].gameObject.layer == enemyLayer)
+            {
+                throwing = true;
+                attacking = true;
+                
+                GameObject toThrow = playerAttack.GetObjectsHit()[0].gameObject;
+                // Add force to enemy rigid body 
+                toThrow.GetComponent<EnemyScript>().rb.AddForce(toThrow.transform.right, ForceMode2D.Impulse);
+                // Throw attack performed 
+                UnityEngine.Debug.Log("Throw attack performed");
+                stats.AffectCurrentStamima(stamDecThrow, "dec");
+                
+                attacking = false;
 
-            nextThrowTime = Time.time + 1f / throwRate;
+                nextThrowTime = Time.time + 1f / throwRate;
+            }
         }
     }
 
@@ -376,5 +411,15 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         }
         attacking = false;
         parryable = false;
+    }
+
+    // TEMPORARY
+    public void DropWeapon()
+    {
+        if (weapon != null)
+        {
+            
+            weapon.GetComponent<Weapon>().DropItem();
+        }
     }
 }

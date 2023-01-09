@@ -70,6 +70,6 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitButton()
     {
-        // Code for quitting game
+        // Code for quitting game to menu
     }
 }

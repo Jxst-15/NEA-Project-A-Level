@@ -9,8 +9,8 @@ public class BladedWeapon : Weapon
     private float stabTime;
     #endregion
 
-    //// Start is called before the first frame update
-    //void Start()
+    // Start is called before the first frame update
+    //override void Start()
     //{
     //    SetVariables();
     //}
@@ -36,6 +36,7 @@ public class BladedWeapon : Weapon
     
     public override void Attack()
     {
+        base.Attack();
         // Code for attacking with this weapon
     }
 

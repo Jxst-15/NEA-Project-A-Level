@@ -3759,8 +3759,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4188515bb6bfac14b8ccb77ee21e60af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BWallL: {fileID: 1121497306}
-  BWallR: {fileID: 2016148439}
+  bWallL: {fileID: 1121497306}
+  bWallR: {fileID: 2016148439}
+  eSpawnerL: {fileID: 982207673}
+  eSpawnerR: {fileID: 1347239209}
   areaCleared: 0
 --- !u!61 &1615803810
 BoxCollider2D:

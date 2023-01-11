@@ -22,7 +22,10 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected WeaponType weaponType;
     protected string weaponName;
     protected float weaponRange;
-    
+
+    protected float nextWAttackTime;
+    protected const float wAttackRate = 2f;
+
     protected int weaponLDmg;
     protected int weaponHDmg;
     protected int weaponUDmg;
@@ -64,7 +67,12 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     public virtual void Attack()
     {
-        Debug.Log("Attacked with weapon!");
+        if (Time.time >= nextWAttackTime)
+        {
+            Debug.Log("Attacked with weapon!");
+
+            nextWAttackTime = Time.time + 1f / wAttackRate;
+        }
     }
 
     public abstract void UniqueAttack();

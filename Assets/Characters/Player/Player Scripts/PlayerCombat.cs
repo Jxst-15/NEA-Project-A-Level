@@ -20,9 +20,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     // LayerMasks help to identify which objects can be hit
     public LayerMask enemyLayer, canHit;
 
-    private float nextWAttackTime = 0f;
-    private const float wAttackRate = 2f;
-
     [SerializeField] private float attackRange;
     [SerializeField] private int attackCount;
     private float nextAttackTime;
@@ -120,36 +117,24 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             // If player is able to attack
             if (canAttack == true)
             {
-                if (weaponHeld != true)
+                if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
                 {
-                    if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
+                    if (Input.GetButtonDown("lAttack"))
                     {
-                        if (Input.GetButtonDown("lAttack"))
-                        {
-                            lightAtk = true;
-                        }
-                        else if (Input.GetButtonDown("hAttack"))
-                        {
-                            lightAtk = false;
-                        }
+                        lightAtk = true;
+                    }
+                    else if (Input.GetButtonDown("hAttack"))
+                    {
+                        lightAtk = false;
+                    }
+
+                    if (weapon == null)
+                    {
                         Attack();
                     }
-                }
-                else
-                {
-                    // For weapon attacks
-                    if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
+                    else if (weapon != null && weapon.tag == "Weapons")
                     {
-                        UnityEngine.Debug.Log("Now attacking with weapon!");
-                        if (Input.GetButtonDown("lAttack"))
-                        {
-                            lightAtk = true;
-                        }
-                        else if (Input.GetButtonDown("hAttack"))
-                        {
-                            lightAtk = false;
-                        }
-                        weapon.GetComponent<Weapon>().Attack();
+                        WeaponAttack();
                     }
                 }
                 if (Input.GetKeyDown(KeyCode.I))
@@ -376,39 +361,42 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     public void WeaponAttack()
     {
-        if (Time.time >= nextWAttackTime)
-        {
-            // Weapon attack feature will be configured here
-            if (Input.GetButtonDown("lAttack"))
-            {
-                UnityEngine.Debug.Log("Weapon Attack Initiated");
-                attacking = true;
-                parryable = true;
+        //if (Time.time >= nextWAttackTime)
+        //{
+        //    // Weapon attack feature will be configured here
+        //    if (Input.GetButtonDown("lAttack"))
+        //    {
+        //        UnityEngine.Debug.Log("Weapon Attack Initiated");
+        //        attacking = true;
+        //        parryable = true;
 
-                // Light attack performed
-                UnityEngine.Debug.Log("Light weapon attack performed");
-                nextWAttackTime = Time.time + 1f / wAttackRate;
-            }
-            else if (Input.GetButtonDown("hAttack"))
-            {
-                UnityEngine.Debug.Log("Weapon Attack Initiated");
-                attacking = true;
-                parryable = true;
+        //        // Light attack performed
+        //        UnityEngine.Debug.Log("Light weapon attack performed");
+        //        nextWAttackTime = Time.time + 1f / wAttackRate;
+        //    }
+        //    else if (Input.GetButtonDown("hAttack"))
+        //    {
+        //        UnityEngine.Debug.Log("Weapon Attack Initiated");
+        //        attacking = true;
+        //        parryable = true;
 
-                // Heavy attack performed
-                UnityEngine.Debug.Log("Heavy weapon attack performed");
-                nextWAttackTime = Time.time + 1f / wAttackRate;
-            }
-            else if (Input.GetKeyDown(KeyCode.L))
-            {
-                UnityEngine.Debug.Log("Weapon Attack Initiated");
-                attacking = true;
+        //        // Heavy attack performed
+        //        UnityEngine.Debug.Log("Heavy weapon attack performed");
+        //        nextWAttackTime = Time.time + 1f / wAttackRate;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.L))
+        //    {
+        //        UnityEngine.Debug.Log("Weapon Attack Initiated");
+        //        attacking = true;
 
-                // Gets the type of the weapon to determine which attack to perform
-                UnityEngine.Debug.Log("Unique weapon attack performed");
-                nextWAttackTime = Time.time + 1f / wAttackRate;
-            }
-        }
+        //        // Gets the type of the weapon to determine which attack to perform
+        //        UnityEngine.Debug.Log("Unique weapon attack performed");
+        //        nextWAttackTime = Time.time + 1f / wAttackRate;
+        //    }
+        //}
+        attacking = true;
+        parryable = true;
+        weapon.GetComponent<Weapon>().Attack();
         attacking = false;
         parryable = false;
     }

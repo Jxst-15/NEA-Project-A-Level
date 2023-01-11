@@ -142,6 +142,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
         DeathCheck();
     }
 
+    // WIP
     public void Stunned()
     {
         stun = true;

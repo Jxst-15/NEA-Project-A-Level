@@ -136,12 +136,19 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         switch (enemyAI.inRange)
         {
             case true:
-                attackBox.SetActive(true);
-                ProbabilityOfActions();
-                break;
+                if (weapon != null)
+                {
+                    attackBox.SetActive(true);
+                    ProbabilityOfActions();
+                }
+                else
+                {
+                    weapon.GetComponent<Weapon>().Attack();
+                }
+            break;
             default:
                 attackBox.SetActive(false);
-                break;
+            break;
         }
     }
 

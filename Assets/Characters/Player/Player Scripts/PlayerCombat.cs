@@ -191,8 +191,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             {
                 // Sets game time back to normal
                 Time.timeScale = 1f;
-                canAttack = true;
-                canDefend = true;
+                // canAttack = true;
+                // canDefend = true;
             }
 
             // TEMPORARY

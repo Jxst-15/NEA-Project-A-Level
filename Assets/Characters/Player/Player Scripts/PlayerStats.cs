@@ -13,8 +13,8 @@ public class PlayerStats : MonoBehaviour, IDamageable
 
     private float nextRegen;
     
-    private bool stun;
-    private float timeStunnedFor;
+    [SerializeField] private bool stun;
+    private float tillUnstun;
     #endregion
 
     #region Getters and Setters
@@ -42,10 +42,11 @@ public class PlayerStats : MonoBehaviour, IDamageable
     void Update()
     {
         if (DeathCheck() == false)
-        {
-            if (stun == false)
+        {          
+            StaminaRegen();
+            if (stun == true)
             {
-                StaminaRegen();
+                Stunned();
             }
         }
     }
@@ -108,8 +109,10 @@ public class PlayerStats : MonoBehaviour, IDamageable
         {
             // Debug.Log("Stamina is less than 0, cannot decrease further, setting value to 0");
             currentStamina = 0;
-            // Debug.Log("Player can no longer block");
-            Stunned();
+            if (stun != true)
+            {
+                Stun();
+            }
         }
     }
 
@@ -118,10 +121,11 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         if (Time.time >= nextRegen)
         {
-            int toIncBy = 0;
+            if (stun != true)
+            {
+                int toIncBy = 0;
                 if (currentStamina < maxStamina && currentStamina > maxStamina / 2)
                 {
-                    // and set next regen time to time elapsed + 3.5 seconds
                     toIncBy = 5;
                     nextRegen = Time.time + 5f;
                 }
@@ -130,8 +134,9 @@ public class PlayerStats : MonoBehaviour, IDamageable
                     toIncBy = 20;
                     nextRegen = Time.time + 2.5f;
                 }
-            // If the time elapsed is more than or equal to whenever the next regen time is, increase stamina by set amount
-            AffectCurrentStamima(toIncBy, "inc");
+                // If the time elapsed is more than or equal to whenever the next regen time is, increase stamina by set amount
+                AffectCurrentStamima(toIncBy, "inc");
+            }
         }
     }
 
@@ -142,13 +147,18 @@ public class PlayerStats : MonoBehaviour, IDamageable
         DeathCheck();
     }
 
+    //WIP
+    private void Stun()
+    {
+        Debug.Log("Stunned");
+        stun = true;
+        tillUnstun = Time.time + 5f;
+    }
+
     // WIP
     public void Stunned()
     {
-        stun = true;
-        timeStunnedFor = Time.time + 5f;
-
-        if (Time.time < timeStunnedFor)
+        if (Time.time < tillUnstun)
         {
             combatScript.canAttack = false;
             combatScript.canDefend = false;
@@ -158,8 +168,15 @@ public class PlayerStats : MonoBehaviour, IDamageable
         }
         else
         {
+            Debug.Log("Unstunned");
+            combatScript.canAttack = true;
+            combatScript.canDefend = true;
+            combatScript.blocking = true;
+
+            controllerScript.canMove = true;
             stun = false;
         }
+
     }
 
     private bool DeathCheck()

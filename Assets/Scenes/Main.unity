@@ -881,6 +881,7 @@ MonoBehaviour:
   currentHealth: 0
   maxStamina: 0
   currentStamina: 0
+  stun: 0
 --- !u!114 &308243324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1193,7 +1194,6 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  - component: {fileID: 519420034}
   - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
@@ -1283,32 +1283,6 @@ MonoBehaviour:
   player: {fileID: 0}
   camFollow: 0
   offset: 0
---- !u!61 &519420034
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 8.907568, y: 0.015832901}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.3357534, y: 9.9613495}
-  m_EdgeRadius: 0
 --- !u!1 &643785997
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,7 +1470,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 12.722}
 --- !u!114 &667446384
 MonoBehaviour:
@@ -1592,6 +1566,7 @@ GameObject:
   m_Component:
   - component: {fileID: 735482156}
   - component: {fileID: 735482155}
+  - component: {fileID: 735482157}
   m_Layer: 0
   m_Name: BattleArea
   m_TagString: Untagged
@@ -1643,8 +1618,20 @@ Transform:
   - {fileID: 982207674}
   - {fileID: 1347239210}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &735482157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735482154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1589445d9f182284cbd19b5092e96680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &805937152
 GameObject:
   m_ObjectHideFlags: 0
@@ -1711,7 +1698,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &827074368
 GameObject:
@@ -1921,7 +1908,7 @@ Transform:
   - {fileID: 14561201}
   - {fileID: 1723675717}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &827074376
 Rigidbody2D:
@@ -3155,7 +3142,7 @@ Transform:
   - {fileID: 1689493004}
   - {fileID: 121237052}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1334105427
 GameObject:
@@ -3578,7 +3565,7 @@ RectTransform:
   - {fileID: 1334105428}
   - {fileID: 1021069380}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4564,7 +4551,7 @@ Transform:
   - {fileID: 996463773}
   - {fileID: 1277867675}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1857568033
 GameObject:
@@ -5051,5 +5038,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 12.722}

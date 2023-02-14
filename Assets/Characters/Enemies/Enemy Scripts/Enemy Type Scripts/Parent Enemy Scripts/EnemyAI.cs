@@ -17,7 +17,6 @@ public class EnemyAI : CharMovement, ICharacterController
     
     #region Variables
     private const bool notNeeded = false;
-    [SerializeField] private bool canMove;
 
     [SerializeField] private bool isRunning;
     private float enemyPosX, enemyPosY;
@@ -34,6 +33,8 @@ public class EnemyAI : CharMovement, ICharacterController
     #endregion
 
     #region Getters and Setters
+    public bool canMove
+    { get; set; }
     [SerializeField] public bool inRange
     { get; set; }
     #endregion

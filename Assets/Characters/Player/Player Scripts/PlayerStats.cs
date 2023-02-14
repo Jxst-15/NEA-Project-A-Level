@@ -83,8 +83,8 @@ public class PlayerStats : MonoBehaviour, IDamageable
 
     public void AffectCurrentStamima(int stam, string incOrDec) 
     {
-        if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
-        {
+        //if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
+        //{
             if (incOrDec == "dec")
             {
                 currentStamina -= stam;
@@ -93,7 +93,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
             {
                 currentStamina += stam;
             }
-        }
+        //}
         StaminaCheck();
     }
 
@@ -121,22 +121,19 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         if (Time.time >= nextRegen)
         {
-            if (stun != true)
+            int toIncBy = 0;
+            if (currentStamina < maxStamina && currentStamina > maxStamina / 2)
             {
-                int toIncBy = 0;
-                if (currentStamina < maxStamina && currentStamina > maxStamina / 2)
-                {
-                    toIncBy = 5;
-                    nextRegen = Time.time + 5f;
-                }
-                else if (currentStamina < maxStamina && currentStamina <= maxStamina / 2)
-                {
-                    toIncBy = 20;
-                    nextRegen = Time.time + 2.5f;
-                }
-                // If the time elapsed is more than or equal to whenever the next regen time is, increase stamina by set amount
-                AffectCurrentStamima(toIncBy, "inc");
+                toIncBy = 5;
+                nextRegen = Time.time + 5f;
             }
+            else if (currentStamina < maxStamina && currentStamina <= maxStamina / 2)
+            {
+                toIncBy = 20;
+                nextRegen = Time.time + 2.5f;
+            }
+            // If the time elapsed is more than or equal to whenever the next regen time is, increase stamina by set amount
+            AffectCurrentStamima(toIncBy, "inc");
         }
     }
 

@@ -7,7 +7,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     public PlayerStats stats;
     public PlayerStyleSwitch playerStyleSwitch;
     
-    public PlayerAttack playerAttack; 
+    public PlayerAttack playerAttack;
+    public PlayerThrow playerThrow;
     public PlayerBlock playerBlock; 
     #endregion
 
@@ -15,7 +16,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     // Following is a weapon that has been picked up
     [SerializeField] public GameObject weapon;
 
-    public GameObject attackBox, blockBox, parryBox;
+    public GameObject attackBox, blockBox, parryBox, throwBox;
     
     // LayerMasks help to identify which objects can be hit
     public LayerMask enemyLayer, canHit;
@@ -91,7 +92,9 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         playerAttack = attackBox.GetComponent<PlayerAttack>(); 
         
         // Gets the PlayerBlock script from the blockBox GameObject
-        playerBlock = blockBox.GetComponent<PlayerBlock>(); 
+        playerBlock = blockBox.GetComponent<PlayerBlock>();
+
+        playerThrow = throwBox.GetComponent<PlayerThrow>();
         
     }
 
@@ -191,8 +194,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             {
                 // Sets game time back to normal
                 Time.timeScale = 1f;
-                // canAttack = true;
-                // canDefend = true;
+                canAttack = true;
+                canDefend = true;
             }
 
             // TEMPORARY
@@ -224,7 +227,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
         comboTime = 3;
 
-        throwRate = 0.3f;
+        throwRate = 0.2f;
         nextThrowTime = 0f;
 
         pressedTime = 0f;
@@ -306,32 +309,27 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
     }
 
-    // Performs a throw attack on the selected enemy, adds a force to the enemy object and deals damage
+    // Performs a throw attack on the selected enemy, configured in the PlayerThrow class
     public void Throw()
     {
-        if (Time.time >= nextThrowTime)
+        if (playerThrow.ObjectsHitCount() != 0)
         {
-            // Throw feature will be configured here
-            if (playerAttack.GetObjectsHit().Count == 0 || playerAttack.GetObjectsHit()[0].gameObject.layer != enemyLayer)
+            if (Time.time >= nextThrowTime)
             {
-                UnityEngine.Debug.Log("No valid object to throw");
-            }
-            else if (playerAttack.GetObjectsHit()[0] != null && playerAttack.GetObjectsHit()[0].gameObject.layer == enemyLayer)
-            {
-                throwing = true;
                 attacking = true;
-                
-                GameObject toThrow = playerAttack.GetObjectsHit()[0].gameObject;
-                // Add force to enemy rigid body 
-                toThrow.GetComponent<EnemyScript>().rb.AddForce(toThrow.transform.right, ForceMode2D.Impulse);
-                // Throw attack performed 
-                UnityEngine.Debug.Log("Throw attack performed");
+                playerThrow.Throw();
                 stats.AffectCurrentStamima(stamDecThrow, "dec");
-                
                 attacking = false;
-
                 nextThrowTime = Time.time + 1f / throwRate;
             }
+            else
+            {
+                UnityEngine.Debug.Log("Throw is on cooldown");
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.Log("No valid enemy to throw");
         }
     }
 

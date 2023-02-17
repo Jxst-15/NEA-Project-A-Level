@@ -61,6 +61,10 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         
         // Set the position of the weapon to where the hand GameObject is and set its parent to the parent that the hand is attached to
         this.transform.position = new Vector2(hand.transform.position.x, hand.transform.position.y);
+        if (hand.transform.parent.localScale.x < 0)
+        {
+            this.transform.localScale = new Vector2(-this.transform.localScale.x, this.transform.localScale.y);
+        }
         this.transform.parent = hand.transform;
         // Destroy(gameObject);
     }

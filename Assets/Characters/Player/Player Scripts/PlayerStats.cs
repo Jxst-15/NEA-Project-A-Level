@@ -141,7 +141,8 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         // currentHealth is affected by the damage given as a parameter
         currentHealth -= dmg;
-        DeathCheck();
+        combatScript.ResetComboCount();
+        // DeathCheck();
     }
 
     //WIP
@@ -149,6 +150,13 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         Debug.Log("Stunned");
         stun = true;
+        
+        combatScript.canAttack = false;
+        combatScript.canDefend = false;
+        combatScript.blocking = false;
+
+        controllerScript.canMove = false;
+        
         tillUnstun = Time.time + 5f;
     }
 
@@ -157,11 +165,11 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         if (Time.time < tillUnstun)
         {
-            combatScript.canAttack = false;
-            combatScript.canDefend = false;
-            combatScript.blocking = false;
+            //combatScript.canAttack = false;
+            //combatScript.canDefend = false;
+            //combatScript.blocking = false;
 
-            controllerScript.canMove = false;
+            //controllerScript.canMove = false;
         }
         else
         {

@@ -83,11 +83,8 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         enemyAI = GetComponent<EnemyAI>();
         enemyStats = GetComponent<EnemyStats>();
 
-        //targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
-        //targetAttackStatus = target.GetComponent<PlayerCombat>();
-        //targetStats = target.GetComponent<PlayerStats>();
-        
-        
+        attackRate = enemyStats.attackRate;
+
         attackBox.SetActive(false);
     }
 
@@ -111,7 +108,6 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
 
         attackRange = 1.5f;
         attackCount = 0;
-        attackRate = 2;
         nextAttackTime = 0f;
 
         uaRate = 0.1f;
@@ -155,7 +151,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     public void ProbabilityOfActions()
     {
         // To determine which action to do
-        randNum = 0;
+        // randNum = 0;
         randNum = Random.Range(1, 11);
         if (weapon != null && weapon.tag == "Weapons")
         {
@@ -236,7 +232,6 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
                 Throw();
             }
             nextAttackTime = Time.time + 1f / attackRate;
-            // Debug.Log("Next attack time is: " + nextAttackTime);
         }
     }
 

@@ -12,21 +12,21 @@ public class PlayerController : CharMovement, ICharacterController
 
     #region Variables 
     // Variables for player movement
-    [SerializeField] private int vSpeed = 2;
-    [SerializeField] private int hSpeed = 3;
-    [SerializeField] private int vRunSpeed = 4;
-    [SerializeField] private int hRunSpeed = 5;
-    [SerializeField] private bool isRunning = false;
+    [SerializeField] private int vSpeed;
+    [SerializeField] private int hSpeed;
+    [SerializeField] private int vRunSpeed;
+    [SerializeField] private int hRunSpeed;
+    [SerializeField] private bool isRunning;
     private float vMove, hMove;
 
     [SerializeField] private const int jumpHeight = 3;
-    [SerializeField] private bool onGround = true;
+    [SerializeField] private bool onGround;
 
     // Variables to allow player to dodge
-    [SerializeField] private bool isDodging = false;
-    [SerializeField] private float dodgeSpeed = 35;
+    [SerializeField] private bool isDodging;
+    [SerializeField] private float dodgeSpeed;
     [SerializeField] private float startDodgeTime;
-    [SerializeField] private int side = 0;
+    [SerializeField] private int side;
     private float dodgeTime;  
 
     // For double tapping key
@@ -34,7 +34,7 @@ public class PlayerController : CharMovement, ICharacterController
     KeyCode lastKey;
 
     // For flipping player
-    private bool facingRight = true;
+    private bool facingRight;
     private float playerPosX, playerPosY;
     
     private Rigidbody2D rb;
@@ -49,15 +49,10 @@ public class PlayerController : CharMovement, ICharacterController
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        playerPosX = transform.localScale.x;
-        playerPosY = transform.localScale.y;
-        
-        // Following sets dodgeTime = to 0.1 as default
-        dodgeTime = startDodgeTime; 
+
+        SetVariables();
 
         playerAction = actionBox.GetComponent<PlayerAction>();
-
-        canMove = true;
     }
 
     // Update is called once per frame
@@ -108,6 +103,32 @@ public class PlayerController : CharMovement, ICharacterController
         }
     }
 
+    private void SetVariables()
+    {
+        playerPosX = transform.localScale.x;
+        playerPosY = transform.localScale.y;
+
+        vSpeed = 2;
+        hSpeed = 3;
+        vRunSpeed = 4;
+        hRunSpeed = 5;
+
+        canMove = true;
+        isRunning = false;
+
+        // Following sets dodgeTime = to 0.1 as default
+        dodgeTime = startDodgeTime;
+        isDodging = false;
+        dodgeSpeed = 35;
+        side = 0;
+
+        facingRight = true;
+        
+        onGround = true;
+
+    }
+
+    // WIP
     public void Jump()
     {
         if (Input.GetButtonDown("Jump"))
@@ -190,12 +211,10 @@ public class PlayerController : CharMovement, ICharacterController
                 dodgeTime -= Time.deltaTime;
                 if (side == 1)
                 {
-                    // Debug.Log("Dodge initiated (left)");
                     rb.velocity = Vector2.left * dodgeSpeed;
                 }
                 else if (side == 2)
                 {
-                    // Debug.Log("Dodge initiated (right)");
                     rb.velocity = Vector2.right * dodgeSpeed;
                 }
             }
@@ -203,13 +222,10 @@ public class PlayerController : CharMovement, ICharacterController
     }
 
     // Action button can be worked on at later date when items added
-    // Allows for the player to pick up an item on the floor by pressing an input
+    // Allows for the player interact with various objects in the stage e.g. weapons
     public void Action()
     {
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            Debug.Log("Player did an action");
-        }
+        playerAction.Action();
     }
 
     // Takes in bool flag to determine which direction player facing and flips player accordingly

@@ -47,7 +47,11 @@ public class PlayerThrow : MonoBehaviour
             {
                 // Ends the throw
                 playerCombat.throwing = false;
+                
                 toThrow.GetComponent<EnemyAI>().canMove = true;
+                toThrow.GetComponent<EnemyCombat>().canAttack = true;
+                toThrow.GetComponent<EnemyCombat>().canDefend = true;
+                
                 toThrow.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 throwDuration = 3f;
             }
@@ -74,7 +78,11 @@ public class PlayerThrow : MonoBehaviour
             // Takes the first enemy in the list to throw
             toThrow = objectsHit[0].gameObject;
             playerCombat.throwing = true;
+            
             toThrow.GetComponent<EnemyAI>().canMove = false;
+            toThrow.GetComponent<EnemyCombat>().canAttack = false;
+            toThrow.GetComponent<EnemyCombat>().canDefend = false;
+            
             // The enemy can no longer move and a velocity is applied so that it moves in the specified direction
             toThrow.GetComponent<Rigidbody2D>().velocity = direction * speed;
             Debug.Log("Throw attack performed");

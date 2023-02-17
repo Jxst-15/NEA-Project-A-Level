@@ -25,10 +25,10 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     [SerializeField] private int attackCount;
     private float nextAttackTime;
 
-    private int comboTime;
+    private float comboTime;
     
     // How many attacks player has performed without getting hit (Field)
-    private int comboCount;
+    [SerializeField] private int comboCount;
 
     // 0.5s, time which is needed for a parry to be valid
     private const float parryDelay = 0.5f;
@@ -165,7 +165,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
                     }
                     keyHeld = false;
-                }
+                }              
                 if (Input.GetKey(KeyCode.H))
                 {
                     // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
@@ -225,7 +225,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         attackCount = 0;
         nextAttackTime = 0f;
 
-        comboTime = 3;
+        comboTime = 5f;
 
         throwRate = 0.2f;
         nextThrowTime = 0f;
@@ -249,11 +249,16 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     public void ResetComboCount()
     {
         comboCount = 0;
+        comboTime = 5f;
     }
 
     public void ComboMeter()
     {
         // Combo meter will be configured here
+        // A timer runs 
+        // This timer runs until it reaches the comboTime
+        // If no attacks that have dealth damage have been performed then the comboCount will be set to 0
+        // Else update the timer to restart
     }
 
     public void Attack()
@@ -307,19 +312,29 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     private void DealDamage(Collider2D hittableObj, int dmgToDeal)
     {
         hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
+        
+        if (hittableObj.gameObject.layer == enemyLayer)
+        {
+            comboCount++;
+        }
     }
 
     // Performs a throw attack on the selected enemy, configured in the PlayerThrow class
     public void Throw()
     {
+        // If the list in playerThrow has elements in it then execute following
         if (playerThrow.ObjectsHitCount() != 0)
         {
             if (Time.time >= nextThrowTime)
             {
                 attacking = true;
+                
+                // Calls throw method
                 playerThrow.Throw();
                 stats.AffectCurrentStamima(stamDecThrow, "dec");
                 attacking = false;
+
+                // For cooldowns
                 nextThrowTime = Time.time + 1f / throwRate;
             }
             else
@@ -327,6 +342,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                 UnityEngine.Debug.Log("Throw is on cooldown");
             }
         }
+        // If there are no elements in the list
         else
         {
             UnityEngine.Debug.Log("No valid enemy to throw");

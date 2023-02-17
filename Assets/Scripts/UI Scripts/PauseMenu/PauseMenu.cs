@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     #region GameObject References
+    public GameObject gameUI;
     public GameObject backgroundObject;
     public GameObject pauseMenuObject;
     #endregion
@@ -43,6 +44,7 @@ public class PauseMenu : MonoBehaviour
     public void PauseGame()
     {
         isPaused = true;
+        gameUI.SetActive(false);
         backgroundObject.SetActive(true);
         pauseMenuObject.SetActive(true);
         Time.timeScale = 0f;
@@ -51,6 +53,7 @@ public class PauseMenu : MonoBehaviour
     public void ResumeGame()
     {
         isPaused = false;
+        gameUI.SetActive(true);
         backgroundObject.SetActive(false);
         pauseMenuObject.SetActive(false);
         Time.timeScale = 1f;

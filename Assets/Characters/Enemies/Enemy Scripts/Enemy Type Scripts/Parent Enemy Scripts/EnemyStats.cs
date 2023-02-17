@@ -25,6 +25,8 @@ public class EnemyStats : MonoBehaviour, IDamageable
     { get; set; }
     public int hRunSpeed
     { get; set; }
+    public float attackRate
+    { get; set; }
     public int lDmg
     { get; set; }
     public int hDmg
@@ -61,6 +63,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
         {
             case "NormalEnemies":
                 maxHealth = 400;
+                attackRate = 2;
                 lDmg = 40;
                 hDmg = 60;
                 uDmg = 80;
@@ -72,6 +75,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
                 break;
             case "NimbleEnemies":
                 maxHealth = 200;
+                attackRate = 3;
                 lDmg = 20;
                 hDmg = 30;
                 uDmg = 50;
@@ -83,6 +87,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
                 break;
             case "BulkyEnemies":
                 maxHealth = 600;
+                attackRate = 0.5f;
                 lDmg = 60;
                 hDmg = 80;
                 uDmg = 100;
@@ -94,6 +99,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
                 break;
             case "BossEnemies":
                 maxHealth = 700;
+                attackRate = 0.5f;
                 lDmg = 70;
                 hDmg = 90;
                 uDmg = 110;

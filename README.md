@@ -3,7 +3,7 @@
 ### NEA Project for my A Level Computer Science Course
 
 This repository will contains the files that I am using to create my A-Level NEA Project
-My NEA Project is a 2D Beat-Em-Up side scroller which involves saving methods using databases and OOP 
+My NEA Project is a 2D Beat-Em-Up side scroller which involves saving using a database and OOP throughout the project 
 
 
 *- Justin Jay Villapa*

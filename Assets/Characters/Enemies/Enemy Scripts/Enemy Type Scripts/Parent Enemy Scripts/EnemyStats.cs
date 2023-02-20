@@ -208,7 +208,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
         // Disable the game object 
         gameObject.SetActive(false);
         // Destroy the game object helps to manage memory and declutter screen
-        // Destroy(gameObject);
+        Destroy(gameObject);
         Debug.Log("Enemy Died");
     }
 }

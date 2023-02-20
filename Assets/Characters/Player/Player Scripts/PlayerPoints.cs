@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class PlayerPoints : MonoBehaviour
 {
-    #region Variables
-    [SerializeField] private int points;
+    #region Getters and Setters
+    public static int points
+    { get; set; }
     #endregion
 
     // Start is called before the first frame update

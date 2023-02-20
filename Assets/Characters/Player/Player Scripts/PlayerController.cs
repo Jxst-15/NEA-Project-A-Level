@@ -140,7 +140,7 @@ public class PlayerController : CharMovement, ICharacterController
         }
     }
 
-    public void DoubleTappingMovement()
+    private void DoubleTappingMovement()
     {
         if (hMove > 0)
         {

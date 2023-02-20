@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// WIP
 public class PauseMenu : MonoBehaviour
 {
     #region GameObject References

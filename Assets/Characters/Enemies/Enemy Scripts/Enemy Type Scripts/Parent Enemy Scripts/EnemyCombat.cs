@@ -8,6 +8,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     [SerializeField] private EnemyAI enemyAI;
     [SerializeField] private EnemyStats enemyStats;
 
+    // These are set in the inspector within unity
     [SerializeField] private PlayerCombat targetAttackStatus;
     [SerializeField] private PlayerBlock targetBlockStats;
     [SerializeField] private PlayerStats targetStats;

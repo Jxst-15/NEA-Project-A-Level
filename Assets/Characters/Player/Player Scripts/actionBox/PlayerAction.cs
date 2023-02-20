@@ -20,42 +20,47 @@ public class PlayerAction : MonoBehaviour
 
     public void Action()
     {
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.N) && interact.Count != 0)
         {
-            if (interact.Count != 0)
+            IInteractable toInteract = interact[0].gameObject.GetComponent<IInteractable>();
+            //Prioritises the first item in the list to interact with
+            switch (interact[0].gameObject.tag)
             {
-                IInteractable toInteract = interact[0].gameObject.GetComponent<IInteractable>();
-                switch (interact[0].gameObject.tag)
-                {
-                    case "Weapons":
-                        // Checks if player already holding weapon
-                        if (weaponHolding.weaponHeld != true)
-                        {
-                            //Uses the first item in the list to pick up weapon
-                            // Needs to check if the weapon is in range, that's where the null reference exception is from future me :)
-                            toInteract.Interact();
-                            weaponHolding.weaponHeld = true;
+                case "Weapons":
+                    // Checks if player already holding weapon
+                    if (weaponHolding.weaponHeld != true)
+                    {
+                        weaponHolding.weaponHeld = true;
 
-                            // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to
-                            weaponHolding.weapon = interact[0].gameObject;
-                        }
-                        else
-                        {
-                            Debug.Log("Already holding weapon");
-                        }
-                        break;
-                }
+                        // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to
+                        weaponHolding.weapon = interact[0].gameObject;
+                    }
+                    else
+                    {
+                        Debug.Log("Already holding weapon");
+                    }
+                    break;
             }
+            // Calls the interact method for the first item in the list
+            toInteract.Interact();
         }
     }
 
     void OnTriggerEnter2D(Collider2D toInteract)
     {
-        // If the item is not already in the list, it's a weapon and the player is not holding anything currently
-        if (!interact.Contains(toInteract) && toInteract.gameObject.tag == "Weapons" && weaponHolding.weaponHeld == false)
+        if (!interact.Contains(toInteract))
         {
-            // Add to list
-            interact.Add(toInteract);
+            // Save points take priority
+            if (toInteract.gameObject.tag == "SavePoint")
+            {
+                interact.Add(toInteract);
+            }
+            // If the item is not already in the list, it's a weapon and the player is not holding anything currently
+            else if (toInteract.gameObject.tag == "Weapons" && weaponHolding.weaponHeld == false)
+            {
+                // Add to list
+                interact.Add(toInteract);
+            }
         }
     }
 

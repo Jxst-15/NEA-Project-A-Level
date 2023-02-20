@@ -9,12 +9,6 @@ public class BladedWeapon : Weapon
     private float stabTime;
     #endregion
 
-    // Start is called before the first frame update
-    //override void Start()
-    //{
-    //    SetVariables();
-    //}
-
     // Update is called once per frame
     protected override void Update()
     {

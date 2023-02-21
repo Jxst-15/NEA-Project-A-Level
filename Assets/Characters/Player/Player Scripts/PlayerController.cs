@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : CharMovement, ICharacterController
+public class PlayerController : CharMovement
 {
     #region GameObjects
     public GameObject actionBox;
@@ -12,51 +12,53 @@ public class PlayerController : CharMovement, ICharacterController
 
     #region Variables 
     // Variables for player movement
-    [SerializeField] private int vSpeed;
-    [SerializeField] private int hSpeed;
-    [SerializeField] private int vRunSpeed;
-    [SerializeField] private int hRunSpeed;
-    [SerializeField] private bool isRunning;
+    //[SerializeField] private int vSpeed;
+    //[SerializeField] private int hSpeed;
+    //[SerializeField] private int vRunSpeed;
+    //[SerializeField] private int hRunSpeed;
+    //[SerializeField] private bool isRunning;
     private float vMove, hMove;
 
     [SerializeField] private const int jumpHeight = 3;
-    [SerializeField] private bool onGround;
+    //[SerializeField] private bool onGround;
 
     // Variables to allow player to dodge
-    [SerializeField] private bool isDodging;
-    [SerializeField] private float dodgeSpeed;
-    [SerializeField] private float startDodgeTime;
-    [SerializeField] private int side;
-    private float dodgeTime;  
+    //[SerializeField] private bool isDodging;
+    //[SerializeField] private float dodgeSpeed;
+    //[SerializeField] private float startDodgeTime;
+    //[SerializeField] private int side;
+    //private float dodgeTime;  
 
     // For double tapping key
     private float doubleTapSpeed;
     KeyCode lastKey;
 
     // For flipping player
-    private bool facingRight;
-    private float playerPosX, playerPosY;
+    //private bool facingRight;
+    // private float playerPosX, playerPosY;
     
-    private Rigidbody2D rb;
+    // private Rigidbody2D rb;
     #endregion
 
     #region Getters and Setters
-    public bool canMove
-    { get; set; }
+    //public bool canMove
+    //{ get; set; }
     #endregion
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
 
-        SetVariables();
+        //SetVariables();
+
+        base.Start();
 
         playerAction = actionBox.GetComponent<PlayerAction>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (PauseMenu.isPaused == false)
         {
@@ -67,14 +69,15 @@ public class PlayerController : CharMovement, ICharacterController
                 vMove = Input.GetAxisRaw("Vertical");
                 hMove = Input.GetAxisRaw("Horizontal");
                 DoubleTappingMovement();
-                Flip(facingRight, playerPosX, playerPosY);
+                // Flip(facingRight, playerPosX, playerPosY);
+                Flip(facingRight, scaleX, scaleY);
             }
             Action();
         }
     }
 
     // Similar to Update but runs depending on device framerate (default 0.02s), better to use with physics
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
         if (PauseMenu.isPaused == false)
         {
@@ -103,29 +106,49 @@ public class PlayerController : CharMovement, ICharacterController
         }
     }
 
-    private void SetVariables()
+    //private void SetVariables()
+    //{
+    //    //playerPosX = transform.localScale.x;
+    //    //playerPosY = transform.localScale.y;
+
+    //    base.SetVariables();
+
+    //    vSpeed = 2;
+    //    hSpeed = 3;
+    //    vRunSpeed = 4;
+    //    hRunSpeed = 5;
+
+    //    canMove = true;
+    //    isRunning = false;
+
+    //    // Following sets dodgeTime = to 0.1 as default
+    //    dodgeTime = startDodgeTime;
+    //    isDodging = false;
+    //    dodgeSpeed = 35;
+    //    side = 0;
+
+    //    facingRight = true;
+
+    //    onGround = true;
+
+    //}
+
+
+    protected override void SetVariables()
     {
-        playerPosX = transform.localScale.x;
-        playerPosY = transform.localScale.y;
+        base.SetVariables();
 
         vSpeed = 2;
         hSpeed = 3;
         vRunSpeed = 4;
         hRunSpeed = 5;
 
-        canMove = true;
-        isRunning = false;
-
-        // Following sets dodgeTime = to 0.1 as default
+        startDodgeTime = 0.1f;
         dodgeTime = startDodgeTime;
-        isDodging = false;
         dodgeSpeed = 35;
         side = 0;
 
         facingRight = true;
-        
-        onGround = true;
-
     }
 
     // WIP
@@ -133,9 +156,9 @@ public class PlayerController : CharMovement, ICharacterController
     {
         if (Input.GetButtonDown("Jump"))
         {
-            onGround = false;
+            // onGround = false;
             Debug.Log("Player jumped!");
-            // rb.AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
+            // rb.AddForce(new Vector2(0f, jumpHeight) * 5, ForceMode2D.Impulse);
             // onGround = true;
         }
     }
@@ -185,18 +208,18 @@ public class PlayerController : CharMovement, ICharacterController
         }
     }
 
-    public void Movement()
+    protected override void Movement()
     {
         rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed);
     }
 
-    public void Run()
+    protected override void Run()
     {
         // Similar to normal movement but speed values replaced with run speed values
         rb.velocity = new Vector2(hMove * hRunSpeed, vMove * vRunSpeed);
     }
 
-    public void Dodge()
+    protected override void Dodge()
     {
         if (side != 0)
         {
@@ -223,21 +246,21 @@ public class PlayerController : CharMovement, ICharacterController
 
     // Action button can be worked on at later date when items added
     // Allows for the player interact with various objects in the stage e.g. weapons
-    public void Action()
+    protected override void Action()
     {
         playerAction.Action();
     }
 
     // Takes in bool flag to determine which direction player facing and flips player accordingly
-    public void Flip(bool facingRight, float posX, float posY) 
+    protected override void Flip(bool facingRight, float scaleX, float scaleY) 
     {
         if (facingRight == true) {
-            this.transform.localScale = new Vector2(posX, posY);
+            this.transform.localScale = new Vector2(scaleX, scaleY);
         }
         else 
         {
             // Flips player on the x axis so it is negative so player faces left
-            this.transform.localScale = new Vector2(-posX, posY);
+            this.transform.localScale = new Vector2(-scaleX, scaleY);
         }
     }
 }

@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 14561201}
   - component: {fileID: 14561200}
-  - component: {fileID: 14561199}
   m_Layer: 0
   m_Name: blockBox
   m_TagString: Untagged
@@ -141,18 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &14561199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 14561198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 339a11e3092a0674c90450097260f545, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &14561200
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -668,6 +655,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 164157254}
   m_CullTransparentMesh: 1
+--- !u!1 &263223868
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 263223869}
+  - component: {fileID: 263223870}
+  - component: {fileID: 263223871}
+  m_Layer: 9
+  m_Name: groundBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &263223869
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263223868}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 827074375}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &263223870
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263223868}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.011025667, y: 0.007737318}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.264616, y: 0.0804231}
+  m_EdgeRadius: 0
+--- !u!114 &263223871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263223868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab2ee473e347d094396c9785e4c93530, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &308243316
 GameObject:
   m_ObjectHideFlags: 0
@@ -707,8 +765,8 @@ MonoBehaviour:
   stats: {fileID: 308243323}
   playerStyleSwitch: {fileID: 308243324}
   playerAttack: {fileID: 707379914}
-  playerThrow: {fileID: 0}
-  playerBlock: {fileID: 0}
+  playerThrow: {fileID: 1684445081}
+  playerBlock: {fileID: 1549039191}
   weapon: {fileID: 0}
   attackBox: {fileID: 707379911}
   blockBox: {fileID: 1549039188}
@@ -735,18 +793,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562c86abdc3d20342a29e015eda883a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vSpeed: 0
+  vRunSpeed: 0
+  hSpeed: 0
+  hRunSpeed: 0
+  isRunning: 0
+  isDodging: 0
+  dodgeSpeed: 0
+  startDodgeTime: 0
+  side: 0
+  onGround: 0
   actionBox: {fileID: 1712302961}
   playerAction: {fileID: 0}
-  vSpeed: 2
-  hSpeed: 3
-  vRunSpeed: 4
-  hRunSpeed: 5
-  isRunning: 0
-  onGround: 1
-  isDodging: 0
-  dodgeSpeed: 35
-  startDodgeTime: 0.1
-  side: 0
 --- !u!61 &308243319
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1930,7 +1988,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 643785998}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: handPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2789,6 +2847,7 @@ Transform:
   - {fileID: 1004200811}
   - {fileID: 14561201}
   - {fileID: 1723675717}
+  - {fileID: 263223869}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5656,7 +5715,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1723675717}
   - component: {fileID: 1723675716}
-  - component: {fileID: 1723675715}
   m_Layer: 0
   m_Name: parryBox
   m_TagString: Untagged
@@ -5664,18 +5722,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1723675715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1723675714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 339a11e3092a0674c90450097260f545, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1723675716
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6259,7 +6305,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2055731182}
   - component: {fileID: 2055731183}
-  m_Layer: 0
+  - component: {fileID: 2055731184}
+  m_Layer: 8
   m_Name: groundBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6307,6 +6354,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1888984, y: 0.101917386}
   m_EdgeRadius: 0
+--- !u!114 &2055731184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2055731181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab2ee473e347d094396c9785e4c93530, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2147368451
 GameObject:
   m_ObjectHideFlags: 0

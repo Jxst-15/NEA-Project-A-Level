@@ -116,74 +116,10 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             {
                 weaponHeld = true;
             }
+            
+            AttackLogic();
 
-            // If player is able to attack
-            if (canAttack == true)
-            {
-                if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
-                {
-                    if (Input.GetButtonDown("lAttack"))
-                    {
-                        lightAtk = true;
-                    }
-                    else if (Input.GetButtonDown("hAttack"))
-                    {
-                        lightAtk = false;
-                    }
-
-                    if (weapon == null)
-                    {
-                        Attack();
-                    }
-                    else if (weapon != null && weapon.tag == "Weapons")
-                    {
-                        WeaponAttack();
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.I))
-                {
-                    Throw();
-                }
-            }
-
-            // If player is able to defend 
-            if (canDefend == true)
-            {
-                if (Input.GetKeyDown(KeyCode.H))
-                {
-                    // Equal to time elapsed
-                    pressedTime = Time.time;
-                    keyHeld = false;
-                }
-                // Once key has been released, knows that key has been pressed not held
-                else if (Input.GetKeyUp(KeyCode.H))
-                {
-                    if (keyHeld == false)
-                    {
-                        UnityEngine.Debug.Log("Parry initiated");
-                        Parry();
-
-                    }
-                    keyHeld = false;
-                }              
-                if (Input.GetKey(KeyCode.H))
-                {
-                    // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
-                    if (Time.time - pressedTime > minHold)
-                    {
-                        Block();
-                        keyHeld = true;
-                    }
-                }
-                // Once key has been released then player is no longer blocking and can attack 
-                else
-                {
-                    parryBox.SetActive(false);
-                    blockBox.SetActive(false);
-                    blocking = false;
-                    canAttack = true;
-                }
-            }
+            DefendLogic();
 
             // If LeftShift is held then will call SwitchStyle method
             if (Input.GetKey(KeyCode.LeftShift))
@@ -245,6 +181,79 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
         weaponHeld = false;
     }
+
+    private void AttackLogic()
+    {
+        // If player is able to attack
+        if (canAttack == true)
+        {
+            if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
+            {
+                if (Input.GetButtonDown("lAttack"))
+                {
+                    lightAtk = true;
+                }
+                else if (Input.GetButtonDown("hAttack"))
+                {
+                    lightAtk = false;
+                }
+
+                if (weapon == null)
+                {
+                    Attack();
+                }
+                else if (weapon != null && weapon.tag == "Weapons")
+                {
+                    WeaponAttack();
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                Throw();
+            }
+        }
+    }
+
+    private void DefendLogic()
+    {
+        // If player is able to defend 
+        if (canDefend == true)
+        {
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                // Equal to time elapsed
+                pressedTime = Time.time;
+                keyHeld = false;
+            }
+            // Once key has been released, knows that key has been pressed not held
+            else if (Input.GetKeyUp(KeyCode.H))
+            {
+                if (keyHeld == false)
+                {
+                    UnityEngine.Debug.Log("Parry initiated");
+                    Parry();
+                }
+                keyHeld = false;
+            }
+            if (Input.GetKey(KeyCode.H))
+            {
+                // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
+                if (Time.time - pressedTime > minHold)
+                {
+                    Block();
+                    keyHeld = true;
+                }
+            }
+            // Once key has been released then player is no longer blocking and can attack 
+            else
+            {
+                parryBox.SetActive(false);
+                blockBox.SetActive(false);
+                blocking = false;
+                canAttack = true;
+            }
+        }
+    }
  
     public void ResetComboCount()
     {
@@ -263,7 +272,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     public void Attack()
     {
-        int dmgToDeal = 0;
+        int dmgToDeal;
         // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
         if (Time.time >= nextAttackTime)
         {
@@ -323,27 +332,24 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     public void Throw()
     {
         // If the list in playerThrow has elements in it then execute following
-        if (playerThrow.ObjectsHitCount() != 0)
+        if (Time.time >= nextThrowTime && playerThrow.ObjectsHitCount() != 0)
         {
-            if (Time.time >= nextThrowTime)
-            {
-                attacking = true;
+            attacking = true;
                 
-                // Calls throw method
-                playerThrow.Throw();
-                stats.AffectCurrentStamima(stamDecThrow, "dec");
-                attacking = false;
+            // Calls throw method
+            playerThrow.Throw();
+            stats.AffectCurrentStamima(stamDecThrow, "dec");
+            attacking = false;
 
-                // For cooldowns
-                nextThrowTime = Time.time + 1f / throwRate;
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Throw is on cooldown");
-            }
+            // For cooldowns
+            nextThrowTime = Time.time + 1f / throwRate;
+        }
+        else if (Time.time < nextThrowTime)
+        {
+            UnityEngine.Debug.Log("Throw is on cooldown");
         }
         // If there are no elements in the list
-        else
+        else if (playerThrow.ObjectsHitCount() == 0)
         {
             UnityEngine.Debug.Log("No valid enemy to throw");
         }

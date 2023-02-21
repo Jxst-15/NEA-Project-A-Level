@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyAI : CharMovement, ICharacterController
+public class EnemyAI : MonoBehaviour, ICharacterController
 {
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
@@ -80,7 +80,7 @@ public class EnemyAI : CharMovement, ICharacterController
         dodgeSpeed = 35;
         side = 0;
 
-        maxTrackDistance = 14f;
+        maxTrackDistance = 15f;
         runDistance = 8f;
         attackDistance = 2.5f;
 

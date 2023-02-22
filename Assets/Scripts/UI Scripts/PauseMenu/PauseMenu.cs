@@ -63,6 +63,7 @@ public class PauseMenu : MonoBehaviour
     public void SettingsButton()
     {
         // Code for opening settings
+        // Load settings scene
     }
 
     public void RestartButton()
@@ -75,5 +76,6 @@ public class PauseMenu : MonoBehaviour
     public void QuitButton()
     {
         // Code for quitting game to menu
+        // Load menu scene
     }
 }

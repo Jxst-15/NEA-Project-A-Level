@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyAttack : CharAttackBox
 {
+    #region W/O Inheritance
+    /*
     private List<Collider2D> objectsHit = new List<Collider2D>();
 
     void OnTriggerEnter2D(Collider2D hittableObj)
@@ -11,7 +11,6 @@ public class EnemyAttack : MonoBehaviour
         if (!objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Player") || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit"))
         {
             objectsHit.Add(hittableObj);
-            // Debug.Log("Object removed from list (E)");
         }
     }
 
@@ -20,7 +19,6 @@ public class EnemyAttack : MonoBehaviour
         if (objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Player") || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit"))
         {
             objectsHit.Remove(hittableObj);
-            // Debug.Log("Object removed from list (E)");
         }
     }
 
@@ -28,5 +26,12 @@ public class EnemyAttack : MonoBehaviour
     {
         // Debug.Log("List returned "+ objectsHit.Count);
         return objectsHit;
+    }
+    */
+    #endregion
+
+    private void Start()
+    {
+        toAttack = LayerMask.NameToLayer("Player");
     }
 }

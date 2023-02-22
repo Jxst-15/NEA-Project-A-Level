@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack : CharAttackBox
 {
+    #region W/O Inheritance
+    /*
     // Following list stores all enemy colliders within attack range
     private List<Collider2D> objectsHit = new List<Collider2D>();
 
@@ -13,7 +13,6 @@ public class PlayerAttack : MonoBehaviour
         if (!objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Enemy") || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit")) 
         {
             objectsHit.Add(hittableObj);
-            // Debug.Log("Object added to list (P)");
         }
     }
 
@@ -23,7 +22,6 @@ public class PlayerAttack : MonoBehaviour
         if (objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == LayerMask.NameToLayer("Enemy") || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit"))
         {
             objectsHit.Remove(hittableObj);
-            // Debug.Log("Object removed from list (P)");
         }
     }
 
@@ -32,5 +30,12 @@ public class PlayerAttack : MonoBehaviour
     {
         // Debug.Log("List returned "+ objectsHit.Count);
         return objectsHit;
+    }
+    */
+    #endregion
+
+    private void Start()
+    {
+        toAttack = LayerMask.NameToLayer("Enemy");
     }
 }

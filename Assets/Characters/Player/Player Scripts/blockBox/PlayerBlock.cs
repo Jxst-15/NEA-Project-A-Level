@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// WIP
+// Want to fix block implementation/ improve it
 public class PlayerBlock : MonoBehaviour
 {
     #region Script References
     private PlayerCombat combatScript;
+
+    private EnemyCombat blockEnemy;
     #endregion
 
     private List<Collider2D> toBlock = new List<Collider2D>();
@@ -25,27 +29,32 @@ public class PlayerBlock : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        stamDecBlock = 10;
-        healthDecBlock = 4;
-        this.gameObject.SetActive(false);
+        stamDecBlock = 5;
+        healthDecBlock = 2;
     }
 
     private void Update()
     {
-        Block();
+        if (!Input.GetKey(KeyCode.H))
+        {
+            foreach(Collider2D c in toBlock)
+            {
+                c.GetComponent<EnemyCombat>().gettingBlocked = false;
+            }
+        }
     }
 
-    private void Block()
+    public void Block()
     {
         foreach(Collider2D c in toBlock)
         {
-
+            c.GetComponent<EnemyCombat>().gettingBlocked = true;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D enemy)
     {
-        if (!toBlock.Contains(enemy) && enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (!toBlock.Contains(enemy) && enemy.gameObject.layer == LayerMask.NameToLayer("Enemy") && enemy.gameObject.name != "groundBox")
         {
             toBlock.Add(enemy);
         }
@@ -55,6 +64,7 @@ public class PlayerBlock : MonoBehaviour
     {
         if (toBlock.Contains(enemy) && enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
+            enemy.GetComponent<EnemyCombat>().gettingBlocked = false;
             toBlock.Remove(enemy);
         }
     }

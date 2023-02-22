@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-// WIP
 public class TimeController : UIController
 {
     #region Getters and Setters
@@ -11,7 +10,7 @@ public class TimeController : UIController
 
     protected override void UpdateText()
     {
-        time = Convert.ToInt32(Time.unscaledTime);
+        time = Convert.ToInt32(Time.time);
         text.text = time.ToString();
     }
 }

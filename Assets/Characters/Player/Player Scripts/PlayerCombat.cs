@@ -144,7 +144,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     private void SetVariables()
     {
-        blockBox.SetActive(false);
+        // blockBox.SetActive(false);
         parryBox.SetActive(false);
 
         enemyLayer = LayerMask.NameToLayer("Enemy");
@@ -248,7 +248,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             else
             {
                 parryBox.SetActive(false);
-                blockBox.SetActive(false);
+                // blockBox.SetActive(false);
                 blocking = false;
                 canAttack = true;
             }
@@ -361,7 +361,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         // Block feature will be configured here
         blocking = true;
         canAttack = false;
-        blockBox.SetActive(true);
+        playerBlock.Block();
     }
 
     // Allows player to parry incoming enemy attacks, player recieves no damage if successful and regains small stamina
@@ -381,39 +381,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     public void WeaponAttack()
     {
-        //if (Time.time >= nextWAttackTime)
-        //{
-        //    // Weapon attack feature will be configured here
-        //    if (Input.GetButtonDown("lAttack"))
-        //    {
-        //        UnityEngine.Debug.Log("Weapon Attack Initiated");
-        //        attacking = true;
-        //        parryable = true;
-
-        //        // Light attack performed
-        //        UnityEngine.Debug.Log("Light weapon attack performed");
-        //        nextWAttackTime = Time.time + 1f / wAttackRate;
-        //    }
-        //    else if (Input.GetButtonDown("hAttack"))
-        //    {
-        //        UnityEngine.Debug.Log("Weapon Attack Initiated");
-        //        attacking = true;
-        //        parryable = true;
-
-        //        // Heavy attack performed
-        //        UnityEngine.Debug.Log("Heavy weapon attack performed");
-        //        nextWAttackTime = Time.time + 1f / wAttackRate;
-        //    }
-        //    else if (Input.GetKeyDown(KeyCode.L))
-        //    {
-        //        UnityEngine.Debug.Log("Weapon Attack Initiated");
-        //        attacking = true;
-
-        //        // Gets the type of the weapon to determine which attack to perform
-        //        UnityEngine.Debug.Log("Unique weapon attack performed");
-        //        nextWAttackTime = Time.time + 1f / wAttackRate;
-        //    }
-        //}
         attacking = true;
         parryable = true;
         weapon.GetComponent<Weapon>().Attack();
@@ -425,8 +392,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     public void DropWeapon()
     {
         if (weapon != null)
-        {
-            
+        {         
             weapon.GetComponent<Weapon>().DropItem();
         }
     }

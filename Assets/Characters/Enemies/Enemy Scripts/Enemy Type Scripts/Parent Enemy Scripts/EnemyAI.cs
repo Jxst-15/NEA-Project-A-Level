@@ -30,6 +30,8 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     private float maxTrackDistance;
     private float runDistance;
     private float attackDistance;
+
+    public Rigidbody2D rb;
     #endregion
 
     #region Getters and Setters
@@ -42,6 +44,8 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+
         enemyStats = GetComponent<EnemyStats>();
         enemyScript = GetComponent<EnemyScript>();
         SetVariables();

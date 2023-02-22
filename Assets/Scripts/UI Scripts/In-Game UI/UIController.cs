@@ -15,10 +15,7 @@ public class UIController : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
-        if (PauseMenu.isPaused != true)
-        {
-            UpdateText();
-        }
+        UpdateText();
     }
 
     protected virtual void UpdateText() { }

@@ -13,7 +13,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
 
     private float nextRegen;
     
-    [SerializeField] private bool stun;
+    // [SerializeField] private bool stun;
     private float tillUnstun;
     #endregion
 
@@ -22,6 +22,8 @@ public class PlayerStats : MonoBehaviour, IDamageable
     { get; set; }
     public int hDmg
     { set; get; }
+    public bool stun
+    { get; private set; }
     public bool dead
     { get; set; }
     #endregion

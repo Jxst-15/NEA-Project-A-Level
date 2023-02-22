@@ -67,6 +67,8 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     { get; set; }
     public bool weaponHeld
     { get; set; }
+    public bool gettingBlocked
+    { get; set; }
     #endregion
 
     void Awake()
@@ -188,7 +190,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             // The probability of attacking
             randNum = Random.Range(1, 11); 
             
-            if (targetAttackStatus.blocking != true)
+            if (gettingBlocked != true || targetStats.stun == true)
             {
                 if (1 <= randNum && randNum <= 8)
                 {
@@ -212,14 +214,9 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
                     }
                 }
             }
-            else
+            else 
             {
-                Debug.Log("Attack was blocked!");
-                
-                // The following decreases the targets current stamina and deals a small amount of damage
-                targetStats.AffectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
-                targetStats.TakeDamage(targetBlockStats.healthDecBlock);
-
+                AttackWhenBlocking();
             }
 
             if (randNum == 9)
@@ -234,6 +231,15 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             }
             nextAttackTime = Time.time + 1f / attackRate;
         }
+    }
+
+    public void AttackWhenBlocking()
+    {
+        //Debug.Log("Attack was blocked!");
+
+        // The following decreases the targets current stamina and deals a small amount of damage
+        targetStats.AffectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
+        targetStats.TakeDamage(targetBlockStats.healthDecBlock);
     }
 
     public void UnblockableAttack()

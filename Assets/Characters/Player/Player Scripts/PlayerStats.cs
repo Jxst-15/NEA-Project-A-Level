@@ -165,15 +165,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
     // WIP
     public void Stunned()
     {
-        if (Time.time < tillUnstun)
-        {
-            //combatScript.canAttack = false;
-            //combatScript.canDefend = false;
-            //combatScript.blocking = false;
-
-            //controllerScript.canMove = false;
-        }
-        else
+        if (Time.time > tillUnstun)
         {
             Debug.Log("Unstunned");
             combatScript.canAttack = true;

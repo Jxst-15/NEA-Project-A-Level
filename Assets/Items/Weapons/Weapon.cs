@@ -16,6 +16,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     #region GameObjects
     public GameObject hand;
+    public GameObject dropPoint;
     #endregion
 
     #region Variables
@@ -58,28 +59,15 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     public void Interact()
     {
         Debug.Log("Weapon was picked up!");
-        
+
         // Set the position of the weapon to where the hand GameObject is and set its parent to the parent that the hand is attached to
-        this.transform.position = new Vector2(hand.transform.position.x, hand.transform.position.y);
+        this.transform.parent = hand.transform;
         if (hand.transform.parent.localScale.x < 0)
         {
             this.transform.localScale = new Vector2(-this.transform.localScale.x, this.transform.localScale.y);
         }
-        this.transform.parent = hand.transform;
-        // Destroy(gameObject);
+        this.transform.position = new Vector2(hand.transform.position.x, hand.transform.position.y);
     }
-
-    public virtual void Attack()
-    {
-        if (Time.time >= nextWAttackTime)
-        {
-            Debug.Log("Attacked with weapon!");
-
-            nextWAttackTime = Time.time + 1f / wAttackRate;
-        }
-    }
-
-    public abstract void UniqueAttack();
 
     public void DropItem()
     {
@@ -87,8 +75,23 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         Debug.Log("Weapon was dropped!");
 
         this.transform.parent = null;
-        this.transform.position = new Vector2(transform.position.x, transform.position.y);
+        this.transform.position = new Vector2(dropPoint.transform.position.x, dropPoint.transform.position.y);
+        this.hand = null;
+        this.dropPoint = null;
     }
+
+    public virtual void Attack()
+    {
+        if (Time.time >= nextWAttackTime)
+        {
+            Debug.Log("Attacked with weapon!");
+            UpdateHitsDone();
+
+            nextWAttackTime = Time.time + 1f / wAttackRate;
+        }
+    }
+
+    public abstract void UniqueAttack();
 
     public void UpdateHitsDone()
     {
@@ -121,9 +124,13 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     // Used to detect which object will pick up the weapon, sets the hand to the hand of that GameObject
     protected void OnTriggerEnter2D(Collider2D entity)
     {
-        if(entity.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (entity.gameObject.name == "actionBox")
         {
-            hand = entity.transform.Find("handPlayer").gameObject;
+            if (entity.gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                hand = entity.transform.parent.Find("handPlayer").gameObject;
+                dropPoint = entity.transform.parent.Find("actionBox").gameObject;
+            }
         }
     }
 
@@ -131,5 +138,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected void OnTriggerExit2D(Collider2D entity)
     {
         hand = null;
+        dropPoint = null;
     }
 }

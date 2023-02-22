@@ -48,6 +48,7 @@ public class PlayerAction : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D toInteract)
     {
+        Debug.Log("Entered");
         if (!interact.Contains(toInteract))
         {
             // Save points take priority
@@ -56,7 +57,7 @@ public class PlayerAction : MonoBehaviour
                 interact.Add(toInteract);
             }
             // If the item is not already in the list, it's a weapon and the player is not holding anything currently
-            else if (toInteract.gameObject.tag == "Weapons" && weaponHolding.weaponHeld == false)
+            else if (toInteract.gameObject.layer == LayerMask.NameToLayer("Weapons") && weaponHolding.weaponHeld == false)
             {
                 // Add to list
                 interact.Add(toInteract);

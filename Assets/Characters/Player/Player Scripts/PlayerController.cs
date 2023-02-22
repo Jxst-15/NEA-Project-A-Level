@@ -43,6 +43,8 @@ public class PlayerController : CharMovement
     #region Getters and Setters
     //public bool canMove
     //{ get; set; }
+    public bool isHolding
+    { get; private set; }
     #endregion
 
     // Start is called before the first frame update
@@ -68,8 +70,9 @@ public class PlayerController : CharMovement
                 // Gets raw number value of axis
                 vMove = Input.GetAxisRaw("Vertical");
                 hMove = Input.GetAxisRaw("Horizontal");
+                
                 DoubleTappingMovement();
-                // Flip(facingRight, playerPosX, playerPosY);
+                
                 Flip(facingRight, scaleX, scaleY);
             }
             Action();
@@ -247,7 +250,7 @@ public class PlayerController : CharMovement
     // Action button can be worked on at later date when items added
     // Allows for the player interact with various objects in the stage e.g. weapons
     protected override void Action()
-    {
+    {      
         playerAction.Action();
     }
 

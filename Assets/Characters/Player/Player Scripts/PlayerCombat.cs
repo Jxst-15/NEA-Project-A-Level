@@ -126,7 +126,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
             {
                 SwitchStyle();
             }
-            else
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 // Sets game time back to normal
                 Time.timeScale = 1f;
@@ -394,6 +394,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         if (weapon != null)
         {         
             weapon.GetComponent<Weapon>().DropItem();
+            weapon = null;
+            weaponHeld = false;
         }
     }
 }

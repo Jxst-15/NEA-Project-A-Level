@@ -16,7 +16,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     #region GameObjects
     public GameObject hand;
-    public GameObject dropPoint;
     #endregion
 
     #region Variables
@@ -58,18 +57,21 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        Debug.Log("Weapon was picked up!");
-
-        // Set the position of the weapon to where the hand GameObject is and set its parent to the parent that the hand is attached to
-        this.transform.parent = hand.transform;
-        if (hand.transform.parent.localScale.x < 0)
+        if (hand != null)
         {
-            this.transform.localScale = new Vector2(-this.transform.localScale.x, this.transform.localScale.y);
+            Debug.Log("Weapon was picked up!");
+
+            // Set the position of the weapon to where the hand GameObject is and set its parent to the parent that the hand is attached to
+            this.transform.parent = hand.transform;
+            if (hand.transform.parent.localScale.x < 0)
+            {
+                this.transform.localScale = new Vector2(-this.transform.localScale.x, this.transform.localScale.y);
+            }
+            this.transform.position = new Vector2(hand.transform.position.x, hand.transform.position.y);
         }
-        this.transform.position = new Vector2(hand.transform.position.x, hand.transform.position.y);
     }
 
-    public void DropItem()
+    public void DropItem(GameObject dropPoint)
     {
         // Code to drop weapon
         Debug.Log("Weapon was dropped!");
@@ -77,7 +79,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         this.transform.parent = null;
         this.transform.position = new Vector2(dropPoint.transform.position.x, dropPoint.transform.position.y);
         this.hand = null;
-        this.dropPoint = null;
     }
 
     public virtual void Attack()
@@ -121,6 +122,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
+    #region OnTrigger Methods
     // Used to detect which object will pick up the weapon, sets the hand to the hand of that GameObject
     protected void OnTriggerEnter2D(Collider2D entity)
     {
@@ -129,7 +131,17 @@ public abstract class Weapon : MonoBehaviour, IInteractable
             if (entity.gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 hand = entity.transform.parent.Find("handPlayer").gameObject;
-                dropPoint = entity.transform.parent.Find("actionBox").gameObject;
+            }
+        }
+    }
+
+    protected void OnTriggerStay2D(Collider2D entity)
+    {
+        if (entity.gameObject.name == "actionBox")
+        {
+            if (entity.gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                hand = entity.transform.parent.Find("handPlayer").gameObject;
             }
         }
     }
@@ -138,6 +150,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected void OnTriggerExit2D(Collider2D entity)
     {
         hand = null;
-        dropPoint = null;
     }
+    #endregion
 }

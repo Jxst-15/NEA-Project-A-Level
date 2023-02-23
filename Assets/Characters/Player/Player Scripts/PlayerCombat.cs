@@ -111,10 +111,10 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         {
             ComboMeter();
 
-            // Checks if player is holding a weapon, if yes then set weaponHeld to true
-            if (weapon != null && weapon.tag == "Weapons")
+            // If there is no weapon
+            if (weapon == null)
             {
-                weaponHeld = true;
+                weaponHeld = false;
             }
             
             AttackLogic();
@@ -393,7 +393,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     {
         if (weapon != null)
         {         
-            weapon.GetComponent<Weapon>().DropItem();
+            weapon.GetComponent<Weapon>().DropItem(this.transform.Find("actionBox").gameObject);
             weapon = null;
             weaponHeld = false;
         }

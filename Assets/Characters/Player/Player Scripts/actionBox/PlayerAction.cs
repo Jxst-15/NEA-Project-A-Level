@@ -26,10 +26,13 @@ public class PlayerAction : MonoBehaviour
             //Prioritises the first item in the list to interact with
             switch (interact[0].gameObject.tag)
             {
+                case "SavePoint":
+                    break;
                 case "Weapons":
                     // Checks if player already holding weapon
                     if (weaponHolding.weaponHeld != true)
                     {
+                        // Checks if player is holding a weapon, if yes then set weaponHeld to true
                         weaponHolding.weaponHeld = true;
 
                         // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to
@@ -41,11 +44,13 @@ public class PlayerAction : MonoBehaviour
                     }
                     break;
             }
+            interact.Remove(interact[0]);
             // Calls the interact method for the first item in the list
-            toInteract.Interact();
+            toInteract.Interact(); // NEED TO FIX SO THAT IF MULTIPLE ITEMS IN LIST BEFORE PICKING UP WEAPON, PLAYER NOT ABLE TO PICK UP ALL ITEMS IN LIST
         }
     }
 
+    #region OnTrigger Methods
     void OnTriggerEnter2D(Collider2D toInteract)
     {
         Debug.Log("Entered");
@@ -67,9 +72,10 @@ public class PlayerAction : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D toInteract)
     {
-        if(interact.Contains(toInteract))
+        if (interact.Contains(toInteract))
         {
             interact.Remove(toInteract);
         }
     }
+    #endregion
 }

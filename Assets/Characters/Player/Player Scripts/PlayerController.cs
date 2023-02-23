@@ -12,15 +12,9 @@ public class PlayerController : CharMovement
 
     #region Variables 
     // Variables for player movement
-    //[SerializeField] private int vSpeed;
-    //[SerializeField] private int hSpeed;
-    //[SerializeField] private int vRunSpeed;
-    //[SerializeField] private int hRunSpeed;
-    //[SerializeField] private bool isRunning;
     private float vMove, hMove;
 
     [SerializeField] private const int jumpHeight = 3;
-    //[SerializeField] private bool onGround;
 
     // Variables to allow player to dodge
     //[SerializeField] private bool isDodging;
@@ -32,28 +26,11 @@ public class PlayerController : CharMovement
     // For double tapping key
     private float doubleTapSpeed;
     KeyCode lastKey;
-
-    // For flipping player
-    //private bool facingRight;
-    // private float playerPosX, playerPosY;
-    
-    // private Rigidbody2D rb;
-    #endregion
-
-    #region Getters and Setters
-    //public bool canMove
-    //{ get; set; }
-    public bool isHolding
-    { get; private set; }
     #endregion
 
     // Start is called before the first frame update
     protected override void Start()
     {
-        //rb = GetComponent<Rigidbody2D>();
-
-        //SetVariables();
-
         base.Start();
 
         playerAction = actionBox.GetComponent<PlayerAction>();
@@ -108,34 +85,6 @@ public class PlayerController : CharMovement
             }
         }
     }
-
-    //private void SetVariables()
-    //{
-    //    //playerPosX = transform.localScale.x;
-    //    //playerPosY = transform.localScale.y;
-
-    //    base.SetVariables();
-
-    //    vSpeed = 2;
-    //    hSpeed = 3;
-    //    vRunSpeed = 4;
-    //    hRunSpeed = 5;
-
-    //    canMove = true;
-    //    isRunning = false;
-
-    //    // Following sets dodgeTime = to 0.1 as default
-    //    dodgeTime = startDodgeTime;
-    //    isDodging = false;
-    //    dodgeSpeed = 35;
-    //    side = 0;
-
-    //    facingRight = true;
-
-    //    onGround = true;
-
-    //}
-
 
     protected override void SetVariables()
     {

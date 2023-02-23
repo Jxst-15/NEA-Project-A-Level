@@ -4,13 +4,15 @@ using UnityEngine;
 public abstract class CharMovement : MonoBehaviour
 {
     #region Variables
+    // Variables for movement
     [SerializeField] protected int vSpeed, vRunSpeed, hSpeed, hRunSpeed;
+    [SerializeField] protected bool isRunning;
     
+    // For flipping the character
     protected bool facingRight;
     protected float scaleX, scaleY;
 
-    [SerializeField] protected bool isRunning;
-
+    // Variables for dodging
     [SerializeField] protected bool isDodging;
     [SerializeField] protected float dodgeSpeed;
     [SerializeField] protected float startDodgeTime;

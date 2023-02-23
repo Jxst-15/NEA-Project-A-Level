@@ -5,12 +5,6 @@ public class Throwable : Weapon
     private float throwRange;
     #endregion
 
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    SetVariables();
-    //}
-
     // Update is called once per frame
     protected override void Update()
     {

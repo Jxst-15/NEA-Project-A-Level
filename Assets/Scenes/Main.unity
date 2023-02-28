@@ -333,7 +333,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &115307562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,6 +346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28b37f84c4f0ac47a5cc3e363ab8797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponAttack: {fileID: 0}
+  attackBox: {fileID: 0}
   hand: {fileID: 0}
 --- !u!58 &115307563
 CircleCollider2D:
@@ -1238,7 +1240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &353259009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,6 +1253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28b37f84c4f0ac47a5cc3e363ab8797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponAttack: {fileID: 0}
+  attackBox: {fileID: 0}
   hand: {fileID: 0}
 --- !u!58 &353259010
 CircleCollider2D:
@@ -1994,6 +1998,7 @@ GameObject:
   - component: {fileID: 583651727}
   - component: {fileID: 583651726}
   - component: {fileID: 583651725}
+  - component: {fileID: 583651733}
   m_Layer: 9
   m_Name: NimbleEnemy
   m_TagString: NimbleEnemies
@@ -2014,6 +2019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
+  flashScript: {fileID: 0}
   type: 
   maxHealth: 0
   currentHealth: 0
@@ -2209,6 +2215,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &583651733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583651724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6915eaebd984f1499c5d60a32c8b77f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flash: {fileID: 2100000, guid: e83d54f56638cca41a08f46a4ace4e20, type: 2}
+  duration: 0
 --- !u!1 &643785997
 GameObject:
   m_ObjectHideFlags: 0
@@ -2322,7 +2342,8 @@ Transform:
   m_LocalPosition: {x: -0.58, y: -3.34, z: 0.58420426}
   m_LocalScale: {x: 0.2379759, y: 0.23797594, z: 0.23797596}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1852753993}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 12.722}
@@ -2338,6 +2359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19c76fbd6a8d5d4886e25a957bc15e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponAttack: {fileID: 0}
+  attackBox: {fileID: 1852753992}
   hand: {fileID: 0}
 --- !u!61 &667446386
 BoxCollider2D:
@@ -2548,6 +2571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
+  flashScript: {fileID: 0}
   type: 
   maxHealth: 0
   currentHealth: 0
@@ -2898,13 +2922,14 @@ GameObject:
   - component: {fileID: 827074371}
   - component: {fileID: 827074370}
   - component: {fileID: 827074369}
+  - component: {fileID: 827074377}
   m_Layer: 9
   m_Name: 'NormalEnemy '
   m_TagString: NormalEnemies
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &827074369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2918,6 +2943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
+  flashScript: {fileID: 0}
   type: 
   maxHealth: 0
   currentHealth: 0
@@ -3114,6 +3140,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &827074377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827074368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6915eaebd984f1499c5d60a32c8b77f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flash: {fileID: 2100000, guid: e83d54f56638cca41a08f46a4ace4e20, type: 2}
+  duration: 0
 --- !u!1 &838764604
 GameObject:
   m_ObjectHideFlags: 0
@@ -6103,6 +6143,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775160966}
   m_CullTransparentMesh: 1
+--- !u!1 &1852753992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1852753993}
+  - component: {fileID: 1852753994}
+  - component: {fileID: 1852753995}
+  m_Layer: 0
+  m_Name: attackBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1852753993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852753992}
+  m_LocalRotation: {x: -0, y: -0, z: -0.11124939, w: 0.99379253}
+  m_LocalPosition: {x: 0.8, y: 2.9, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 667446383}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -12.775}
+--- !u!61 &1852753994
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852753992}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 4.2187295, y: 1.3813591}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 9.437459, y: 10.205758}
+  m_EdgeRadius: 0
+--- !u!114 &1852753995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852753992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd65350ca7ea674181d7b9d821b98d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1915963552
 GameObject:
   m_ObjectHideFlags: 0

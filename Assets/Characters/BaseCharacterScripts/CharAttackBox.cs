@@ -19,6 +19,13 @@ public abstract class CharAttackBox : MonoBehaviour
             objectsHit.Add(hittableObj);
         }
     }
+    protected void OnTriggerStay2D(Collider2D hittableObj)
+    {
+        if (!objectsHit.Contains(hittableObj) && hittableObj.gameObject.layer == toAttack || hittableObj.gameObject.layer == LayerMask.NameToLayer("CanHit"))
+        {
+            objectsHit.Add(hittableObj);
+        }
+    }
 
     // When a collider exits the attack collider trigger box
     protected void OnTriggerExit2D(Collider2D hittableObj)
@@ -28,6 +35,7 @@ public abstract class CharAttackBox : MonoBehaviour
             objectsHit.Remove(hittableObj);
         }
     }
+
 
     // Returns the list in order to deal damage
     public List<Collider2D> GetObjectsHit()

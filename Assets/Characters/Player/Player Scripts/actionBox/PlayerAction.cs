@@ -45,8 +45,12 @@ public class PlayerAction : MonoBehaviour
                     break;
             }
             interact.Remove(interact[0]);
+            
+            // Ensures that player cannot pick up all items that are in the interact list
+            interact.Clear();
+            
             // Calls the interact method for the first item in the list
-            toInteract.Interact(); // NEED TO FIX SO THAT IF MULTIPLE ITEMS IN LIST BEFORE PICKING UP WEAPON, PLAYER NOT ABLE TO PICK UP ALL ITEMS IN LIST
+            toInteract.Interact(); 
         }
     }
 

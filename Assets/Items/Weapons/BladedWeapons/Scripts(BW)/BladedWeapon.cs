@@ -24,10 +24,11 @@ public class BladedWeapon : Weapon
         hitsToBreak = 15;
     }
     
-    public override void Attack()
+    public override bool Attack(bool light)
     {
-        base.Attack();
+        bool objHit = base.Attack(light);
         // Code for attacking with this weapon
+        return objHit;
     }
 
     public override void UniqueAttack()

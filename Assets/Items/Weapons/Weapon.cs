@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // This is an abstract class meaning that this cannot be instantiated therefore it only serves the purpose of 
@@ -14,7 +12,13 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         BladedWeapon
     }
 
+    #region Script References
+    public WeaponAttackBox weaponAttack;
+    #endregion
+
     #region GameObjects
+    public GameObject attackBox;
+    
     public GameObject hand;
     #endregion
 
@@ -42,9 +46,15 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     public int getHitsDone() { return hitsDone; }
     #endregion
 
+    protected virtual void Awake()
+    {
+        weaponAttack = attackBox.GetComponent<WeaponAttackBox>();
+    }
+
     // I have made these methods virtual so they can be overriden in the actual weapon scripts
     protected virtual void Start()
     {
+        attackBox.SetActive(false);
         SetVariables();
     }
 
@@ -55,15 +65,21 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     protected abstract void SetVariables();
 
+    // WIP
+    // Set the position of the weapon to where the hand GameObject is and set its parent to the parent that the hand is attached to
     public void Interact()
     {
         if (hand != null)
         {
             Debug.Log("Weapon was picked up!");
 
-            // Set the position of the weapon to where the hand GameObject is and set its parent to the parent that the hand is attached to
+            attackBox.SetActive(true);
             this.transform.parent = hand.transform;
-            if (hand.transform.parent.localScale.x < 0)
+            if (hand.transform.parent.localScale.x > 0 && this.transform.localScale.x < 0)
+            {
+                this.transform.localScale = new Vector2(this.transform.localScale.x, this.transform.localScale.y);
+            }
+            else if (hand.transform.parent.localScale.x < 0 && this.transform.localScale.x < 0)
             {
                 this.transform.localScale = new Vector2(-this.transform.localScale.x, this.transform.localScale.y);
             }
@@ -71,28 +87,54 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         }
     }
 
+    // WIP
     public void DropItem(GameObject dropPoint)
     {
         // Code to drop weapon
         Debug.Log("Weapon was dropped!");
 
+        attackBox.SetActive(false);
         this.transform.parent = null;
         this.transform.position = new Vector2(dropPoint.transform.position.x, dropPoint.transform.position.y);
         this.hand = null;
     }
 
-    public virtual void Attack()
+    public virtual bool Attack(bool light)
     {
+        bool objHit = false;
         if (Time.time >= nextWAttackTime)
         {
-            Debug.Log("Attacked with weapon!");
-            UpdateHitsDone();
-
+            int dmgToDeal;
+            foreach (Collider2D hittableObj in weaponAttack.GetObjectsHit())
+            {
+                objHit = true;
+                switch (light)
+                {
+                    case true:
+                        // Do light damage
+                        dmgToDeal = weaponLDmg;
+                        Debug.Log("Light weapon attack");
+                        break;
+                    case false:
+                        // Do heavy damage
+                        dmgToDeal = weaponHDmg;
+                        Debug.Log("Heavy weapon attack");
+                        break;
+                }
+                DealDamage(hittableObj, dmgToDeal);
+            }
             nextWAttackTime = Time.time + 1f / wAttackRate;
         }
+        return objHit;
     }
 
     public abstract void UniqueAttack();
+
+    private void DealDamage(Collider2D toDmg, int dmg)
+    {
+        toDmg.GetComponent<IDamageable>().TakeDamage(dmg);
+        UpdateHitsDone();
+    }
 
     public void UpdateHitsDone()
     {
@@ -118,6 +160,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected void BreakItem()
     {
         Debug.Log("Weapon was destroyed!");
+        attackBox.SetActive(false);
         // Fully destroy this object
         Destroy(gameObject);
     }

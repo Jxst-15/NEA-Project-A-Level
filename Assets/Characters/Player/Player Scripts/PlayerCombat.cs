@@ -383,7 +383,12 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
     {
         attacking = true;
         parryable = true;
-        weapon.GetComponent<Weapon>().Attack();
+        if (weapon.GetComponent<Weapon>().Attack(lightAtk) == true)
+        {
+            comboCount++;
+            attackCount++;
+        }
+        // Get the number of objects hit by attack
         attacking = false;
         parryable = false;
     }

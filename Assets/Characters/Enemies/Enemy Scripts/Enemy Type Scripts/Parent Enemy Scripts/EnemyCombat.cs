@@ -34,6 +34,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     private const float wAttackRate = 2f;
 
     private int randNum;
+    private bool lightAtk;
     [SerializeField] private float attackRange;
     [SerializeField] private int attackCount;
     private float nextAttackTime;
@@ -142,7 +143,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
                 }
                 else
                 {
-                    weapon.GetComponent<Weapon>().Attack();
+                    weapon.GetComponent<Weapon>().Attack(lightAtk); // WIP
                 }
             break;
             default:

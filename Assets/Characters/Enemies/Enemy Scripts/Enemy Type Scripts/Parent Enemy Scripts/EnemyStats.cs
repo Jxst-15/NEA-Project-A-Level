@@ -4,11 +4,11 @@ public class EnemyStats : MonoBehaviour, IDamageable
 {
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
+    [SerializeField] private FlashScript flashScript;
     #endregion
 
     #region Script Reference Variables
     [SerializeField] private string type;
-    // [SerializeField] private int points;
     #endregion
 
     #region Variables
@@ -33,6 +33,8 @@ public class EnemyStats : MonoBehaviour, IDamageable
     { get; set; }
     public int uDmg
     { get; set; }
+    public bool stun
+    { get; set; }
     public bool dead
     { get; set; }
     #endregion
@@ -46,6 +48,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
     void Start()
     {
         enemyScript = GetComponent<EnemyScript>();
+        flashScript = GetComponent<FlashScript>();
         SetVariables();
     }
 
@@ -116,7 +119,11 @@ public class EnemyStats : MonoBehaviour, IDamageable
 
     public void EStatsUpdate()
     {
-        DeathCheck();
+        if (DeathCheck() == false)
+        {
+            // Regen enemy stamina
+            // Check for stun
+        }
     }
 
     #region Set Methods
@@ -158,17 +165,17 @@ public class EnemyStats : MonoBehaviour, IDamageable
 
     public void AffectCurrentStamima(int stam, string incOrDec)
     {
-        if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
+        // if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
+        // {
+        if (incOrDec == "dec")
         {
-            if (incOrDec == "dec")
-            {
-                currentStamina -= stam;
-            }
-            else if (incOrDec == "inc")
-            {
-                currentStamina += stam;
-            }
+            currentStamina -= stam;
         }
+        else if (incOrDec == "inc")
+        {
+            currentStamina += stam;
+        }
+        // }
         StaminaCheck(currentStamina);
     }
 
@@ -179,9 +186,13 @@ public class EnemyStats : MonoBehaviour, IDamageable
         {
             currentStamina = maxStamina;
         }
-        else if (currentStamina < 0)
+        else if (currentStamina <= 0)
         {
             currentStamina = 0;
+            if (stun != true)
+            {
+                // Stun the enemy
+            }
         }
     }
 
@@ -189,14 +200,17 @@ public class EnemyStats : MonoBehaviour, IDamageable
     {
         // currentHealth is affected by the damage given as the parameter
         currentHealth -= dmg;
+        flashScript.Flash();
     }
 
-    private void DeathCheck()
+    private bool DeathCheck()
     {
         if (currentHealth <= 0)
         {
             Death();
+            return true;
         }
+        return false;
     }
 
     // Runs when this game object has been defeated
@@ -205,6 +219,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
         dead = true;
         // enemyScript.points = points;
         enemyScript.GivePoints();
+        flashScript.Flash();
         // Disable the game object 
         gameObject.SetActive(false);
         // Destroying the game object helps to manage memory and declutter screen

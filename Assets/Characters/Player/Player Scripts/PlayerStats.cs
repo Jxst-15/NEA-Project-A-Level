@@ -43,6 +43,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
+        // If the player is not dead
         if (DeathCheck() == false)
         {          
             StaminaRegen();
@@ -83,19 +84,17 @@ public class PlayerStats : MonoBehaviour, IDamageable
         nextRegen = 0f;
     }
 
+    // Parameters indicate the amount to affect stamina by and whether it is an increase or decrease
     public void AffectCurrentStamima(int stam, string incOrDec) 
     {
-        //if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
-        //{
-            if (incOrDec == "dec")
-            {
-                currentStamina -= stam;
-            }
-            else if (incOrDec == "inc")
-            {
-                currentStamina += stam;
-            }
-        //}
+        if (incOrDec == "dec")
+        {
+            currentStamina -= stam;
+        }
+        else if (incOrDec == "inc")
+        {
+            currentStamina += stam;
+        }
         StaminaCheck();
     }
 
@@ -124,6 +123,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
         if (Time.time >= nextRegen)
         {
             int toIncBy = 0;
+            // Following if block is to determine the speed and the amount to regen stamina by
             if (currentStamina < maxStamina && currentStamina > maxStamina / 2)
             {
                 toIncBy = 5;
@@ -153,20 +153,25 @@ public class PlayerStats : MonoBehaviour, IDamageable
         Debug.Log("Stunned");
         stun = true;
         
+        // Makes it so player can no longer attack, defend, and make it so their block is removed
         combatScript.canAttack = false;
         combatScript.canDefend = false;
         combatScript.blocking = false;
 
+        // Disables player movement
         controllerScript.canMove = false;
         
+        // Sets the time that the player will be unstunned
         tillUnstun = Time.time + 5f;
     }
 
     // WIP
     public void Stunned()
     {
+        // If time elapsed is more than the time that is set to unstun player
         if (Time.time > tillUnstun)
         {
+            // Unstun the player and allow player to act again
             Debug.Log("Unstunned");
             combatScript.canAttack = true;
             combatScript.canDefend = true;

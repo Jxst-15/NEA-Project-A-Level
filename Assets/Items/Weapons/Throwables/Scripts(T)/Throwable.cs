@@ -26,10 +26,11 @@ public class Throwable : Weapon
         hitsToBreak = 6;
     }
 
-    public override void Attack()
+    public override bool Attack(bool light)
     {
-        base.Attack();
+        bool objHit = base.Attack(light);
         // Code for attacking with this weapon
+        return objHit;
     }
 
     public override void UniqueAttack()

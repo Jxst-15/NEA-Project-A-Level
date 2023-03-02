@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +17,7 @@ public class PlayerAction : MonoBehaviour
         weaponHolding = gameObject.GetComponentInParent<PlayerCombat>();
     }
 
+    // For interacting with objects in the game 
     public void Action()
     {
         if (Input.GetKeyDown(KeyCode.N) && interact.Count != 0)
@@ -44,8 +44,6 @@ public class PlayerAction : MonoBehaviour
                     }
                     break;
             }
-            interact.Remove(interact[0]);
-            
             // Ensures that player cannot pick up all items that are in the interact list
             interact.Clear();
             

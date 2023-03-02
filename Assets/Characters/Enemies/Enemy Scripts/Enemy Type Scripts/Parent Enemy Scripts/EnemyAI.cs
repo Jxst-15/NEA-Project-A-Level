@@ -56,7 +56,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     // Update is called once per frame
     void Update()
     {
-        if (PauseMenu.isPaused == false)
+        if (PauseMenu.isPaused == false|| canMove == false)
         {
             EAIUpdate();
         }
@@ -64,7 +64,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
 
     void FixedUpdate()
     {
-        if (PauseMenu.isPaused == false)
+        if (PauseMenu.isPaused == false || canMove == false)
         {
             Movement();
         }

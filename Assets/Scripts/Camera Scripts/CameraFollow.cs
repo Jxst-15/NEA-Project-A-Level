@@ -11,12 +11,12 @@ public class CameraFollow : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         camFollow = true;
-        offset = 6.3f;
+        offset = 4.5f;
     }
 
     private void LateUpdate()
     {
-        if (camFollow != false)
+        if (camFollow == true)
         {
             transform.position = new Vector3(player.transform.position.x + offset, transform.position.y, transform.position.z);
         }

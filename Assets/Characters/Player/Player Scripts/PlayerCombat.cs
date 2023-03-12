@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour, ICharacterCombat
+public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 {
     #region Script References
     public PlayerStats stats;
@@ -111,15 +111,26 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         {
             ComboMeter();
 
-            // If there is no weapon
-            if (weapon == null)
+            // If player is able to attack
+            if (canAttack == true)
             {
-                weaponHeld = false;
+                // If there is no weapon
+                if (weapon == null)
+                {
+                    // weaponHeld = false;
+                    AttackLogic();
+                }
+                else
+                {
+                    WeaponAttackLogic();
+                }
             }
-            
-            AttackLogic();
 
-            DefendLogic();
+            // If player is able to defend
+            if (canDefend == true)
+            {
+                DefendLogic();
+            }
 
             // If LeftShift is held then will call SwitchStyle method
             if (Input.GetKey(KeyCode.LeftShift))
@@ -184,9 +195,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
 
     private void AttackLogic()
     {
-        // If player is able to attack
-        if (canAttack == true)
-        {
             if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
             {
                 if (Input.GetButtonDown("lAttack"))
@@ -197,28 +205,17 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                 {
                     lightAtk = false;
                 }
-
-                if (weapon == null)
-                {
-                    Attack();
-                }
-                else if (weapon != null && weapon.tag == "Weapons")
-                {
-                    WeaponAttack();
-                }
+            
+                Attack();
             }
             if (Input.GetKeyDown(KeyCode.I))
             {
                 Throw();
             }
-        }
     }
 
     private void DefendLogic()
     {
-        // If player is able to defend 
-        if (canDefend == true)
-        {
             if (Input.GetKeyDown(KeyCode.H))
             {
                 // Equal to time elapsed
@@ -252,7 +249,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
                 blocking = false;
                 canAttack = true;
             }
-        }
     }
  
     public void ResetComboCount()
@@ -379,18 +375,59 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat
         playerStyleSwitch.SwitchStyle();
     }
 
-    public void WeaponAttack()
+    private void WeaponAttackLogic()
+    {
+        if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack") || Input.GetKeyDown(KeyCode.L))
+        {
+            bool unique = false;
+            
+            if (Input.GetButtonDown("lAttack"))
+            {
+                lightAtk = true;
+            }
+            else if (Input.GetButtonDown("hAttack"))
+            {
+                lightAtk = false;
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
+            {
+                unique = true;
+            }
+            
+            WeaponAttack(unique);
+        }
+       
+    }
+
+    public void WeaponAttack(bool unique)
     {
         attacking = true;
         parryable = true;
-        if (weapon.GetComponent<Weapon>().Attack(lightAtk) == true)
+        if (!unique)
         {
-            comboCount++;
-            attackCount++;
+            if (weapon.GetComponent<Weapon>().Attack(lightAtk) == true)
+            {
+                // Get the number of objects hit by attack and increase comboCount by amount
+                comboCount++;
+            }
         }
-        // Get the number of objects hit by attack
+        else
+        {
+            if (weapon.GetComponent<Weapon>().UniqueAttack() == true)
+            {
+                // Get the number of objects hit by attack and increase comboCount by amount
+                comboCount++;
+            }
+        }
+        attackCount++;
+        
         attacking = false;
         parryable = false;
+    }
+
+    public void SetWeaponHeld(bool val)
+    {
+        weaponHeld = val;
     }
 
     // TEMPORARY

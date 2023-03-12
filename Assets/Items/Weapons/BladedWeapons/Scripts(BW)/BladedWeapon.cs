@@ -4,12 +4,6 @@ public class BladedWeapon : Weapon
     private float stabRange;
     private float stabTime;
     #endregion
-
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
-    }
     
     protected override void SetVariables()
     {
@@ -30,10 +24,4 @@ public class BladedWeapon : Weapon
         // Code for attacking with this weapon
         return objHit;
     }
-
-    public override void UniqueAttack()
-    {
-        // Code for using the unique attack for this weapon
-    }
-
 }

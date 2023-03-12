@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pole : Weapon
@@ -7,18 +5,6 @@ public class Pole : Weapon
     #region Variables
     private float spinRange;
     #endregion
-
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    SetVariables();
-    //}
-
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
-    }
 
     protected override void SetVariables()
     {
@@ -39,10 +25,5 @@ public class Pole : Weapon
         bool objHit =  base.Attack(light);
         // Code for attacking with this weapon
         return objHit;
-    }
-
-    public override void UniqueAttack()
-    {
-        // Code for using the unique attack for this weapon
     }
 }

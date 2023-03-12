@@ -14,10 +14,12 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     #region Script References
     public WeaponAttackBox weaponAttack;
+    public WeaponAttackBox uniqueWeaponAttack;
     #endregion
 
     #region GameObjects
     public GameObject attackBox;
+    public GameObject uniqueAttackBox;
     
     public GameObject hand;
     #endregion
@@ -28,12 +30,15 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected float weaponRange;
 
     protected float nextWAttackTime;
-    protected const float wAttackRate = 2f;
+    protected const float wAttackRate = 1.5f;
 
     protected int weaponLDmg;
     protected int weaponHDmg;
-    protected int weaponUDmg;
-    protected int uniqueDmg;
+   
+    public int uniqueDmg
+    { get; set; }
+    protected float nextWUAttackTime;
+    protected const float wUAttackRate = 0.25f;
 
     // How many times to attack in order to destroy the weapon
     protected int hitsDone;
@@ -49,12 +54,14 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected virtual void Awake()
     {
         weaponAttack = attackBox.GetComponent<WeaponAttackBox>();
+        uniqueWeaponAttack = uniqueAttackBox.GetComponent<WeaponAttackBox>();
     }
 
     // I have made these methods virtual so they can be overriden in the actual weapon scripts
     protected virtual void Start()
     {
         attackBox.SetActive(false);
+        uniqueAttackBox.SetActive(false);
         SetVariables();
     }
 
@@ -74,6 +81,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
             Debug.Log("Weapon was picked up!");
 
             attackBox.SetActive(true);
+            uniqueAttackBox.SetActive(true);
             this.transform.parent = hand.transform;
             if (hand.transform.parent.localScale.x > 0 && this.transform.localScale.x < 0)
             {
@@ -94,6 +102,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         Debug.Log("Weapon was dropped!");
 
         attackBox.SetActive(false);
+        uniqueAttackBox.SetActive(false);
         this.transform.parent = null;
         this.transform.position = new Vector2(dropPoint.transform.position.x, dropPoint.transform.position.y);
         this.hand = null;
@@ -121,24 +130,42 @@ public abstract class Weapon : MonoBehaviour, IInteractable
                         Debug.Log("Heavy weapon attack");
                         break;
                 }
-                DealDamage(hittableObj, dmgToDeal);
+                DealDamage(hittableObj, dmgToDeal, 1);
             }
             nextWAttackTime = Time.time + 1f / wAttackRate;
         }
         return objHit;
     }
 
-    public abstract void UniqueAttack();
-
-    private void DealDamage(Collider2D toDmg, int dmg)
+    // Code for using the unique attack for this weapon
+    public virtual bool UniqueAttack()
     {
-        toDmg.GetComponent<IDamageable>().TakeDamage(dmg);
-        UpdateHitsDone();
+        bool objHit = false;
+        
+        if (Time.time >= nextWUAttackTime && weaponAttack.GetObjectsHit().Count != 0)
+        {
+            foreach (Collider2D hittableObj in uniqueWeaponAttack.GetObjectsHit())
+            {
+                objHit = true;
+                Debug.Log("Unique weapon attack");
+                DealDamage(hittableObj, uniqueDmg, 0);
+            }
+            UpdateHitsDone(5);
+            nextWUAttackTime = Time.time + 1f / wUAttackRate;
+            nextWAttackTime = nextWUAttackTime;
+        }
+        return objHit;
     }
 
-    public void UpdateHitsDone()
+    protected void DealDamage(Collider2D toDmg, int dmg, int toUpdateHits)
     {
-        hitsDone++;
+        toDmg.GetComponent<IDamageable>().TakeDamage(dmg);
+        UpdateHitsDone(toUpdateHits);
+    }
+
+    public void UpdateHitsDone(int toUpdateHits)
+    {
+        hitsDone += toUpdateHits;
         if (CheckIfBroken() == true)
         {
             BreakItem();
@@ -161,6 +188,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     {
         Debug.Log("Weapon was destroyed!");
         attackBox.SetActive(false);
+        uniqueAttackBox.SetActive(false);
         // Fully destroy this object
         Destroy(gameObject);
     }

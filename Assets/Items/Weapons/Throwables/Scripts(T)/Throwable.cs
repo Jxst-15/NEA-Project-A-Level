@@ -1,21 +1,29 @@
+using UnityEngine;
+
 public class Throwable : Weapon
 {
     #region Variables
+    public bool isThrowing;
     private float throwSpeed;
     private float throwRange;
     #endregion
 
-    // Update is called once per frame
-    protected override void Update()
+    private Rigidbody2D rb;
+
+    public GameObject throwEnd;
+
+    protected override void Awake()
     {
-        base.Update();
+        base.Awake();
+        rb = GetComponent<Rigidbody2D>();
+        rb.isKinematic = true;
     }
 
     protected override void SetVariables()
     {
         weaponType = WeaponType.Throwable;
 
-        throwSpeed = 2.5f;
+        throwSpeed = 10f;
         throwRange = 5f;
         
         weaponLDmg = 20;
@@ -33,8 +41,30 @@ public class Throwable : Weapon
         return objHit;
     }
 
-    public override void UniqueAttack()
+    public override bool UniqueAttack()
     {
-        // Code for using the unique attack for this weapon
+        bool objHit = false;
+        
+        if (Time.time >= nextWUAttackTime)
+        {
+            isThrowing = true;
+            // Gets the parent of the hand object (Either the enemy or the player gameobject)
+            this.transform.parent.gameObject.transform.parent.GetComponent<IWeaponHandler>().SetWeaponHeld(false);
+            this.transform.parent = null;
+            this.hand = null;
+            rb.isKinematic = false;
+            // Determine the direction
+            Vector2 direction = ((throwEnd.transform.position) - transform.position).normalized;
+            // Add force to the object
+            rb.AddForce(direction * throwSpeed, ForceMode2D.Impulse); // Does some weird thing where sometimes it throws it upwards? Needs fix
+            
+            nextWUAttackTime = Time.time + 1f / wUAttackRate;
+        }
+        return objHit;
+    }
+
+    public void OnObjectHit()
+    {
+        BreakItem();
     }
 }

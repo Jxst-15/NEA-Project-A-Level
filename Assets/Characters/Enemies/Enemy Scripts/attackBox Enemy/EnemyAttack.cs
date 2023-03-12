@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyAttack : CharAttackBox
+public class EnemyAttack : AttackBox
 {
     #region W/O Inheritance
     /*

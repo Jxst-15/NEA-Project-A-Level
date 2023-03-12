@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WeaponAttackBox : CharAttackBox
+public class WeaponAttackBox : AttackBox
 {
     // Activated when the GameObject is set to active
     void OnEnable()
@@ -20,5 +20,15 @@ public class WeaponAttackBox : CharAttackBox
     void OnDisable()
     {
         toAttack = LayerMask.NameToLayer("Blank");
+    }
+
+    public LayerMask GetToAttack()
+    {
+        return toAttack;
+    }
+
+    public LayerMask GetCanHit()
+    {
+        return canHit;
     }
 }

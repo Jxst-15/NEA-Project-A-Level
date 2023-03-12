@@ -27,21 +27,10 @@ public class PlayerAction : MonoBehaviour
             switch (interact[0].gameObject.tag)
             {
                 case "SavePoint":
+                    SaveInteract();
                     break;
                 case "Weapons":
-                    // Checks if player already holding weapon
-                    if (weaponHolding.weaponHeld != true)
-                    {
-                        // Checks if player is holding a weapon, if yes then set weaponHeld to true
-                        weaponHolding.weaponHeld = true;
-
-                        // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to
-                        weaponHolding.weapon = interact[0].gameObject;
-                    }
-                    else
-                    {
-                        Debug.Log("Already holding weapon");
-                    }
+                    WeaponInteract();
                     break;
             }
             // Ensures that player cannot pick up all items that are in the interact list
@@ -52,10 +41,31 @@ public class PlayerAction : MonoBehaviour
         }
     }
 
+    private void SaveInteract()
+    {
+        // Used for interacting with a save point WIP
+    }
+
+    private void WeaponInteract()
+    {
+        // Checks if player already holding weapon
+        if (weaponHolding.weaponHeld != true)
+        {
+            // Checks if player is holding a weapon, if yes then set weaponHeld to true
+            weaponHolding.weaponHeld = true;
+
+            // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to
+            weaponHolding.weapon = interact[0].gameObject;
+        }
+        else
+        {
+            Debug.Log("Already holding weapon");
+        }
+    }
+
     #region OnTrigger Methods
     void OnTriggerEnter2D(Collider2D toInteract)
     {
-        Debug.Log("Entered");
         if (!interact.Contains(toInteract))
         {
             // Save points take priority

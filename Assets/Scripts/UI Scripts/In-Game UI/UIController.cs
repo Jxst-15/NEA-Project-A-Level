@@ -3,11 +3,14 @@ using TMPro;
 
 public class UIController : MonoBehaviour
 {
+    #region Fields
     #region Text Reference
     [SerializeField] protected TMP_Text text;
     #endregion
+    #endregion
 
-    protected void Awake()
+    #region Unity Methods
+    protected virtual void Awake()
     {
         text = GetComponent<TMP_Text>();
     }
@@ -17,6 +20,7 @@ public class UIController : MonoBehaviour
     {
         UpdateText();
     }
+    #endregion
 
     protected virtual void UpdateText() { }
 }

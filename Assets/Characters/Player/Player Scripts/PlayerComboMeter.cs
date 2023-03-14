@@ -1,20 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerComboMeter : MonoBehaviour
 {
+    #region Fields
+    #region Script Reference
     public PlayerCombat playerCombat;
+    #endregion
 
-    private bool inCombo;
+    #region Variables
     private int comboSnapshot;
-    public float comboTime
-    { get; set; }
+    private float comboEndTime;
+    #endregion
 
+    #region Getters and Setters
+    public float comboDuration
+    { get; set; }
+    public bool inCombo
+    { get; set; }
+    #endregion
+    #endregion
+
+    #region Unity Methods
     void Awake()
     {
         playerCombat = GetComponent<PlayerCombat>();
-        comboTime = 5f;
+        comboDuration = 5f;
         comboSnapshot = 0;
     }
 
@@ -26,25 +36,41 @@ public class PlayerComboMeter : MonoBehaviour
             ComboTimer();
         }
     }
+    #endregion
 
-    public void ComboMeter()
+    public void ComboStart()
     {
         // Combo meter will be configured here
-        if (playerCombat._comboCount  >= 1 && inCombo == false)
+        if (playerCombat._comboCount >= 1 && inCombo == false)
         {
             inCombo = true;
             comboSnapshot = playerCombat._comboCount;
+            comboEndTime = Time.time + comboDuration;
         }
+    }
+
+    public void ResetCombo()
+    {
+        playerCombat._comboCount = 0;
+        inCombo = false;
     }
 
     private void ComboTimer()
     {
-        // This timer runs until it reaches the comboTime
-        if (comboTime >= Time.time + comboTime && playerCombat._comboCount == comboSnapshot || playerCombat._comboCount == 0)
+        // If timer has run out then reset combo and set no longer in combo
+        if (Time.time >= comboEndTime)
         {
-            inCombo = false;
+            ResetCombo();
         }
-        // If no attacks that have dealt damage have been performed then the comboCount will be set to 0
-        // Else update the timer to restart
+        else 
+        {
+            // Check if there has been any changes in the combo count
+            if (playerCombat._comboCount != comboSnapshot)
+            {
+                // If there are changes in combo count then keep the timer going and set new timer
+                comboEndTime = Time.time + comboDuration;
+                comboSnapshot = playerCombat._comboCount;
+            }
+        }
     }
 }

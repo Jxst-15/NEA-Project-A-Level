@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerStyleSwitch : MonoBehaviour
 {
+    #region Fields
     #region Script References
     public PlayerStats stats;
     public PlayerCombat combat;
@@ -9,7 +10,9 @@ public class PlayerStyleSwitch : MonoBehaviour
     #endregion
 
     [SerializeField] private string fightStyle;
+    #endregion
 
+    #region Unity Methods
     void Awake()
     {
         stats = GetComponent<PlayerStats>();
@@ -21,6 +24,7 @@ public class PlayerStyleSwitch : MonoBehaviour
     {
         fightStyle = "Iron Fist";
     }
+    #endregion
 
     public void SwitchStyle()
     {

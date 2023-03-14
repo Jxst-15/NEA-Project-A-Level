@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class Pole : Weapon
 {
+    #region Fields
     #region Variables
     private float spinRange;
+    #endregion
     #endregion
 
     protected override void SetVariables()

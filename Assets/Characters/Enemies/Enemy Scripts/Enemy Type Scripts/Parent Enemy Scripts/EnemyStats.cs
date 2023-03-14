@@ -2,319 +2,7 @@ using UnityEngine;
 
 public class EnemyStats : CharStats
 {
-    #region W/O Inheritance
-    /*
-    #region Script References
-    [SerializeField] private EnemyScript enemyScript;
-    [SerializeField] private EnemyCombat enemyCombat;
-    [SerializeField] private EnemyAI enemyAI;
-    
-    [SerializeField] private FlashScript flashScript;
-    #endregion
-
-    #region Script Reference Variables
-    [SerializeField] private string type;
-    #endregion
-
-    #region Variables
-    [SerializeField] private int maxHealth, currentHealth;
-    [SerializeField] private int maxStamina, currentStamina;
-
-    private float nextRegen;
-    private float regenCooldown;
-    private int toIncBy;
-
-    private float tillUnstun;
-    private float unstunCooldown;
-    #endregion
-
-    #region Getters and Setters
-    public int vSpeed
-    { get; set; }
-    public int hSpeed
-    { get; set; }
-    public int vRunSpeed
-    { get; set; }
-    public int hRunSpeed
-    { get; set; }
-    public float attackRate
-    { get; set; }
-    public int lDmg
-    { get; set; }
-    public int hDmg
-    { get; set; }
-    public int uDmg
-    { get; set; }
-    public bool stun
-    { get; set; }
-    public bool dead
-    { get; set; }
-    #endregion
-
-    void Awake()
-    {
-        dead = false;
-        enemyCombat = GetComponent<EnemyCombat>();
-        enemyAI = GetComponent<EnemyAI>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        enemyScript = GetComponent<EnemyScript>();
-        flashScript = GetComponent<FlashScript>();
-        SetVariables();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (DeathCheck() == false)
-        {
-            // Regen enemy stamina
-            StaminaRegen();
-            // Check for stun
-            if (stun == true)
-            {
-                WaitForUnstun();
-            }
-        }
-    }
-
-    private void SetVariables()
-    {
-        type = enemyScript.type;
-        // Based on the tag of the game object, sets the stats accordingly
-        switch (type)
-        {
-            case "NormalEnemies":
-                maxHealth = 400;
-                attackRate = 2;
-                lDmg = 40;
-                hDmg = 60;
-                uDmg = 80;
-                
-                maxStamina = 200;
-                regenCooldown = 5;
-                
-                vSpeed = 2;
-                hSpeed = 3;
-                vRunSpeed = 4;
-                hRunSpeed = 5;
-                break;
-            case "NimbleEnemies":
-                maxHealth = 200;
-                attackRate = 3;
-                lDmg = 20;
-                hDmg = 30;
-                uDmg = 50;
-                
-                maxStamina = 300;
-                regenCooldown = 3;
-
-                vSpeed = 3;
-                hSpeed = 4;
-                vRunSpeed = 5;
-                hRunSpeed = 6;
-                break;
-            case "BulkyEnemies":
-                maxHealth = 600;
-                attackRate = 0.5f;
-                lDmg = 60;
-                hDmg = 80;
-                uDmg = 100;
-                
-                maxStamina = 100;
-                regenCooldown = 7;
-                
-                vSpeed = 1;
-                hSpeed = 2;
-                vRunSpeed = 3;
-                hRunSpeed = 4;
-                break;
-            case "BossEnemies":
-                maxHealth = 700;
-                attackRate = 0.5f;
-                lDmg = 70;
-                hDmg = 90;
-                uDmg = 110;
-                
-                maxStamina = 400;
-                regenCooldown = 10;
-                
-                vSpeed = 2;
-                hSpeed = 3;
-                vRunSpeed = 4;
-                hRunSpeed = 5;
-                break;
-        }
-
-        if (type != "BossEnemies")
-        {
-            toIncBy = 5;
-            unstunCooldown = 7;
-        }
-        else
-        {
-            toIncBy = 15;
-            unstunCooldown = 10;
-        }
-        
-        currentHealth = maxHealth;
-        currentStamina = maxStamina;
-    }    
-
-    public void EStatsUpdate()
-    {
-        if (DeathCheck() == false)
-        {
-            // Regen enemy stamina
-            // Check for stun
-        }
-    }
-
-    #region Set Methods
-    public void setHealth(int h)
-    {
-        maxHealth = h;
-    }
-
-    public void setCurrentHealth(int h)
-    {
-        currentHealth = h;
-    }
-
-    public void setLDmg(int dmg)
-    {
-        lDmg = dmg;
-    }
-
-    public void setHDmg(int dmg)
-    {
-        hDmg = dmg;
-    }
-
-    public void setUDmg(int dmg)
-    {
-        uDmg = dmg;
-    }
-
-    public void setMaxStamina(int stam)
-    {
-        maxStamina = stam;
-    }
-
-    public void setCurrentStamina(int stam)
-    {
-        currentStamina = stam;
-    }
-    #endregion
-
-    public void AffectCurrentStamima(int stam, string incOrDec)
-    {
-        // if (currentStamina != maxStamina && currentStamina < maxStamina || currentStamina == maxStamina)
-        // {
-        if (incOrDec == "dec")
-        {
-            currentStamina -= stam;
-        }
-        else if (incOrDec == "inc")
-        {
-            currentStamina += stam;
-        }
-        // }
-        StaminaCheck(currentStamina);
-    }
-
-    // Runs a check to make sure stamina does not go above or below allowed levels
-    private void StaminaCheck(int stam)
-    {
-        if (currentStamina > maxStamina)
-        {
-            currentStamina = maxStamina;
-        }
-        else if (currentStamina <= 0)
-        {
-            currentStamina = 0;
-            if (stun != true)
-            {
-                // Stun the enemy
-                Stun();
-            }
-        }
-    }
-
-    private void StaminaRegen()
-    {
-        // If the time elapsed is more than or equal to whenever the next regen time is and currentStamina is less than the max, increase stamina by set amount
-        if (Time.time >= nextRegen && currentStamina < maxStamina)
-        {     
-            // Sets the next time that the enemy regens stamina
-            nextRegen = Time.time + regenCooldown;
-                
-            AffectCurrentStamima(toIncBy, "inc");
-        }
-    }
-
-    public void TakeDamage(int dmg)
-    {
-        // currentHealth is affected by the damage given as the parameter
-        currentHealth -= dmg;
-        flashScript.Flash();
-    }
-
-    public void Stun()
-    {
-        stun = true;
-
-        enemyCombat.canAttack = false;
-        enemyCombat.canDefend = false;
-        enemyCombat.blocking = false;
-
-        enemyAI.canMove = false;
-
-        tillUnstun = Time.time + unstunCooldown;
-    }
-
-    private void WaitForUnstun()
-    {
-        if (Time.time > tillUnstun)
-        {
-            enemyCombat.canAttack = true;
-            enemyCombat.canDefend = true;
-            enemyCombat.blocking = true;
-
-            enemyAI.canMove = true;
-
-            stun = false;
-        }
-    }
-
-    private bool DeathCheck()
-    {
-        if (currentHealth <= 0)
-        {
-            Death();
-            return true;
-        }
-        return false;
-    }
-
-    // Runs when this game object has been defeated
-    private void Death()
-    {
-        dead = true;
-        // enemyScript.points = points;
-        enemyScript.GivePoints();
-        flashScript.Flash();
-        // Disable the game object 
-        gameObject.SetActive(false);
-        // Destroying the game object helps to manage memory and declutter screen
-        Destroy(gameObject);
-       Debug.Log("Enemy Died");
-    }
-    */
-    #endregion
+    #region Fields
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyCombat enemyCombat;
@@ -339,9 +27,11 @@ public class EnemyStats : CharStats
     public float attackRate
     { get; set; }
     public int uDmg
-    { get; set; }  
+    { get; set; }
+    #endregion
     #endregion
 
+    #region Unity Methods
     protected override void Awake()
     {
         enemyCombat = GetComponent<EnemyCombat>();
@@ -350,6 +40,17 @@ public class EnemyStats : CharStats
 
     // Start is called before the first frame update
     protected override void Start()
+    {
+        StartInit();
+    }
+
+    protected void OnEnable()
+    {
+        StartInit();
+    }
+    #endregion
+
+    protected void StartInit()
     {
         enemyScript = GetComponent<EnemyScript>();
         flashScript = GetComponent<FlashScript>();
@@ -453,7 +154,7 @@ public class EnemyStats : CharStats
     public override void TakeDamage(int dmg)
     {
         base.TakeDamage(dmg);
-        flashScript.Flash();
+        flashScript.Flash(flashScript.GetFlashMaterial(0));
     }
 
     public override void Stun()
@@ -484,8 +185,9 @@ public class EnemyStats : CharStats
     protected override void Death()
     {
         enemyScript.GivePoints();
-        flashScript.Flash();
-        
+
+        flashScript.Flash(flashScript.GetFlashMaterial(2));
+
         // Disable the game object 
         gameObject.SetActive(false);
         

@@ -3,6 +3,7 @@ using UnityEngine;
 // WIP
 public abstract class CharMovement : MonoBehaviour
 {
+    #region Fields
     #region Variables
     // Variables for movement
     [SerializeField] protected int vSpeed, vRunSpeed, hSpeed, hRunSpeed;
@@ -28,7 +29,9 @@ public abstract class CharMovement : MonoBehaviour
     #endregion
 
     protected Rigidbody2D rb;
+    #endregion
 
+    #region Unity Methods
     protected virtual void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
@@ -39,6 +42,7 @@ public abstract class CharMovement : MonoBehaviour
     protected abstract void Update();
 
     protected abstract void FixedUpdate();
+    #endregion
 
     protected virtual void SetVariables()
     {

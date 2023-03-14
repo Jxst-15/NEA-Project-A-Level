@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerThrow : MonoBehaviour
 {
+    #region Fields
     #region Script References
     public PlayerCombat playerCombat;
     #endregion
@@ -29,7 +30,9 @@ public class PlayerThrow : MonoBehaviour
 
     // Stores a list of colliders which will be used to determine which enemy to throw
     List<Collider2D> objectsHit = new List<Collider2D>();
+    #endregion
 
+    #region Unity Methods
     void Awake()
     {
         playerCombat = GetComponentInParent<PlayerCombat>();
@@ -46,7 +49,7 @@ public class PlayerThrow : MonoBehaviour
     void Update()
     {
         // Only if the player is currently throwing
-        if (playerCombat.throwing == true)
+        if (playerCombat.throwing == true && toThrow != null)
         {
             if (throwDuration <= 0f)
             {
@@ -67,6 +70,7 @@ public class PlayerThrow : MonoBehaviour
             }
         }
     }
+    #endregion
 
     // Main method for throwing an enemy
     public void Throw()
@@ -94,6 +98,12 @@ public class PlayerThrow : MonoBehaviour
         }
     }
 
+    public int ObjectsHitCount()
+    {
+        return objectsHit.Count;
+    }
+
+    #region OnTrigger Methods
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (!objectsHit.Contains(col) && col.gameObject.layer == LayerMask.NameToLayer("Enemy") || col.gameObject.layer == LayerMask.NameToLayer("CanHit"))
@@ -109,9 +119,5 @@ public class PlayerThrow : MonoBehaviour
             objectsHit.Remove(col);
         }
     }
-
-    public int ObjectsHitCount()
-    {
-        return objectsHit.Count;
-    }
+    #endregion
 }

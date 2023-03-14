@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class CharStats : MonoBehaviour, IDamageable
 {
+    #region Fields
     #region Variables
     [SerializeField] protected int maxHealth, currentHealth;
     [SerializeField] protected int maxStamina, currentStamina;
@@ -22,7 +23,9 @@ public abstract class CharStats : MonoBehaviour, IDamageable
     public bool stun
     { get; set; }
     #endregion
+    #endregion
 
+    #region Unity Methods
     protected abstract void Awake();
     // Start is called before the first frame update
     protected virtual void Start()
@@ -42,6 +45,8 @@ public abstract class CharStats : MonoBehaviour, IDamageable
             }
         }
     }
+    #endregion
+
     protected virtual void SetVariables()
     {
         currentHealth = maxHealth;
@@ -101,6 +106,7 @@ public abstract class CharStats : MonoBehaviour, IDamageable
     {
         if (currentHealth <= 0)
         {
+            currentHealth = 0;
             Death();
             return true;
         }

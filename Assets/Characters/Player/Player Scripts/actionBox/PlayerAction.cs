@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerAction : MonoBehaviour
 {
+    #region Fields
     // For the weaponHeld variable
     #region Script References
     public PlayerCombat weaponHolding;
@@ -10,12 +11,15 @@ public class PlayerAction : MonoBehaviour
 
     // A list containing all items that are within the actionBox collider
     private List<Collider2D> interact = new List<Collider2D>();
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     void Start()
     {
         weaponHolding = gameObject.GetComponentInParent<PlayerCombat>();
     }
+    #endregion
 
     // For interacting with objects in the game 
     public void Action()
@@ -43,7 +47,8 @@ public class PlayerAction : MonoBehaviour
 
     private void SaveInteract()
     {
-        // Used for interacting with a save point WIP
+        // Used for interacting with a save point 
+        Debug.Log("Saved!");
     }
 
     private void WeaponInteract()

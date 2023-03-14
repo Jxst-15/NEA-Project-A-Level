@@ -13,6 +13,15 @@ public class EnemyScript : MonoBehaviour
     //[SerializeField] private EnemyAI enemyAI;
     #endregion
 
+    private enum EnemyPoints
+    {
+        NormalEnemy = 1,
+        NimbleEnemy = 2,
+        BulkyEnemy = 3,
+        BossEnemy = 6
+    }
+
+    #region Fields
     #region Getters and Setters
     public GameObject target
     { get; set; }
@@ -25,15 +34,9 @@ public class EnemyScript : MonoBehaviour
     public Rigidbody2D rb
     { get; set; }
     #endregion
+    #endregion
 
-    private enum EnemyPoints
-    {
-        NormalEnemy = 1,
-        NimbleEnemy = 2,
-        BulkyEnemy = 3,
-        BossEnemy = 6
-    }
-
+    #region Unity Methods
     private void Awake()
     {
         // Sets the enemy type to the tag which is given in the editor
@@ -61,6 +64,7 @@ public class EnemyScript : MonoBehaviour
         target = GameObject.FindGameObjectWithTag("Player");
         
     }
+    #endregion
 
     public void GivePoints()
     {

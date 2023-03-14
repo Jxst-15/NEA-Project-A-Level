@@ -2,10 +2,13 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    #region fields
     [SerializeField] private GameObject player;
     public bool camFollow;
     public float offset;
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +24,9 @@ public class CameraFollow : MonoBehaviour
             transform.position = new Vector3(player.transform.position.x + offset, transform.position.y, transform.position.z);
         }
     }
+    #endregion
 
+    #region OnTrigger Methods
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Boundary")
@@ -30,4 +35,5 @@ public class CameraFollow : MonoBehaviour
             Debug.Log("Collided with boundary");
         }
     }
+    #endregion
 }

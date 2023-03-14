@@ -6,6 +6,7 @@ using UnityEngine;
 // Want to fix block implementation/ improve it
 public class PlayerBlock : MonoBehaviour
 {
+    #region Fields
     #region Script References
     private PlayerCombat combatScript;
 
@@ -20,7 +21,9 @@ public class PlayerBlock : MonoBehaviour
     public int healthDecBlock
     { get; set; }
     #endregion
+    #endregion
 
+    #region Unity Methods
     private void Awake()
     {
         combatScript = GetComponentInParent<PlayerCombat>();
@@ -43,6 +46,7 @@ public class PlayerBlock : MonoBehaviour
             }
         }
     }
+    #endregion
 
     public void Block()
     {
@@ -52,6 +56,7 @@ public class PlayerBlock : MonoBehaviour
         }
     }
 
+    #region OnTrigger Methods
     private void OnTriggerEnter2D(Collider2D enemy)
     {
         if (!toBlock.Contains(enemy) && enemy.gameObject.layer == LayerMask.NameToLayer("Enemy") && enemy.gameObject.name != "groundBox")
@@ -68,4 +73,5 @@ public class PlayerBlock : MonoBehaviour
             toBlock.Remove(enemy);
         }
     }
+    #endregion
 }

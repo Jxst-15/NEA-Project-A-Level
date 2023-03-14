@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class ThrowableUnique : MonoBehaviour // Could have it inherit from attack box?
 {
+    #region Fields
     #region Script References
     public Throwable thisWeapon;
     #endregion
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     void Awake()
     {
         thisWeapon = this.GetComponentInParent<Throwable>();
     }
+    #endregion
 
     private void ThrowingWeapon(Collider2D collision)
     {
@@ -27,6 +31,7 @@ public class ThrowableUnique : MonoBehaviour // Could have it inherit from attac
         }
     }
 
+    #region OnTriggerMethods
     private void OnTriggerEnter2D(Collider2D collision)
     {
         ThrowingWeapon(collision);
@@ -36,4 +41,5 @@ public class ThrowableUnique : MonoBehaviour // Could have it inherit from attac
     {
         ThrowingWeapon(collision);
     }
+    #endregion
 }

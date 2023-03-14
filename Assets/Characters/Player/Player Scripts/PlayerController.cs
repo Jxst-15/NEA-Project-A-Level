@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerController : CharMovement
 {
+    #region Fields
     #region GameObjects
     public GameObject actionBox;
     #endregion
@@ -27,7 +28,9 @@ public class PlayerController : CharMovement
     private float doubleTapSpeed;
     KeyCode lastKey;
     #endregion
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -85,6 +88,7 @@ public class PlayerController : CharMovement
             }
         }
     }
+    #endregion
 
     protected override void SetVariables()
     {

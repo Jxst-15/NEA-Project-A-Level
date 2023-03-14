@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class Stack : MonoBehaviour
 {
+    #region Fields
     private List<GameObject> stack;
+    #endregion
 
     public Stack()
     {

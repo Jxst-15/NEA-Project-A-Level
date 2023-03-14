@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Throwable : Weapon
 {
+    #region Fields
     #region Variables
     public bool isThrowing;
     private float throwSpeed;
@@ -11,13 +12,16 @@ public class Throwable : Weapon
     private Rigidbody2D rb;
 
     public GameObject throwEnd;
+    #endregion
 
+    #region Unity Methods
     protected override void Awake()
     {
         base.Awake();
         rb = GetComponent<Rigidbody2D>();
         rb.isKinematic = true;
     }
+    #endregion
 
     protected override void SetVariables()
     {

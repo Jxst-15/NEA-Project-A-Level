@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 // WIP
 public class PauseMenu : MonoBehaviour
 {
+    #region Fields
     #region GameObject References
     public GameObject gameUI;
     public GameObject backgroundObject;
@@ -15,7 +16,9 @@ public class PauseMenu : MonoBehaviour
     #region Variables
     [SerializeField] public static bool isPaused;
     #endregion
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +44,7 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
+    #endregion
 
     public void PauseGame()
     {

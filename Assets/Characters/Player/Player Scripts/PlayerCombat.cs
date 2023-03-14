@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 {
+    #region Fields
     #region Script References
     public PlayerStats stats;
     public PlayerStyleSwitch playerStyleSwitch;
@@ -80,7 +81,9 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     public bool weaponHeld
     { get; set; }
     #endregion
+    #endregion
 
+    #region Unity Methods
     // Used for getting the required scripts
     void Awake()
     {
@@ -96,43 +99,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 
         playerThrow = throwBox.GetComponent<PlayerThrow>();
         
-    }
-    private void SetVariables()
-    {
-        // blockBox.SetActive(false);
-        parryBox.SetActive(false);
-
-        enemyLayer = LayerMask.NameToLayer("Enemy");
-        canHit = LayerMask.NameToLayer("CanHit");
-
-        canAttack = true;
-        canDefend = true;
-        attacking = false;
-        blocking = false;
-        throwing = false;
-        parryable = false;
-
-        attackRange = 1.5f;
-        attackCount = 0;
-        nextAttackTime = 0f;
-
-        throwRate = 0.2f;
-        nextThrowTime = 0f;
-
-        pressedTime = 0f;
-        keyHeld = false;
-
-        lightAtk = false;
-
-        attackRate = 2;
-
-        stamDecLAttack = 15;
-        stamDecHAttack = 20;
-        stamDecWUAttack = 30;
-        stamDecThrow = 35;
-        stamIncParry = 20;
-
-        weaponHeld = false;
     }
 
     // Start is called before the first frame update
@@ -188,7 +154,46 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
                 DropWeapon();
             }
         }
-    }   
+    }
+    #endregion
+
+    private void SetVariables()
+    {
+        // blockBox.SetActive(false);
+        parryBox.SetActive(false);
+
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        canHit = LayerMask.NameToLayer("CanHit");
+
+        canAttack = true;
+        canDefend = true;
+        attacking = false;
+        blocking = false;
+        throwing = false;
+        parryable = false;
+
+        attackRange = 1.5f;
+        attackCount = 0;
+        nextAttackTime = 0f;
+
+        throwRate = 0.2f;
+        nextThrowTime = 0f;
+
+        pressedTime = 0f;
+        keyHeld = false;
+
+        lightAtk = false;
+
+        attackRate = 2;
+
+        stamDecLAttack = 15;
+        stamDecHAttack = 20;
+        stamDecWUAttack = 30;
+        stamDecThrow = 35;
+        stamIncParry = 20;
+
+        weaponHeld = false;
+    }
 
     private void AttackLogic()
     {
@@ -251,12 +256,12 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     public void ResetComboCount()
     {
         comboCount = 0;
-        comboMeter.comboTime = 5f;
+        comboMeter.inCombo = false;
     }
 
     public void StartCombo()
     {
-        comboMeter.ComboMeter();
+        comboMeter.ComboStart();
     }
 
     public void Attack()
@@ -282,6 +287,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
                 }
                 DealDamage(hittableObj, dmgToDeal);
                 comboCount++;
+                StartCombo();
             }
             
             attackCount++;
@@ -310,11 +316,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     private void DealDamage(Collider2D hittableObj, int dmgToDeal)
     {
         hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
-
-        if (hittableObj.gameObject.layer == enemyLayer)
-        {
-            comboCount++;
-        }
     }
 
     // Performs a throw attack on the selected enemy, configured in the PlayerThrow class

@@ -1,10 +1,12 @@
 public class BladedWeapon : Weapon
 {
+    #region Fields
     #region Variables
     private float stabRange;
     private float stabTime;
     #endregion
-    
+    #endregion
+
     protected override void SetVariables()
     {
         weaponType = WeaponType.BladedWeapon;

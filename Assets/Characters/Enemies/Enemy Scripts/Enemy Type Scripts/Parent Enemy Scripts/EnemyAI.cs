@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour, ICharacterController
 {
+    #region Fields
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyStats enemyStats;
@@ -40,10 +41,13 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     [SerializeField] public bool inRange
     { get; set; }
     #endregion
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     void Start()
     {
+        // StartInit();
         rb = GetComponent<Rigidbody2D>();
 
         enemyStats = GetComponent<EnemyStats>();
@@ -69,6 +73,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
             Movement();
         }
     }
+    #endregion
 
     private void SetVariables()
     {

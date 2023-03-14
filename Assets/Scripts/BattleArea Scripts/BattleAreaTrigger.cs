@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BattleAreaTrigger : MonoBehaviour
 {
+    #region Fields
     #region Gameobjects
     public GameObject bWallL, bWallR;
     public GameObject eSpawnerL, eSpawnerR;
@@ -13,7 +14,9 @@ public class BattleAreaTrigger : MonoBehaviour
     [SerializeField] private bool areaCleared;
     private bool activateArea;
     #endregion
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +34,9 @@ public class BattleAreaTrigger : MonoBehaviour
     {
         
     }
+    #endregion
 
+    #region OnTrigger Methods
     void OnTriggerEnter2D(Collider2D player)
     {
         if (areaCleared == false && activateArea == false)
@@ -55,5 +60,5 @@ public class BattleAreaTrigger : MonoBehaviour
             eSpawnerR.SetActive(true);
         }
     }
-
+    #endregion
 }

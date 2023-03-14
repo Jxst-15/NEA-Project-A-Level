@@ -4,7 +4,7 @@ using UnityEngine;
 // a way for the other weapons to inherit what methods this has in order to save copying code
 public abstract class Weapon : MonoBehaviour, IInteractable
 {
-    // enum for all the weapon types within the game
+    // Enum for all the weapon types within the game
     public enum WeaponType
     {
         Throwable,
@@ -12,6 +12,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         BladedWeapon
     }
 
+    #region Fields
     #region Script References
     public WeaponAttackBox weaponAttack;
     public WeaponAttackBox uniqueWeaponAttack;
@@ -54,7 +55,9 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     public void setName(string name) {  weaponName = name; }
     public int getHitsDone() { return hitsDone; }
     #endregion
+    #endregion
 
+    #region Unity Methods
     protected virtual void Awake()
     {
         weaponAttack = attackBox.GetComponent<WeaponAttackBox>();
@@ -75,6 +78,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     {
         CheckIfBroken();
     }
+    #endregion
 
     protected abstract void SetVariables();
 
@@ -110,6 +114,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         this.transform.localScale = newScale;
     }
 
+    // WIP
     // Code to drop weapon
     public void DropItem()
     {
@@ -119,7 +124,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         uniqueAttackBox.SetActive(false);
         
         this.transform.parent = null;
-        this.transform.position = transform.TransformPoint(Vector3.down * 8.5f);
+        this.transform.position = transform.TransformPoint(Vector3.down * 8.5f); // Still needs fixing
         this.hand = null;
     }
 
@@ -157,7 +162,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     {
         bool objHit = false;
         
-        if (Time.time >= nextWUAttackTime && weaponAttack.GetObjectsHit().Count != 0)
+        if (Time.time >= nextWUAttackTime && uniqueWeaponAttack.GetObjectsHit().Count != 0)
         {
             foreach (Collider2D hittableObj in uniqueWeaponAttack.GetObjectsHit())
             {

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FlashScript : MonoBehaviour
@@ -13,6 +14,8 @@ public class FlashScript : MonoBehaviour
     private Coroutine flashing;
     #endregion
 
+    public List<Material> flashMaterials = new List<Material>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,16 +24,16 @@ public class FlashScript : MonoBehaviour
         duration = 0.09f;
     }
 
-    public void Flash()
+    public void Flash(Material flash)
     {
         if (flashing != null)
         {
             StopCoroutine(flashing);
         }
-        flashing = StartCoroutine(flashRoutine());
+        flashing = StartCoroutine(flashRoutine(flash));
     }
 
-    private IEnumerator flashRoutine()
+    private IEnumerator flashRoutine(Material flash)
     {
         spriteRenderer.material = flash;
 
@@ -39,5 +42,17 @@ public class FlashScript : MonoBehaviour
         spriteRenderer.material = originalMat;
 
         flashing = null;
+    }
+
+    public Material GetFlashMaterial(int index)
+    {
+        Material flashMaterial = null;
+        
+        if (index < flashMaterials.Count - 1 && index >= 0)
+        {
+            flashMaterial = flashMaterials[index];
+        }
+        
+        return flashMaterial;
     }
 }

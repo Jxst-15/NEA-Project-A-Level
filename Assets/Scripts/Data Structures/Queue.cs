@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class Queue : MonoBehaviour
 {
+    #region Fields
     private List<GameObject> queue;
     private int front = 0;
     private int rear = -1;
+    #endregion
 
     public Queue()
     {

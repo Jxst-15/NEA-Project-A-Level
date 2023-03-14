@@ -6,6 +6,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     #region Script References
     public PlayerStats stats;
     public PlayerStyleSwitch playerStyleSwitch;
+    public PlayerComboMeter comboMeter;
     
     public PlayerAttack playerAttack;
     public PlayerThrow playerThrow;
@@ -24,8 +25,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     [SerializeField] private float attackRange;
     [SerializeField] private int attackCount;
     private float nextAttackTime;
-
-    private float comboTime;
     
     // How many attacks player has performed without getting hit (Field)
     [SerializeField] private int comboCount;
@@ -87,6 +86,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     {
         stats = GetComponent<PlayerStats>();
         playerStyleSwitch = GetComponent<PlayerStyleSwitch>();
+        comboMeter = GetComponent<PlayerComboMeter>();
         
         // Gets the PlayerAttack script from the attackBox GameObject
         playerAttack = attackBox.GetComponent<PlayerAttack>(); 
@@ -96,6 +96,43 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 
         playerThrow = throwBox.GetComponent<PlayerThrow>();
         
+    }
+    private void SetVariables()
+    {
+        // blockBox.SetActive(false);
+        parryBox.SetActive(false);
+
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        canHit = LayerMask.NameToLayer("CanHit");
+
+        canAttack = true;
+        canDefend = true;
+        attacking = false;
+        blocking = false;
+        throwing = false;
+        parryable = false;
+
+        attackRange = 1.5f;
+        attackCount = 0;
+        nextAttackTime = 0f;
+
+        throwRate = 0.2f;
+        nextThrowTime = 0f;
+
+        pressedTime = 0f;
+        keyHeld = false;
+
+        lightAtk = false;
+
+        attackRate = 2;
+
+        stamDecLAttack = 15;
+        stamDecHAttack = 20;
+        stamDecWUAttack = 30;
+        stamDecThrow = 35;
+        stamIncParry = 20;
+
+        weaponHeld = false;
     }
 
     // Start is called before the first frame update
@@ -109,7 +146,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     {
         if (PauseMenu.isPaused == false)
         {
-            ComboMeter();
+            // ComboMeter();
 
             // If player is able to attack
             if (canAttack == true)
@@ -152,46 +189,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             }
         }
     }   
-
-    private void SetVariables()
-    {
-        // blockBox.SetActive(false);
-        parryBox.SetActive(false);
-
-        enemyLayer = LayerMask.NameToLayer("Enemy");
-        canHit = LayerMask.NameToLayer("CanHit");
-
-        canAttack = true;
-        canDefend = true;
-        attacking = false;
-        blocking = false;
-        throwing = false;
-        parryable = false;
-
-        attackRange = 1.5f;
-        attackCount = 0;
-        nextAttackTime = 0f;
-
-        comboTime = 5f;
-
-        throwRate = 0.2f;
-        nextThrowTime = 0f;
-
-        pressedTime = 0f;
-        keyHeld = false;
-
-        lightAtk = false;
-
-        attackRate = 2;
-
-        stamDecLAttack = 15;
-        stamDecHAttack = 20;
-        stamDecWUAttack = 30;
-        stamDecThrow = 35;
-        stamIncParry = 20;
-
-        weaponHeld = false;
-    }
 
     private void AttackLogic()
     {
@@ -254,16 +251,12 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     public void ResetComboCount()
     {
         comboCount = 0;
-        comboTime = 5f;
+        comboMeter.comboTime = 5f;
     }
 
-    public void ComboMeter()
+    public void StartCombo()
     {
-        // Combo meter will be configured here
-        // A timer runs 
-        // This timer runs until it reaches the comboTime
-        // If no attacks that have dealth damage have been performed then the comboCount will be set to 0
-        // Else update the timer to restart
+        comboMeter.ComboMeter();
     }
 
     public void Attack()
@@ -317,7 +310,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     private void DealDamage(Collider2D hittableObj, int dmgToDeal)
     {
         hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
-        
+
         if (hittableObj.gameObject.layer == enemyLayer)
         {
             comboCount++;
@@ -375,6 +368,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         playerStyleSwitch.SwitchStyle();
     }
 
+    #region Weapon Code
     private void WeaponAttackLogic()
     {
         if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack") || Input.GetKeyDown(KeyCode.L))
@@ -435,9 +429,10 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     {
         if (weapon != null)
         {         
-            weapon.GetComponent<Weapon>().DropItem(this.transform.Find("actionBox").gameObject);
+            weapon.GetComponent<Weapon>().DropItem();
             weapon = null;
             weaponHeld = false;
         }
     }
+    #endregion
 }

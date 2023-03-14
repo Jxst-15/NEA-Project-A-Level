@@ -23,7 +23,7 @@ public class Throwable : Weapon
     {
         weaponType = WeaponType.Throwable;
 
-        throwSpeed = 10f;
+        throwSpeed = 15.5f;
         throwRange = 5f;
         
         weaponLDmg = 20;

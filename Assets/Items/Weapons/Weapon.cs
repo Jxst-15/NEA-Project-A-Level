@@ -24,6 +24,10 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     public GameObject hand;
     #endregion
 
+    #region Scale
+    protected float scaleX;
+    #endregion
+
     #region Variables
     protected WeaponType weaponType;
     protected string weaponName;
@@ -55,6 +59,8 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     {
         weaponAttack = attackBox.GetComponent<WeaponAttackBox>();
         uniqueWeaponAttack = uniqueAttackBox.GetComponent<WeaponAttackBox>();
+
+        // scaleX = this.transform.localScale.x;
     }
 
     // I have made these methods virtual so they can be overriden in the actual weapon scripts
@@ -72,7 +78,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     protected abstract void SetVariables();
 
-    // WIP
     // Set the position of the weapon to where the hand GameObject is and set its parent to the parent that the hand is attached to
     public void Interact()
     {
@@ -82,29 +87,39 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
             attackBox.SetActive(true);
             uniqueAttackBox.SetActive(true);
-            this.transform.parent = hand.transform;
-            if (hand.transform.parent.localScale.x > 0 && this.transform.localScale.x < 0)
-            {
-                this.transform.localScale = new Vector2(this.transform.localScale.x, this.transform.localScale.y);
-            }
-            else if (hand.transform.parent.localScale.x < 0 && this.transform.localScale.x < 0)
-            {
-                this.transform.localScale = new Vector2(-this.transform.localScale.x, this.transform.localScale.y);
-            }
-            this.transform.position = new Vector2(hand.transform.position.x, hand.transform.position.y);
+            
+            this.transform.parent = hand.transform; 
+
+            Vector3 newScale = this.transform.localScale;
+            
+            this.transform.position = hand.transform.position;
+
+            Flip(newScale);
         }
     }
 
-    // WIP
-    public void DropItem(GameObject dropPoint)
+    protected void Flip(Vector3 newScale)
     {
-        // Code to drop weapon
+        Vector3 parentScale = hand.transform.parent.transform.localScale;
+
+        if ((parentScale.x > 0 && newScale.x < 0) || (parentScale.x < 0 && newScale.x < 0))
+        {
+            newScale.x *= -1;
+        }
+        
+        this.transform.localScale = newScale;
+    }
+
+    // Code to drop weapon
+    public void DropItem()
+    {
         Debug.Log("Weapon was dropped!");
 
         attackBox.SetActive(false);
         uniqueAttackBox.SetActive(false);
+        
         this.transform.parent = null;
-        this.transform.position = new Vector2(dropPoint.transform.position.x, dropPoint.transform.position.y);
+        this.transform.position = transform.TransformPoint(Vector3.down * 8.5f);
         this.hand = null;
     }
 

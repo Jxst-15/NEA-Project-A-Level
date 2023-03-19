@@ -36,7 +36,6 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     private float nextWAttackTime = 0f;
     private const float wAttackRate = 2f;
 
-    private int randNum;
     private bool lightAtk;
     [SerializeField] private float attackRange;
     [SerializeField] private int attackCount;
@@ -159,7 +158,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     {
         // To determine which action to do
         // randNum = 0;
-        randNum = Random.Range(1, 11);
+        int randNum = Random.Range(1, 11);
         if (weapon != null && weapon.tag == "Weapons")
         {
             weaponHeld = true;
@@ -193,59 +192,62 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             if (doingUnblockable != true)
             {
                 // The probability of attacking
-                randNum = Random.Range(1, 11);
+                int randNum = Random.Range(1, 11);
 
-                if (gettingBlocked != true || targetStats.stun == true)
+                if (enemyStats.stun != true)
                 {
-                    // Normal attacks
                     if (1 <= randNum && randNum <= 8)
                     {
                         int dmgToDeal = 0;
-                        foreach (Collider2D hittableobj in enemyAttack.GetObjectsHit())
+                        foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
                         {
-                            // Determines if the attack is a light or heavy attack
-                            switch (randNum)
+                            switch (gettingBlocked)
                             {
-                                case int i when i >= 1 && i <= 6:
-                                    lightAtk = true;
-                                    dmgToDeal = enemyStats.lDmg;
+                                case false:
+                                    switch (randNum)
+                                    {
+                                        case int i when i >= 1 && i <= 6:
+                                            lightAtk = true;
+                                            dmgToDeal = enemyStats.lDmg;
+                                            Debug.Log("Light");
+                                            break;
+                                        case int i when i == 7 || i == 8:
+                                            lightAtk = false;
+                                            dmgToDeal = enemyStats.hDmg;
+                                            Debug.Log("Heavy");
+                                            break;
+                                    }
+                                    DealDamage(hittableObj, dmgToDeal);
                                     break;
-                                case int i when i == 7 || i == 8:
-                                    lightAtk = false;
-                                    dmgToDeal = enemyStats.hDmg;
+                                case true:
+                                    AttackWhenBlocking(hittableObj);
                                     break;
                             }
-                            DealDamage(hittableobj, dmgToDeal);
                         }
                     }
-                }
-                else
-                {
-                    // Done if the player is blocking the attacks
-                    AttackWhenBlocking();
-                }
 
-                // These attacks can still be done even if the player is blocking
-                if (randNum == 9)
-                {
-                    // Unblockable attack
-                    StartCoroutine(UnblockableAttack());
+                    // These attacks can still be done even if the player is blocking
+                    if (randNum == 9)
+                    {
+                        // Unblockable attack
+                        StartCoroutine(UnblockableAttack());
+                    }
+                    else if (randNum == 10)
+                    {
+                        Throw();
+                    }
+                    lightAtk = false;
+                    nextAttackTime = Time.time + 1f / attackRate;
                 }
-                else if (randNum == 10)
-                {
-                    Throw();
-                }
-                lightAtk = false;
-                nextAttackTime = Time.time + 1f / attackRate;
             }
         }
     }
 
-    public void AttackWhenBlocking()
+    public void AttackWhenBlocking(Collider2D hittableObj)
     {
         // The following decreases the targets current stamina and deals a small amount of damage
         targetStats.AffectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
-        targetStats.TakeDamage(targetBlockStats.healthDecBlock);
+        DealDamage(hittableObj, targetBlockStats.healthDecBlock);
     }
 
     // Coroutine so the attack can be delayed and dodged by the player
@@ -260,6 +262,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             yield return new WaitForSeconds(1);
             
             enemyAI.canMove = true; 
+            
             foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
             {
                 DealDamage(hittableObj, enemyStats.uDmg);

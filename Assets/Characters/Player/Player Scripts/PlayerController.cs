@@ -17,13 +17,6 @@ public class PlayerController : CharMovement
 
     [SerializeField] private const int jumpHeight = 3;
 
-    // Variables to allow player to dodge
-    //[SerializeField] private bool isDodging;
-    //[SerializeField] private float dodgeSpeed;
-    //[SerializeField] private float startDodgeTime;
-    //[SerializeField] private int side;
-    //private float dodgeTime;  
-
     // For double tapping key
     private float doubleTapSpeed;
     KeyCode lastKey;
@@ -71,7 +64,7 @@ public class PlayerController : CharMovement
                 Jump();
 
                 // If player not currently dodging or running
-                if (isDodging == false && isRunning == false)
+                if (isDodging == false || isRunning == false)
                 {
                     // Player can move, adds velocity to rigidbody (value x axis * hSpeed, value y axis * vSpeed)
                     Movement();

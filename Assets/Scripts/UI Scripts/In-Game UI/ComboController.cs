@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ComboController : UIController
+public class ComboController : UITextController
 {
     #region Fields
     #region Script References

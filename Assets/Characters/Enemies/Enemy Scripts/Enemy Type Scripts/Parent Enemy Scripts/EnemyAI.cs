@@ -21,6 +21,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
 
     [SerializeField] private bool isRunning;
     private float enemyPosX, enemyPosY;
+    private float distanceFromTarget;
 
     [SerializeField] private bool isDodging;
     [SerializeField] private float dodgeSpeed;
@@ -60,7 +61,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     // Update is called once per frame
     void Update()
     {
-        if (PauseMenu.isPaused == false|| canMove == false)
+        if (PauseMenu.isPaused == false || canMove == false)
         {
             EAIUpdate();
         }
@@ -92,7 +93,6 @@ public class EnemyAI : MonoBehaviour, ICharacterController
         maxTrackDistance = 15f;
         runDistance = 8f;
         attackDistance = 2.5f;
-
     }
 
     public void EAIUpdate()
@@ -133,7 +133,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     {
         if (canMove == true)
         {
-            float distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
+            distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
             switch (TrackPlayer(distanceFromTarget))
             {
                 case 0:

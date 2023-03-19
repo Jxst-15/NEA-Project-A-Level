@@ -9,7 +9,9 @@ public class PlayerStyleSwitch : MonoBehaviour
     public PlayerBlock blockStats;
     #endregion
 
-    [SerializeField] private string fightStyle;
+    [SerializeField] public static string fightStyle;
+
+    public GameObject StyleSwitcher;
     #endregion
 
     #region Unity Methods
@@ -18,11 +20,8 @@ public class PlayerStyleSwitch : MonoBehaviour
         stats = GetComponent<PlayerStats>();
         combat = GetComponent<PlayerCombat>();
         blockStats = GetComponentInChildren<PlayerBlock>();
-    }
-
-    private void Start()
-    {
-        fightStyle = "Iron Fist";
+        
+        fightStyle = "Iron Fist";    
     }
     #endregion
 
@@ -30,6 +29,8 @@ public class PlayerStyleSwitch : MonoBehaviour
     {
         // Slows down game time by half
         Time.timeScale = 0.5f;
+
+        StyleSwitcher.SetActive(true);
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {

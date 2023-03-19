@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class TimeController : UIController
+public class TimeController : UITextController
 {
     #region Fields
     #region Getters and Setters

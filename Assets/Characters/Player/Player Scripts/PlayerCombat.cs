@@ -146,6 +146,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
                 Time.timeScale = 1f;
                 canAttack = true;
                 canDefend = true;
+
+                playerStyleSwitch.StyleSwitcher.SetActive(false);
             }
 
             // TEMPORARY

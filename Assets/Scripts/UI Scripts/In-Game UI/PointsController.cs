@@ -1,4 +1,4 @@
-public class PointsController : UIController
+public class PointsController : UITextController
 {
     protected override void UpdateText()
     {

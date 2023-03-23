@@ -12,6 +12,9 @@ public class BattleAreaTrigger : MonoBehaviour
 
     #region Variables
     [SerializeField] private bool areaCleared;
+    #endregion
+
+    #region Getters and Setters
     private bool activateArea
     { get; set; }
     #endregion
@@ -23,7 +26,7 @@ public class BattleAreaTrigger : MonoBehaviour
     {
         areaCleared = false;
 
-        DeactivateArea();
+        AreaController(areaCleared);
     }
 
     // Update is called once per frame
@@ -31,30 +34,19 @@ public class BattleAreaTrigger : MonoBehaviour
     {
         if (areaCleared == true)
         {
-            DeactivateArea();
+            activateArea = false;
+            AreaController(activateArea);
         }
     }
     #endregion
 
-    private void ActivateArea(bool activateWalls)
+    private void AreaController(bool val)
     {
-        if (activateArea == true)
-        {
-            bWallL.SetActive(true);
-            bWallR.SetActive(true);
+        bWallL.SetActive(val);
+        bWallR.SetActive(val);
 
-            eSpawnerL.SetActive(true);
-            eSpawnerR.SetActive(true);
-        }
-    }
-
-    private void DeactivateArea()
-    {
-        bWallL.SetActive(false);
-        bWallR.SetActive(false);
-
-        eSpawnerL.SetActive(false);
-        eSpawnerR.SetActive(false);
+        eSpawnerL.SetActive(val);
+        eSpawnerR.SetActive(val);
     }
 
     #region OnTrigger Methods
@@ -65,7 +57,7 @@ public class BattleAreaTrigger : MonoBehaviour
             if (player.gameObject.tag == "Player")
             {
                 activateArea = true;
-                ActivateArea(activateArea);
+                AreaController(activateArea);
             }
         }
     }

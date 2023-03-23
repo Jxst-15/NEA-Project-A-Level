@@ -56,11 +56,11 @@ TagManager:
   - name: Ground
     uniqueID: 3985719363
     locked: 0
-  - name: Characters
-    uniqueID: 168254547
-    locked: 0
   - name: SavePoints
     uniqueID: 796018043
+    locked: 0
+  - name: Characters
+    uniqueID: 168254547
     locked: 0
   - name: Items
     uniqueID: 2981228041

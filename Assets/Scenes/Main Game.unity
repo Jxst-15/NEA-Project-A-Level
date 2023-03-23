@@ -3819,7 +3819,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &826824330
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6102,7 +6102,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1334105428
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6426,6 +6426,7 @@ GameObject:
   - component: {fileID: 1422130980}
   - component: {fileID: 1422130979}
   - component: {fileID: 1422130981}
+  - component: {fileID: 1422130982}
   m_Layer: 0
   m_Name: SavePoint 1
   m_TagString: SavePoint
@@ -6516,6 +6517,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.022362696}
   serializedVersion: 2
   m_Radius: 0.67890173
+--- !u!114 &1422130982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422130978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b84fe2e798b051942b67f74ce94ff0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UICanvas: {fileID: 0}
+  saveMenu: {fileID: 0}
 --- !u!1 &1452226756
 GameObject:
   m_ObjectHideFlags: 0
@@ -6533,7 +6548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1452226757
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6948,13 +6963,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1553166253}
+        m_TargetAssemblyTypeName: SaveMenu, Assembly-CSharp
+        m_MethodName: LeaveButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7337,6 +7352,8 @@ GameObject:
   - component: {fileID: 1553166249}
   - component: {fileID: 1553166248}
   - component: {fileID: 1553166252}
+  - component: {fileID: 1553166253}
+  - component: {fileID: 1553166254}
   m_Layer: 5
   m_Name: UI Canvas
   m_TagString: Untagged
@@ -7444,6 +7461,35 @@ MonoBehaviour:
   gameUI: {fileID: 1452226756}
   backgroundObject: {fileID: 1334105427}
   pauseMenuObject: {fileID: 1021069379}
+--- !u!114 &1553166253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553166247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86988d5c7ee0e1649961bcce58e10700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameUI: {fileID: 1452226756}
+  backgroundObject: {fileID: 1334105427}
+  saveMenuObject: {fileID: 826824329}
+  sp: {fileID: 0}
+  saveHandler: {fileID: 0}
+--- !u!114 &1553166254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553166247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66fcd205e0151f545b19254bf0d4218a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1559435938
 GameObject:
   m_ObjectHideFlags: 0
@@ -7637,13 +7683,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1553166253}
+        m_TargetAssemblyTypeName: SaveMenu, Assembly-CSharp
+        m_MethodName: SaveButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9148,13 +9194,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1553166253}
+        m_TargetAssemblyTypeName: SaveMenu, Assembly-CSharp
+        m_MethodName: HealButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

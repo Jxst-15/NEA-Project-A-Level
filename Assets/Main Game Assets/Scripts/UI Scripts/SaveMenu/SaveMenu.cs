@@ -12,7 +12,9 @@ public class SaveMenu : MonoBehaviour
     #endregion
 
     #region Script References
-
+    public SavePointHandler sp;
+    public SaveHandler saveHandler;
+    private PauseMenu pausing;
     #endregion
     #endregion
 
@@ -21,6 +23,8 @@ public class SaveMenu : MonoBehaviour
     void Start()
     {
         saveMenuObject.SetActive(false);
+        pausing = GetComponent<PauseMenu>();
+        saveHandler = GetComponent<SaveHandler>();
     }
 
     // Update is called once per frame
@@ -29,4 +33,30 @@ public class SaveMenu : MonoBehaviour
         
     }
     #endregion
+
+    public void EnterSaveMenu()
+    {
+        saveMenuObject.SetActive(true);
+        pausing.PauseGame();
+        pausing.pauseMenuObject.SetActive(false);
+    }
+
+    // Will let player save the game
+    public void SaveButton()
+    {
+        saveHandler.SaveGame();
+    }
+
+    // Will heal the player if player has sufficient points
+    public void HealButton()
+    {
+
+    }
+
+    // Player leaves the save menu
+    public void LeaveButton()
+    {
+        saveMenuObject.SetActive(false);
+        pausing.ResumeGame();
+    }
 }

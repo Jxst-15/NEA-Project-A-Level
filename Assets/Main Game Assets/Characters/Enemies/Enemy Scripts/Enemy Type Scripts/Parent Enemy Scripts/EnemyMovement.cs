@@ -6,6 +6,7 @@ public class EnemyMovement : CharMovement
     #region Script References
     [SerializeField] protected EnemyScript enemyScript;
     [SerializeField] protected EnemyStats enemyStats;
+    [SerializeField] protected EnemyAI enemyAI;
     #endregion
 
     #region Target
@@ -16,16 +17,10 @@ public class EnemyMovement : CharMovement
     protected const bool notNeeded = false;
 
     protected float enemyScaleX, enemyScaleY;
-    protected float distanceFromTarget;
 
-    protected float maxTrackDistance;
+    protected Vector2 direction;
+
     protected float runDistance;
-    protected float attackDistance;
-    #endregion
-
-    #region Getters and Setters
-    public bool inRange
-    { get; set; }
     #endregion
     #endregion
 
@@ -35,8 +30,11 @@ public class EnemyMovement : CharMovement
     {
         enemyScript = GetComponent<EnemyScript>();
         enemyStats = GetComponent<EnemyStats>();
+        enemyAI = GetComponent<EnemyAI>();
         
         base.Start();
+        enemyScaleX = this.transform.localScale.x;
+        enemyScaleY = this.transform.localScale.y;
     }
 
     // Update is called once per frame
@@ -46,9 +44,6 @@ public class EnemyMovement : CharMovement
         {
             if (canMove == true)
             {
-                enemyScaleX = this.transform.localScale.x;
-                enemyScaleY = this.transform.localScale.y;
-
                 Flip(notNeeded, enemyScaleX, enemyScaleY);
             }
             // Action();
@@ -92,68 +87,40 @@ public class EnemyMovement : CharMovement
         dodgeSpeed = 35;
         side = 0;
 
-        maxTrackDistance = 15f;
         runDistance = 8f;
-        attackDistance = 2.5f;
 
         targetPos = enemyScript.target.transform;
     }
 
-    // Determining the distance between this object and the player
-    private int TrackPlayer(float distanceFromTarget)
-    {
-        if (distanceFromTarget >= runDistance && distanceFromTarget < maxTrackDistance)
-        {
-            return 0;
-        }
-        else if (distanceFromTarget < runDistance && distanceFromTarget > attackDistance)
-        {
-            return 1;
-        }
-        else if (distanceFromTarget <= attackDistance)
-        {
-            return 2;
-        }
-
-        return -1;
-    }
-
     protected override void Movement()
     {
-        distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
-        switch (TrackPlayer(distanceFromTarget))
+        direction = (targetPos.position - transform.position).normalized;
+
+        if (enemyAI.fsm.currentState.thisStateID == EnemyStates.Tracking)
         {
-            case 0:
-                // Make enemy run towards player
-                inRange = false;
-                isRunning = true;
+            if (enemyAI.fsm.distanceFromTarget >= runDistance)
+            {
                 Run();
-                break;
-            case 1:
-                // Make enemy walk towards player
-                inRange = false;
-                isRunning = false;
-                transform.position = Vector2.MoveTowards(transform.position, targetPos.position, hSpeed * Time.deltaTime);
-                // rb.velocity = new Vector2(distanceFromTarget * hSpeed, distanceFromTarget * vSpeed);
-                break;
-            case 2:
-                // Enemy in attack range, make enemy attack and stop moving
-                inRange = true;
-                isRunning = false;
-                // Also random chance of dodging whenever player attacks
-                break;
-            case -1:
-                // Enemy will stand still waiting for player to get in range
-                inRange = false;
-                isRunning = false;
-                break;
+            }
+            else if (enemyAI.fsm.distanceFromTarget < runDistance)
+            {
+                rb.velocity = new Vector2(direction.x * hSpeed, direction.y * vSpeed);
+            }
+        }
+        else
+        {
+            StopMovement();
         }
     }
 
     protected override void Run()
     {
-        transform.position = Vector2.MoveTowards(transform.position, targetPos.position, hRunSpeed * Time.deltaTime);
-        // rb.velocity = new Vector2(distanceFromTarget * hRunSpeed, distanceFromTarget * vRunSpeed);
+        rb.velocity = new Vector2(direction.x * hRunSpeed, direction.y * vRunSpeed);
+    }
+
+    public void StopMovement()
+    {
+        rb.velocity = Vector2.zero;
     }
 
     protected override void Dodge()
@@ -166,7 +133,6 @@ public class EnemyMovement : CharMovement
         Debug.Log("Action");
     }
 
-    // Needs fixing
     protected override void Flip(bool value, float scaleX, float scaleY)
     {
         if (transform.position.x > targetPos.position.x)

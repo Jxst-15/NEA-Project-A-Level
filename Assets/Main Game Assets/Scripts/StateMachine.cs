@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Generic type parameters where the constraint is making sure they are enums
-public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
+public class StateMachine <T1, T2, T3> where T1 : Enum where T2 : Enum where T3 : class
 {
     #region Nested Classes
     // A class that defines the state transition
@@ -47,13 +47,17 @@ public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
         // Whether or not the state is the accepting state or not
         public bool acceptingState
         { get; protected set; }
+
+        public T3 belongsTo
+        { get; protected set; }
         #endregion
         #endregion
 
-        protected State(T1 thisStateID, bool acceptingState)
+        protected State(T1 thisStateID, bool acceptingState, T3 belongsTo)
         {
             this.thisStateID = thisStateID;
             this.acceptingState = acceptingState;
+            this.belongsTo = belongsTo;
         }
 
         // Methods used to handle what happens in a transition
@@ -72,7 +76,7 @@ public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
     
     #region Getters and Setters
     public State currentState
-    { get; set; }
+    { get; protected set; }
     public State previousState
     { get; protected set; }
     #endregion
@@ -91,16 +95,13 @@ public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
     private State CheckIfTransitionValid(T2 command)
     {
         StateTransition transition = new StateTransition(currentState, command);
-        Debug.Log(transition.currentState);
-        Debug.Log(transition.command);
         
         // Looks up the transition in the table (key) and sees whether or not the transition is valid and returns the next state if it is
         if (!transitionTable.TryGetValue(transition, out State nextState))
         {
             throw new Exception("Invalid Transition " + currentState + " by " + command + " -> " + nextState); // STATES ARE NULL, NEEDS FIXING
         }
-        
-        Debug.Log(nextState);
+  
         // Output if it is
         return nextState;
     }
@@ -112,7 +113,7 @@ public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
         currentState.Exit();
         previousState = currentState;
         currentState = CheckIfTransitionValid(command);
-        currentState.Enter();
         Debug.Log("Now in state: " + currentState.thisStateID);
+        currentState.Enter();
     }
 }

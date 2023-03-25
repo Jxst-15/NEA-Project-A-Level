@@ -22,7 +22,7 @@ public enum EnemyCommands
 }
 #endregion
 
-public class EnemyFSM : StateMachine<EnemyStates, EnemyCommands>
+public class EnemyAIFSM : StateMachine<EnemyStates, EnemyCommands, EnemyAIFSM>
 {
     #region Fields
     #region Object References
@@ -37,42 +37,38 @@ public class EnemyFSM : StateMachine<EnemyStates, EnemyCommands>
     public Inactive inactiveState
     { get; private set; }
     #endregion
+
+    #region Getters and Setters
+    public float distanceFromTarget
+    { get; set; }
+
+    public float maxTrackDistance
+    { get; set; }
+
+    public float attackDistance
+    { get; private set; }
+    #endregion
     #endregion
 
     #region States
     public class Active : State
     {
-        public Active() : base(EnemyStates.Active, false) { }
+        public Active(EnemyAIFSM enemyAIFSM) : base(EnemyStates.Active, false, enemyAIFSM) { }
 
         public override void Enter()
         {
-            base.Enter();
+            belongsTo.maxTrackDistance = 15f;
+            belongsTo.attackDistance = 2.5f;
         }
 
-        public override void UpdateLogic()
-        {
-            base.UpdateLogic();
-        }
-
-        public override void UpdateFixed()
-        {
-            base.UpdateFixed();
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-        }
+        public override void Exit() { base.Exit(); }
     }
 
     public class Idle : State
     {
-        public Idle() : base(EnemyStates.Idle, false) { }
+        public Idle(EnemyAIFSM enemyAIFSM) : base(EnemyStates.Idle, false, enemyAIFSM) { }
 
-        public override void Enter()
-        {
-            base.Enter();
-        }
+        public override void Enter() { base.Enter(); }
 
         public override void UpdateLogic()
         {
@@ -81,91 +77,79 @@ public class EnemyFSM : StateMachine<EnemyStates, EnemyCommands>
 
         public override void UpdateFixed()
         {
-            base.UpdateFixed();
+            // Only moves states if it is less than or equal to the max tracking distance
+            if (belongsTo.distanceFromTarget <= belongsTo.maxTrackDistance)
+            {
+                belongsTo.MoveStates(EnemyCommands.InRange);
+            }
         }
 
-        public override void Exit()
-        {
-            base.Exit();
-        }
+        public override void Exit() { base.Exit(); }
     }
 
     public class Tracking : State
     {
-        public Tracking() : base(EnemyStates.Tracking, false) { }
+        public Tracking(EnemyAIFSM enemyAIFSM) : base(EnemyStates.Tracking, false, enemyAIFSM) { }
 
-        public override void Enter()
-        {
-            base.Enter();
-        }
-
-        public override void UpdateLogic()
-        {
-            base.UpdateLogic();
-        }
+        public override void Enter() { base.Enter(); }
 
         public override void UpdateFixed()
         {
-            base.UpdateFixed();
+            if (belongsTo.distanceFromTarget >= belongsTo.maxTrackDistance)
+            {
+                belongsTo.MoveStates(EnemyCommands.NotInRange);
+            }
+            else if (belongsTo.distanceFromTarget <= belongsTo.attackDistance)
+            {
+                belongsTo.MoveStates(EnemyCommands.InAttackRange);
+            }
         }
 
-        public override void Exit()
-        {
-            base.Exit();
-        }
+        public override void Exit() { base.Exit(); }
     }
 
     public class Attacking : State
     {
-        public Attacking() : base(EnemyStates.Attacking, false) { }
+        public Attacking(EnemyAIFSM enemyAIFSM) : base(EnemyStates.Attacking, false, enemyAIFSM) { }
 
-        public override void Enter()
-        {
-            base.Enter();
-        }
-
-        public override void UpdateLogic()
-        {
-            base.UpdateLogic();
-        }
+        public override void Enter() { base.Enter(); }
 
         public override void UpdateFixed()
         {
-            base.UpdateFixed();
+            if (belongsTo.distanceFromTarget > belongsTo.attackDistance)
+            {
+                belongsTo.MoveStates(EnemyCommands.NotInAttackRange);
+            }
         }
 
-        public override void Exit()
-        {
-            base.Exit();
-        }
+        public override void Exit() { base.Exit(); }
     }
 
     public class Inactive : State
     {
-        public Inactive() : base(EnemyStates.Inactive, true) { }
+        public Inactive(EnemyAIFSM enemyAIFSM) : base(EnemyStates.Inactive, true, enemyAIFSM) { }
 
         public override void Enter()
         {
-            base.Enter();
-            // Give points to the player          
-            // Destroy gameobject
+            Debug.Log("Enemy defeated");
         }
     }
     #endregion
 
-    public EnemyFSM() : base()
+    public EnemyAIFSM() : base()
     {
         MakeTransitionTable();
         this.currentState = activeState;
+        currentState.Enter();
     }
 
     private void MakeTransitionTable()
     {
-        activeState = new Active();
-        idleState = new Idle();
-        trackingState = new Tracking();
-        attackingState = new Attacking();
-        inactiveState = new Inactive();
+        activeState = new Active(this);
+        idleState = new Idle(this);
+        trackingState = new Tracking(this);
+        attackingState = new Attacking(this);
+        inactiveState = new Inactive(this);
         
         this.transitionTable = new Dictionary<StateTransition, State>
         {
@@ -188,16 +172,5 @@ public class EnemyFSM : StateMachine<EnemyStates, EnemyCommands>
         //    //    Debug.Log("N");
         //    //}
         //}
-
-        StateTransition test = new StateTransition(activeState, EnemyCommands.Spawned);
-        if (transitionTable.ContainsKey(test))
-        {
-            Debug.Log(transitionTable[test]);
-
-        }
-        else
-        {
-            Debug.Log("Error");
-        }
     }
 }

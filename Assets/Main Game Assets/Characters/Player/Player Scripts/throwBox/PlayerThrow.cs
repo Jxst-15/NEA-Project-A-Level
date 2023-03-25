@@ -89,6 +89,7 @@ public class PlayerThrow : MonoBehaviour
             playerCombat.throwing = true;
             
             toThrow.GetComponent<EnemyMovement>().canMove = false;
+            toThrow.GetComponent<EnemyMovement>().StopMovement();
             toThrow.GetComponent<EnemyCombat>().canAttack = false;
             toThrow.GetComponent<EnemyCombat>().canDefend = false;
 

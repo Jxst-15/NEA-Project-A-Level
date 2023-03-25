@@ -8,6 +8,7 @@ public class EnemyStats : CharStats
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyCombat enemyCombat;
     [SerializeField] private EnemyMovement enemyMovement;
+    [SerializeField] private EnemyAI enemyAI;
 
     [SerializeField] private FlashScript flashScript;
     #endregion
@@ -41,6 +42,7 @@ public class EnemyStats : CharStats
     {
         enemyCombat = GetComponent<EnemyCombat>();
         enemyMovement = GetComponent<EnemyMovement>();
+        enemyAI = GetComponent<EnemyAI>();
     }
 
     // Start is called before the first frame update
@@ -200,15 +202,15 @@ public class EnemyStats : CharStats
 
     protected override void Death()
     {
+        // As the enemy has no health left, switch states to Inactive
+        enemyAI.fsm.MoveStates(EnemyCommands.NoHealth);
+
+        // On death, gives the player points
         enemyScript.GivePoints();
 
         flashScript.Flash(flashScript.GetFlashMaterial(2));
-
-        // Disable the game object 
-        gameObject.SetActive(false);
         
         // Destroying the game object helps to manage memory and declutter screen
         Destroy(gameObject);
-        Debug.Log("Enemy Died");
     }
 }

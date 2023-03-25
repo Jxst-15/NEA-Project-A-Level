@@ -4,8 +4,8 @@ public abstract class CharStats : MonoBehaviour, IDamageable
 {
     #region Fields
     #region Variables
-    [SerializeField] protected int maxHealth, currentHealth;
-    [SerializeField] protected int maxStamina, currentStamina;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected int maxStamina;
 
     protected float nextRegen;
     protected float regenCooldown;
@@ -22,6 +22,10 @@ public abstract class CharStats : MonoBehaviour, IDamageable
     { get; set; }
     public bool stun
     { get; set; }
+    public int currentHealth
+    { get; protected set; }
+    public int currentStamina
+    { get; protected set; }
     #endregion
     #endregion
 
@@ -43,6 +47,10 @@ public abstract class CharStats : MonoBehaviour, IDamageable
             {
                 WaitForUnstun();
             }
+        }
+        else
+        {
+            Death();
         }
     }
     #endregion
@@ -107,7 +115,6 @@ public abstract class CharStats : MonoBehaviour, IDamageable
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Death();
             return true;
         }
         return false;

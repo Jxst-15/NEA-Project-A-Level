@@ -8,6 +8,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyAttack enemyAttack;
     [SerializeField] private EnemyMovement enemyMovement;
+    [SerializeField] private EnemyAI enemyAI;
     [SerializeField] private EnemyStats enemyStats;
     [SerializeField] private FlashScript flashScript;
 
@@ -90,6 +91,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
 
         enemyAttack = attackBox.GetComponent<EnemyAttack>();
         enemyMovement = GetComponent<EnemyMovement>();
+        enemyAI = GetComponent<EnemyAI>();
         enemyStats = GetComponent<EnemyStats>();
         flashScript = GetComponent<FlashScript>();
 
@@ -103,7 +105,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     {
         if (PauseMenu.isPaused == false || canAttack == false)
         {
-            switch (enemyMovement.inRange)
+            switch (enemyAI.fsm.currentState.thisStateID == EnemyStates.Attacking)
             {
                 case true:
                     if (weapon == null)

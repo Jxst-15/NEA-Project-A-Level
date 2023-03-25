@@ -4,14 +4,19 @@ public class PlayerStyleSwitch : MonoBehaviour
 {
     #region Fields
     #region Script References
-    public PlayerStats stats;
-    public PlayerCombat combat;
-    public PlayerBlock blockStats;
+    private PlayerStats stats;
+    private PlayerCombat combat;
+    private PlayerBlock blockStats;
     #endregion
 
     [SerializeField] public static string fightStyle;
 
     public GameObject StyleSwitcher;
+
+    #region Getters and Setters
+    public string fightStyleSnapshot
+    { get; set; }
+    #endregion
     #endregion
 
     #region Unity Methods
@@ -22,6 +27,15 @@ public class PlayerStyleSwitch : MonoBehaviour
         blockStats = GetComponentInChildren<PlayerBlock>();
         
         fightStyle = "Iron Fist";    
+    }
+
+    void Update()
+    {
+        if (combat.weaponHeld == true)
+        {
+            fightStyle = "HoldingWeapon";
+            combat.canSwitch = false;
+        }
     }
     #endregion
 

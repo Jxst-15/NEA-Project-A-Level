@@ -5,13 +5,21 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 {
     #region Fields
     #region Script References
-    public PlayerStats stats;
-    public PlayerStyleSwitch playerStyleSwitch;
-    public PlayerComboMeter comboMeter;
+    public PlayerStats stats
+    { get; private set; }
+    public PlayerStyleSwitch playerStyleSwitch
+    { get; private set; }
+    public PlayerComboMeter comboMeter
+    { get; private set; }
+    public PlayerController playerController
+    { get; private set; }
     
-    public PlayerAttack playerAttack;
-    public PlayerThrow playerThrow;
-    public PlayerBlock playerBlock; 
+    public PlayerAttack playerAttack
+    { get; private set; }
+    public PlayerThrow playerThrow
+    { get; private set; }
+    public PlayerBlock playerBlock
+    { get; private set; }
     #endregion
 
     #region Variables
@@ -68,6 +76,8 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     { get; set; }
     public bool canDefend
     { get; set; }
+    public bool canSwitch
+    { get; set; }
     public bool attacking
     { get; set; }
     public bool blocking
@@ -79,7 +89,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     public float attackRate
     { get; set; }
     public bool weaponHeld
-    { get; set; }
+    { get; private set; }
     #endregion
     #endregion
 
@@ -90,6 +100,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         stats = GetComponent<PlayerStats>();
         playerStyleSwitch = GetComponent<PlayerStyleSwitch>();
         comboMeter = GetComponent<PlayerComboMeter>();
+        playerController = GetComponent<PlayerController>();
         
         // Gets the PlayerAttack script from the attackBox GameObject
         playerAttack = attackBox.GetComponent<PlayerAttack>(); 
@@ -120,7 +131,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
                 // If there is no weapon
                 if (weapon == null)
                 {
-                    // weaponHeld = false;
+                    weaponHeld = false;
                     AttackLogic();
                 }
                 else
@@ -144,6 +155,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             {
                 // Sets game time back to normal
                 Time.timeScale = 1f;
+                playerController.playerAction.canInteract = true;
                 canAttack = true;
                 canDefend = true;
 
@@ -169,6 +181,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 
         canAttack = true;
         canDefend = true;
+        canSwitch = true;
         attacking = false;
         blocking = false;
         throwing = false;
@@ -366,9 +379,13 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 
     private void SwitchStyle()
     {
-        canAttack = false;
-        canDefend = false;
-        playerStyleSwitch.SwitchStyle();
+        if (canSwitch)
+        {
+            canAttack = false;
+            canDefend = false;
+            playerController.playerAction.canInteract = false;
+            playerStyleSwitch.SwitchStyle();
+        }
     }
 
     #region Weapon Code
@@ -435,6 +452,9 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             weapon.GetComponent<Weapon>().DropItem();
             weapon = null;
             weaponHeld = false;
+            
+            PlayerStyleSwitch.fightStyle = playerStyleSwitch.fightStyleSnapshot;
+            canSwitch = true;
         }
     }
     #endregion

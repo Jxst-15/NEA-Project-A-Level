@@ -8,7 +8,8 @@ public class PlayerController : CharMovement
     #endregion
 
     #region Script References
-    public PlayerAction playerAction;
+    public PlayerAction playerAction
+    { get; private set; }
     #endregion
 
     #region Variables 
@@ -19,7 +20,7 @@ public class PlayerController : CharMovement
 
     // For double tapping key
     private float doubleTapSpeed;
-    KeyCode lastKey;
+    private KeyCode lastKey;
     #endregion
     #endregion
 

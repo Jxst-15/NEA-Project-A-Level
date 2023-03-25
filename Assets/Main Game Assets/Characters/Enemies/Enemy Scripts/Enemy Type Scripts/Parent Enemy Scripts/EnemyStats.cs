@@ -168,6 +168,7 @@ public class EnemyStats : CharStats
     {
         if (PlayerStyleSwitch.fightStyle == weakTo)
         {
+            Debug.Log("Advantage");
             int weakToAddOn = 10;
             dmg += weakToAddOn; 
         }

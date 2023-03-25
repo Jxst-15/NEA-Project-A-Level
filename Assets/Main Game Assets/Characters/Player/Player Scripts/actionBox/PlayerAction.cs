@@ -9,6 +9,11 @@ public class PlayerAction : MonoBehaviour
     public PlayerCombat weaponHolding;
     #endregion
 
+    #region Getters and Setters
+    public bool canInteract
+    { get; set; }
+    #endregion
+
     // A list containing all items that are within the actionBox collider
     private List<Collider2D> interact = new List<Collider2D>();
     #endregion
@@ -18,13 +23,14 @@ public class PlayerAction : MonoBehaviour
     void Start()
     {
         weaponHolding = gameObject.GetComponentInParent<PlayerCombat>();
+        canInteract = true;
     }
     #endregion
 
     // For interacting with objects in the game 
     public void Action()
     {
-        if (Input.GetKeyDown(KeyCode.N) && interact.Count != 0)
+        if (Input.GetKeyDown(KeyCode.N) && interact.Count != 0 && canInteract == true)
         {
             IInteractable toInteract = interact[0].gameObject.GetComponent<IInteractable>();
             //Prioritises the first item in the list to interact with
@@ -57,7 +63,9 @@ public class PlayerAction : MonoBehaviour
         if (weaponHolding.weaponHeld != true)
         {
             // Checks if player is holding a weapon, if yes then set weaponHeld to true
-            weaponHolding.weaponHeld = true;
+            weaponHolding.SetWeaponHeld(true);
+
+            weaponHolding.playerStyleSwitch.fightStyleSnapshot = PlayerStyleSwitch.fightStyle;
 
             // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to
             weaponHolding.weapon = interact[0].gameObject;

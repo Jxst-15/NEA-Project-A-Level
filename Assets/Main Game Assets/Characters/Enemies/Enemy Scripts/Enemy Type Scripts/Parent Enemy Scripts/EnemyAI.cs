@@ -67,9 +67,6 @@ public class EnemyAI : MonoBehaviour
 
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
-    [SerializeField] private EnemyStats enemyStats;
-    [SerializeField] private EnemyMovement enemyMovement;
-    [SerializeField] private EnemyCombat enemyCombat;
     #endregion
 
     #region Script Reference Variables
@@ -85,9 +82,6 @@ public class EnemyAI : MonoBehaviour
         fsm = new EnemyAIFSM();
 
         enemyScript = GetComponent<EnemyScript>();
-        enemyStats = GetComponent<EnemyStats>();
-        enemyMovement = GetComponent<EnemyMovement>();
-        enemyCombat = GetComponent<EnemyCombat>();
         
         // Enemy has been made active and is spawned, set state to idle
         fsm.MoveStates(EnemyCommands.Spawned);

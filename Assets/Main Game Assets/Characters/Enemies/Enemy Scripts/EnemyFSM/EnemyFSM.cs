@@ -155,14 +155,19 @@ public class EnemyFSM : StateMachine<EnemyStates, EnemyCommands>
 
     public EnemyFSM() : base()
     {
-        MakeStates();
-        this.currentState = activeState;
         MakeTransitionTable();
+        this.currentState = activeState;
     }
 
     private void MakeTransitionTable()
     {
-        this.transitionTable = new Dictionary<StateTransition, State>()
+        activeState = new Active();
+        idleState = new Idle();
+        trackingState = new Tracking();
+        attackingState = new Attacking();
+        inactiveState = new Inactive();
+        
+        this.transitionTable = new Dictionary<StateTransition, State>
         {
             { new StateTransition(activeState, EnemyCommands.Spawned), idleState },
             { new StateTransition(idleState, EnemyCommands.NotInRange), idleState },
@@ -177,16 +182,22 @@ public class EnemyFSM : StateMachine<EnemyStates, EnemyCommands>
 
         //foreach (var kvp in transitionTable)
         //{
-        //    Debug.Log("CurrentState: " + kvp.Key.currentState.thisStateID + " Command: " + kvp.Key.command + " NextState: " + kvp.Value.thisStateID);
-        //}      
-    }
+        //    Debug.Log("CurrentState: " + kvp.Key.currentState + " Command: " + kvp.Key.command + " NextState: " + kvp.Value);
+        //    //if (kvp.Key.currentState == null)
+        //    //{
+        //    //    Debug.Log("N");
+        //    //}
+        //}
 
-    private void MakeStates()
-    {
-        activeState = new Active();
-        idleState = new Idle();
-        trackingState = new Tracking();
-        attackingState = new Attacking();
-        inactiveState = new Inactive();
+        StateTransition test = new StateTransition(activeState, EnemyCommands.Spawned);
+        if (transitionTable.ContainsKey(test))
+        {
+            Debug.Log(transitionTable[test]);
+
+        }
+        else
+        {
+            Debug.Log("Error");
+        }
     }
 }

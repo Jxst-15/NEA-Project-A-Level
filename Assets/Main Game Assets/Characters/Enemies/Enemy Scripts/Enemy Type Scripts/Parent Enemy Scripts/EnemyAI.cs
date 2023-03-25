@@ -254,39 +254,39 @@ public class EnemyAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //float distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
-        //switch (fsm.currentState.thisStateID)
-        //{
-        //    case EnemyStates.Idle:
-        //        if (distanceFromTarget > maxTrackDistance)
-        //        {
-        //            // fsm.MoveStates(EnemyCommands.NotInRange);
-        //        }
-        //        else if (distanceFromTarget <= maxTrackDistance)
-        //        {
-        //            fsm.MoveStates(EnemyCommands.InRange);
-        //        }
-        //        break;
-        //    case EnemyStates.Tracking:
-        //        if (distanceFromTarget >= maxTrackDistance)
-        //        {
-        //            fsm.MoveStates(EnemyCommands.NotInRange);
-        //        }
-        //        if (distanceFromTarget <= attackDistance)
-        //        {
-        //            fsm.MoveStates(EnemyCommands.InAttackRange);
-        //        }
-        //        break;
-        //    case EnemyStates.Attacking:
-        //        if (distanceFromTarget > attackDistance)
-        //        {
-        //            fsm.MoveStates(EnemyCommands.NotInAttackRange);
-        //        }
-        //        break;
-        //    case EnemyStates.Inactive:
-        //        Debug.Log("Dead");
-        //        break;
-        //}
+        float distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
+        switch (fsm.currentState.thisStateID)
+        {
+            case EnemyStates.Idle:
+                if (distanceFromTarget > maxTrackDistance)
+                {
+                    // fsm.MoveStates(EnemyCommands.NotInRange);
+                }
+                else if (distanceFromTarget <= maxTrackDistance)
+                {
+                    fsm.MoveStates(EnemyCommands.InRange);
+                }
+                break;
+            case EnemyStates.Tracking:
+                if (distanceFromTarget >= maxTrackDistance)
+                {
+                    fsm.MoveStates(EnemyCommands.NotInRange);
+                }
+                if (distanceFromTarget <= attackDistance)
+                {
+                    fsm.MoveStates(EnemyCommands.InAttackRange);
+                }
+                break;
+            case EnemyStates.Attacking:
+                if (distanceFromTarget > attackDistance)
+                {
+                    fsm.MoveStates(EnemyCommands.NotInAttackRange);
+                }
+                break;
+            case EnemyStates.Inactive:
+                Debug.Log("Dead");
+                break;
+        }
     }
     #endregion
 }

@@ -22,10 +22,22 @@ public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
             this.currentState = currentState;
             this.command = command;
         }
+
+        // Need to figure out what this does
+        public override bool Equals(object obj)
+        {
+            StateTransition other = obj as StateTransition;
+            return other != null && this.currentState.Equals(other.currentState) && this.command.Equals(other.command);
+        }
+
+        public override int GetHashCode()
+        {
+            return 17 + 31 * this.currentState.GetHashCode() + 31 * this.command.GetHashCode();
+        }
     }
 
     // A class that defines all states of the state machine, set to a generic type of an enum
-    public class State : MonoBehaviour
+    public class State
     {
         #region Fields
         #region Getters and Setters
@@ -78,18 +90,17 @@ public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
     // Makes sure the next state is actually in the transition table
     private State CheckIfTransitionValid(T2 command)
     {
-        Debug.Log(currentState.thisStateID);
         StateTransition transition = new StateTransition(currentState, command);
-        Debug.Log(transition.currentState.thisStateID);
+        Debug.Log(transition.currentState);
         Debug.Log(transition.command);
         
         // Looks up the transition in the table (key) and sees whether or not the transition is valid and returns the next state if it is
         if (!transitionTable.TryGetValue(transition, out State nextState))
         {
-            throw new Exception("Invalid Transition " + currentState.thisStateID + " by " + command + " -> " + nextState); // STATES ARE NULL, NEEDS FIXING
+            throw new Exception("Invalid Transition " + currentState + " by " + command + " -> " + nextState); // STATES ARE NULL, NEEDS FIXING
         }
         
-        Debug.Log(nextState.thisStateID);
+        Debug.Log(nextState);
         // Output if it is
         return nextState;
     }
@@ -102,6 +113,6 @@ public class StateMachine <T1, T2> where T1 : Enum where T2 : Enum
         previousState = currentState;
         currentState = CheckIfTransitionValid(command);
         currentState.Enter();
-        Debug.Log("Now in state: " + currentState.thisStateID.ToString());
+        Debug.Log("Now in state: " + currentState.thisStateID);
     }
 }

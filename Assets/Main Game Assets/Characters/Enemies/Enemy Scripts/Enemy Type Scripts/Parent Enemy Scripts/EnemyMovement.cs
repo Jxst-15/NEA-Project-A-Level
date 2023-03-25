@@ -166,6 +166,7 @@ public class EnemyMovement : CharMovement
         Debug.Log("Action");
     }
 
+    // Needs fixing
     protected override void Flip(bool value, float scaleX, float scaleY)
     {
         if (transform.position.x > targetPos.position.x)

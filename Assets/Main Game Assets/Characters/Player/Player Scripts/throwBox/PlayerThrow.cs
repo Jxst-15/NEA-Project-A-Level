@@ -56,7 +56,7 @@ public class PlayerThrow : MonoBehaviour
                 // Ends the throw
                 playerCombat.throwing = false;
                 
-                toThrow.GetComponent<EnemyAI>().canMove = true;
+                toThrow.GetComponent<EnemyMovement>().canMove = true;
                 toThrow.GetComponent<EnemyCombat>().canAttack = true;
                 toThrow.GetComponent<EnemyCombat>().canDefend = true;
                 
@@ -88,7 +88,7 @@ public class PlayerThrow : MonoBehaviour
             toThrow = objectsHit[0].gameObject;
             playerCombat.throwing = true;
             
-            toThrow.GetComponent<EnemyAI>().canMove = false;
+            toThrow.GetComponent<EnemyMovement>().canMove = false;
             toThrow.GetComponent<EnemyCombat>().canAttack = false;
             toThrow.GetComponent<EnemyCombat>().canDefend = false;
 

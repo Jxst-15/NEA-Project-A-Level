@@ -7,7 +7,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyAttack enemyAttack;
-    [SerializeField] private EnemyAI enemyAI;
+    [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private EnemyStats enemyStats;
     [SerializeField] private FlashScript flashScript;
 
@@ -89,7 +89,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         target = enemyScript.target;
 
         enemyAttack = attackBox.GetComponent<EnemyAttack>();
-        enemyAI = GetComponent<EnemyAI>();
+        enemyMovement = GetComponent<EnemyMovement>();
         enemyStats = GetComponent<EnemyStats>();
         flashScript = GetComponent<FlashScript>();
 
@@ -103,7 +103,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     {
         if (PauseMenu.isPaused == false || canAttack == false)
         {
-            switch (enemyAI.inRange)
+            switch (enemyMovement.inRange)
             {
                 case true:
                     if (weapon == null)
@@ -209,12 +209,10 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
                                         case int i when i >= 1 && i <= 6:
                                             lightAtk = true;
                                             dmgToDeal = enemyStats.lDmg;
-                                            Debug.Log("Light");
                                             break;
                                         case int i when i == 7 || i == 8:
                                             lightAtk = false;
                                             dmgToDeal = enemyStats.hDmg;
-                                            Debug.Log("Heavy");
                                             break;
                                     }
                                     DealDamage(hittableObj, dmgToDeal);
@@ -257,11 +255,11 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         {
             doingUnblockable = true;
             flashScript.Flash(flashScript.GetFlashMaterial(1));
-            enemyAI.canMove = false;
+            enemyMovement.canMove = false;
             
             yield return new WaitForSeconds(1);
             
-            enemyAI.canMove = true; 
+            enemyMovement.canMove = true; 
             
             foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
             {

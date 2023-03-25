@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyStats : CharStats
@@ -6,13 +7,17 @@ public class EnemyStats : CharStats
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyCombat enemyCombat;
-    [SerializeField] private EnemyAI enemyAI;
+    [SerializeField] private EnemyMovement enemyMovement;
 
     [SerializeField] private FlashScript flashScript;
     #endregion
 
     #region Script Reference Variables
     [SerializeField] private string type;
+    #endregion
+
+    #region Variables
+    private string weakTo;
     #endregion
 
     #region Getters and Setters
@@ -35,7 +40,7 @@ public class EnemyStats : CharStats
     protected override void Awake()
     {
         enemyCombat = GetComponent<EnemyCombat>();
-        enemyAI = GetComponent<EnemyAI>();
+        enemyMovement = GetComponent<EnemyMovement>();
     }
 
     // Start is called before the first frame update
@@ -77,6 +82,8 @@ public class EnemyStats : CharStats
                 hSpeed = 3;
                 vRunSpeed = 4;
                 hRunSpeed = 5;
+
+                weakTo = "Iron Fist";
                 break;
             case "NimbleEnemies":
                 maxHealth = 200;
@@ -92,6 +99,8 @@ public class EnemyStats : CharStats
                 hSpeed = 4;
                 vRunSpeed = 5;
                 hRunSpeed = 6;
+
+                weakTo = "Grass Style";
                 break;
             case "BulkyEnemies":
                 maxHealth = 600;
@@ -107,6 +116,8 @@ public class EnemyStats : CharStats
                 hSpeed = 2;
                 vRunSpeed = 3;
                 hRunSpeed = 4;
+
+                weakTo = "Boulder Style";
                 break;
             case "BossEnemies":
                 maxHealth = 700;
@@ -153,6 +164,11 @@ public class EnemyStats : CharStats
 
     public override void TakeDamage(int dmg)
     {
+        if (PlayerStyleSwitch.fightStyle == weakTo)
+        {
+            int weakToAddOn = 10;
+            dmg += weakToAddOn; 
+        }
         base.TakeDamage(dmg);
         flashScript.Flash(flashScript.GetFlashMaterial(0));
     }
@@ -163,7 +179,7 @@ public class EnemyStats : CharStats
         enemyCombat.canDefend = false;
         enemyCombat.blocking = false;
 
-        enemyAI.canMove = false;
+        enemyMovement.canMove = false;
 
         base.Stun();
     }
@@ -176,7 +192,7 @@ public class EnemyStats : CharStats
             enemyCombat.canDefend = true;
             enemyCombat.blocking = true;
 
-            enemyAI.canMove = true;
+            enemyMovement.canMove = true;
 
             stun = false;
         }

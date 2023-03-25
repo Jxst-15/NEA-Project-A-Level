@@ -31,8 +31,6 @@ public class EnemyScript : MonoBehaviour
     { get; set; }
     public int scoreToGive
     { get ; set; }
-    public Rigidbody2D rb
-    { get; set; }
     #endregion
     #endregion
 
@@ -41,8 +39,6 @@ public class EnemyScript : MonoBehaviour
     {
         // Sets the enemy type to the tag which is given in the editor
         type = gameObject.tag;
-        
-        rb = gameObject.GetComponent<Rigidbody2D>();
 
         // Sets the points depending on the type using the EnemyPoints enum
         switch(type)
@@ -62,7 +58,6 @@ public class EnemyScript : MonoBehaviour
         }
         
         target = GameObject.FindGameObjectWithTag("Player");
-        
     }
     #endregion
 

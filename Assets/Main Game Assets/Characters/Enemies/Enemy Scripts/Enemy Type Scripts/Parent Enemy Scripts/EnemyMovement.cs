@@ -15,7 +15,7 @@ public class EnemyMovement : CharMovement
     #region Variables
     protected const bool notNeeded = false;
 
-    protected float enemyPosX, enemyPosY;
+    protected float enemyScaleX, enemyScaleY;
     protected float distanceFromTarget;
 
     protected float maxTrackDistance;
@@ -33,6 +33,9 @@ public class EnemyMovement : CharMovement
     // Start is called before the first frame update
     protected override void Start()
     {
+        enemyScript = GetComponent<EnemyScript>();
+        enemyStats = GetComponent<EnemyStats>();
+        
         base.Start();
     }
 
@@ -43,15 +46,15 @@ public class EnemyMovement : CharMovement
         {
             if (canMove == true)
             {
-                enemyPosX = this.transform.localScale.x;
-                enemyPosY = this.transform.localScale.y;
+                enemyScaleX = this.transform.localScale.x;
+                enemyScaleY = this.transform.localScale.y;
 
-                Flip(notNeeded, enemyPosX, enemyPosY);
+                Flip(notNeeded, enemyScaleX, enemyScaleY);
             }
-            Action();
+            // Action();
         }
     }
-    
+
     protected override void FixedUpdate()
     {
         if (PauseMenu.isPaused == false)
@@ -65,10 +68,9 @@ public class EnemyMovement : CharMovement
                     Movement();
                 }
 
-                Dodge();
+                // Dodge();
             }
         }
-        throw new System.NotImplementedException();
     }
     #endregion
 
@@ -93,6 +95,8 @@ public class EnemyMovement : CharMovement
         maxTrackDistance = 15f;
         runDistance = 8f;
         attackDistance = 2.5f;
+
+        targetPos = enemyScript.target.transform;
     }
 
     // Determining the distance between this object and the player
@@ -129,8 +133,8 @@ public class EnemyMovement : CharMovement
                 // Make enemy walk towards player
                 inRange = false;
                 isRunning = false;
-                // transform.position = Vector2.MoveTowards(transform.position, targetPos.position, hSpeed * Time.deltaTime);
-                rb.velocity = new Vector2(distanceFromTarget * hSpeed, distanceFromTarget * vSpeed);
+                transform.position = Vector2.MoveTowards(transform.position, targetPos.position, hSpeed * Time.deltaTime);
+                // rb.velocity = new Vector2(distanceFromTarget * hSpeed, distanceFromTarget * vSpeed);
                 break;
             case 2:
                 // Enemy in attack range, make enemy attack and stop moving
@@ -148,28 +152,29 @@ public class EnemyMovement : CharMovement
 
     protected override void Run()
     {
-        rb.velocity = new Vector2(distanceFromTarget * hRunSpeed, distanceFromTarget * vRunSpeed);
+        transform.position = Vector2.MoveTowards(transform.position, targetPos.position, hRunSpeed * Time.deltaTime);
+        // rb.velocity = new Vector2(distanceFromTarget * hRunSpeed, distanceFromTarget * vRunSpeed);
     }
 
     protected override void Dodge()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Dodge");
     }
 
     protected override void Action()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Action");
     }
 
     protected override void Flip(bool value, float scaleX, float scaleY)
     {
         if (transform.position.x > targetPos.position.x)
         {
-            this.transform.localScale = new Vector2(-1.89751f, scaleY);
+            this.transform.localScale = new Vector2(scaleX, scaleY);
         }
         else
         {
-            this.transform.localScale = new Vector2(1.89751f, scaleY);
+            this.transform.localScale = new Vector2(-scaleX, scaleY);
         }
     }
 

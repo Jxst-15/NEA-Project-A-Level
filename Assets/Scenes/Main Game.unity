@@ -1645,7 +1645,7 @@ MonoBehaviour:
   currentStamina: 0
   enemyScript: {fileID: 0}
   enemyCombat: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   flashScript: {fileID: 0}
   type: 
 --- !u!114 &351866335
@@ -1662,7 +1662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyAttack: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   enemyStats: {fileID: 0}
   flashScript: {fileID: 0}
   targetAttackStatus: {fileID: 308243317}
@@ -1700,16 +1700,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyStats: {fileID: 0}
-  vSpeed: 0
-  hSpeed: 0
-  vRunSpeed: 0
-  hRunSpeed: 0
-  isRunning: 0
-  isDodging: 0
-  dodgeSpeed: 0
-  startDodgeTime: 0
-  side: 0
-  rb: {fileID: 0}
+  enemyMovement: {fileID: 0}
+  enemyCombat: {fileID: 0}
 --- !u!114 &351866337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3926,7 +3918,7 @@ MonoBehaviour:
   currentStamina: 0
   enemyScript: {fileID: 0}
   enemyCombat: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   flashScript: {fileID: 0}
   type: 
 --- !u!114 &827074370
@@ -3943,7 +3935,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyAttack: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   enemyStats: {fileID: 0}
   flashScript: {fileID: 0}
   targetAttackStatus: {fileID: 308243317}
@@ -3981,16 +3973,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyStats: {fileID: 0}
-  vSpeed: 0
-  hSpeed: 0
-  vRunSpeed: 0
-  hRunSpeed: 0
-  isRunning: 0
-  isDodging: 0
-  dodgeSpeed: 0
-  startDodgeTime: 0
-  side: 0
-  rb: {fileID: 0}
+  enemyMovement: {fileID: 0}
+  enemyCombat: {fileID: 0}
 --- !u!114 &827074372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4336,13 +4320,14 @@ GameObject:
   - component: {fileID: 959466260}
   - component: {fileID: 959466259}
   - component: {fileID: 959466258}
+  - component: {fileID: 959466267}
   m_Layer: 9
   m_Name: BulkyEnemy
   m_TagString: BulkyEnemies
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &959466258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4379,7 +4364,7 @@ MonoBehaviour:
   currentStamina: 0
   enemyScript: {fileID: 0}
   enemyCombat: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   flashScript: {fileID: 0}
   type: 
 --- !u!114 &959466260
@@ -4396,7 +4381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyAttack: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   enemyStats: {fileID: 0}
   flashScript: {fileID: 0}
   targetAttackStatus: {fileID: 308243317}
@@ -4434,16 +4419,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyStats: {fileID: 0}
-  vSpeed: 0
-  hSpeed: 0
-  vRunSpeed: 0
-  hRunSpeed: 0
-  isRunning: 0
-  isDodging: 0
-  dodgeSpeed: 0
-  startDodgeTime: 0
-  side: 0
-  rb: {fileID: 0}
+  enemyMovement: {fileID: 0}
+  enemyCombat: {fileID: 0}
 --- !u!114 &959466262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4574,6 +4551,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &959466267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959466257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a40cb42fcc41f248928229f28bfa469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vSpeed: 0
+  vRunSpeed: 0
+  hSpeed: 0
+  hRunSpeed: 0
+  isRunning: 0
+  isDodging: 0
+  dodgeSpeed: 0
+  startDodgeTime: 0
+  side: 0
+  onGround: 0
+  enemyScript: {fileID: 0}
+  enemyStats: {fileID: 0}
 --- !u!1 &982207673
 GameObject:
   m_ObjectHideFlags: 0
@@ -7073,7 +7074,7 @@ MonoBehaviour:
   currentStamina: 0
   enemyScript: {fileID: 0}
   enemyCombat: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   flashScript: {fileID: 0}
   type: 
 --- !u!114 &1540675213
@@ -7090,7 +7091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyAttack: {fileID: 0}
-  enemyAI: {fileID: 0}
+  enemyMovement: {fileID: 0}
   enemyStats: {fileID: 0}
   flashScript: {fileID: 0}
   targetAttackStatus: {fileID: 308243317}
@@ -7128,16 +7129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
   enemyStats: {fileID: 0}
-  vSpeed: 0
-  hSpeed: 0
-  vRunSpeed: 0
-  hRunSpeed: 0
-  isRunning: 0
-  isDodging: 0
-  dodgeSpeed: 0
-  startDodgeTime: 0
-  side: 0
-  rb: {fileID: 0}
+  enemyMovement: {fileID: 0}
+  enemyCombat: {fileID: 0}
 --- !u!114 &1540675215
 MonoBehaviour:
   m_ObjectHideFlags: 0

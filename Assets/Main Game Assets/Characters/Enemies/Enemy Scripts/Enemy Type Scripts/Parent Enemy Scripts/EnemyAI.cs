@@ -1,8 +1,14 @@
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour, ICharacterController
+public class EnemyAI : MonoBehaviour
 {
+    #region Old
+    /*
     #region Fields
+    #region FSM
+    private EnemyFSM fsm;
+    #endregion
+
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyStats enemyStats;
@@ -20,7 +26,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     private const bool notNeeded = false;
 
     [SerializeField] private bool isRunning;
-    private float enemyPosX, enemyPosY;
+    private float enemyScaleX, enemyScaleY;
     private float distanceFromTarget;
 
     [SerializeField] private bool isDodging;
@@ -48,22 +54,25 @@ public class EnemyAI : MonoBehaviour, ICharacterController
     // Start is called before the first frame update
     void Start()
     {
-        // StartInit();
         rb = GetComponent<Rigidbody2D>();
 
         enemyStats = GetComponent<EnemyStats>();
         enemyScript = GetComponent<EnemyScript>();
         SetVariables();
+        
         // Finds the target by getting the target variable from the EnemyScript parent class and gets the transform component 
         targetPos = enemyScript.target.transform;
-    }
 
+        fsm = new EnemyFSM();
+    }
+   
     // Update is called once per frame
     void Update()
     {
         if (PauseMenu.isPaused == false || canMove == false)
         {
             EAIUpdate();
+
         }
     }
 
@@ -94,8 +103,8 @@ public class EnemyAI : MonoBehaviour, ICharacterController
         runDistance = 8f;
         attackDistance = 2.5f;
 
-            enemyPosX = this.transform.localScale.x;
-            enemyPosY = this.transform.localScale.y;
+        enemyScaleX = this.transform.localScale.x;
+        enemyScaleY = this.transform.localScale.y;
     }
 
     public void EAIUpdate()
@@ -106,7 +115,7 @@ public class EnemyAI : MonoBehaviour, ICharacterController
             // Run action method
 
             // For flipping the sprite
-            Flip(notNeeded, enemyPosX, enemyPosY);
+            Flip(notNeeded, enemyScaleX, enemyScaleY);
         }
     }
 
@@ -196,4 +205,88 @@ public class EnemyAI : MonoBehaviour, ICharacterController
             this.transform.localScale = new Vector2(-scaleX, scaleY);
         }
     }
+    */
+    #endregion
+
+    #region Fields
+    #region FSM
+    public EnemyFSM fsm;
+    #endregion
+
+    #region Script References
+    [SerializeField] private EnemyScript enemyScript;
+    [SerializeField] private EnemyStats enemyStats;
+    [SerializeField] private EnemyMovement enemyMovement;
+    [SerializeField] private EnemyCombat enemyCombat;
+    #endregion
+
+    #region Script Reference Variables
+    private Transform targetPos;
+    #endregion
+
+    #region Getters and Setters
+    private float maxTrackDistance;
+    public float runDistance
+    { get; private set; }
+    public float attackDistance
+    { get; private set; }
+    #endregion
+    #endregion
+
+    #region Unity Methods
+    private void Start()
+    {
+        fsm = new EnemyFSM();
+
+        enemyScript = GetComponent<EnemyScript>();
+        enemyStats = GetComponent<EnemyStats>();
+        enemyMovement = GetComponent<EnemyMovement>();
+        enemyCombat = GetComponent<EnemyCombat>();
+
+        maxTrackDistance = 15f;
+        runDistance = 8f;
+        attackDistance = 2.5f;
+
+        targetPos = enemyScript.target.transform;
+
+        fsm.MoveStates(EnemyCommands.Spawned);
+    }
+
+    private void FixedUpdate()
+    {
+        //float distanceFromTarget = Vector2.Distance(transform.position, targetPos.position);
+        //switch (fsm.currentState.thisStateID)
+        //{
+        //    case EnemyStates.Idle:
+        //        if (distanceFromTarget > maxTrackDistance)
+        //        {
+        //            // fsm.MoveStates(EnemyCommands.NotInRange);
+        //        }
+        //        else if (distanceFromTarget <= maxTrackDistance)
+        //        {
+        //            fsm.MoveStates(EnemyCommands.InRange);
+        //        }
+        //        break;
+        //    case EnemyStates.Tracking:
+        //        if (distanceFromTarget >= maxTrackDistance)
+        //        {
+        //            fsm.MoveStates(EnemyCommands.NotInRange);
+        //        }
+        //        if (distanceFromTarget <= attackDistance)
+        //        {
+        //            fsm.MoveStates(EnemyCommands.InAttackRange);
+        //        }
+        //        break;
+        //    case EnemyStates.Attacking:
+        //        if (distanceFromTarget > attackDistance)
+        //        {
+        //            fsm.MoveStates(EnemyCommands.NotInAttackRange);
+        //        }
+        //        break;
+        //    case EnemyStates.Inactive:
+        //        Debug.Log("Dead");
+        //        break;
+        //}
+    }
+    #endregion
 }

@@ -21,12 +21,6 @@ public class SavePointHandler : MonoBehaviour, IInteractable
         UICanvas = GameObject.Find("UI Canvas");
         saveMenu = UICanvas.GetComponent<SaveMenu>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     #endregion
 
     public void Interact()

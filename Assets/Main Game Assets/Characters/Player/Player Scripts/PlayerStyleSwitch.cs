@@ -9,14 +9,9 @@ public class PlayerStyleSwitch : MonoBehaviour
     private PlayerBlock blockStats;
     #endregion
 
-    [SerializeField] public static string fightStyle;
+    public static string fightStyle;
 
     public GameObject StyleSwitcher;
-
-    #region Getters and Setters
-    public string fightStyleSnapshot
-    { get; set; }
-    #endregion
     #endregion
 
     #region Unity Methods
@@ -26,15 +21,18 @@ public class PlayerStyleSwitch : MonoBehaviour
         combat = GetComponent<PlayerCombat>();
         blockStats = GetComponentInChildren<PlayerBlock>();
         
-        fightStyle = "Iron Fist";    
+        fightStyle = "Iron Fist";
     }
 
     void Update()
     {
         if (combat.weaponHeld == true)
         {
-            fightStyle = "HoldingWeapon";
             combat.canSwitch = false;
+        }
+        else
+        {
+            combat.canSwitch = true;
         }
     }
     #endregion

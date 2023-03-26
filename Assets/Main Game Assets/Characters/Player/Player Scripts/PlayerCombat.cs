@@ -330,7 +330,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     // Actually dealing the damage to the targeted objects
     private void DealDamage(Collider2D hittableObj, int dmgToDeal)
     {
-        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
+        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal, false);
     }
 
     // Performs a throw attack on the selected enemy, configured in the PlayerThrow class
@@ -453,7 +453,6 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             weapon = null;
             weaponHeld = false;
             
-            PlayerStyleSwitch.fightStyle = playerStyleSwitch.fightStyleSnapshot;
             canSwitch = true;
         }
     }

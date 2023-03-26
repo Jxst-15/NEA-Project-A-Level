@@ -95,7 +95,7 @@ public abstract class CharStats : MonoBehaviour, IDamageable
 
     protected abstract void StaminaRegen();
 
-    public virtual void TakeDamage(int dmg)
+    public virtual void TakeDamage(int dmg, bool weapon)
     {
         // currentHealth is affected by the damage given as the parameter
         currentHealth -= dmg;

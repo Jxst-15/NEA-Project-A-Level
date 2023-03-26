@@ -25,7 +25,7 @@ public class ThrowableUnique : MonoBehaviour // Could have it inherit from attac
                 GameObject toDamage = collision.gameObject;
 
                 // Deal damage to the first gameobject it comes in contact with
-                toDamage.GetComponent<IDamageable>().TakeDamage(thisWeapon.uniqueDmg);
+                toDamage.GetComponent<IDamageable>().TakeDamage(thisWeapon.uniqueDmg, true);
                 thisWeapon.OnObjectHit();
             }
         }

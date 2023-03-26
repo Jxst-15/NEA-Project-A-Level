@@ -179,7 +179,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     protected void DealDamage(Collider2D toDmg, int dmg, int toUpdateHits)
     {
-        toDmg.GetComponent<IDamageable>().TakeDamage(dmg);
+        toDmg.GetComponent<IDamageable>().TakeDamage(dmg, true);
         UpdateHitsDone(toUpdateHits);
     }
 

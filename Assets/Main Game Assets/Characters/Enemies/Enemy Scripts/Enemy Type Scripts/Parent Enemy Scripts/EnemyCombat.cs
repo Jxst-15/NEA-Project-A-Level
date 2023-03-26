@@ -278,7 +278,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
 
     public void DealDamage(Collider2D hittableObj, int dmgToDeal)
     {
-        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal);
+        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal, false);
     }
 
     public void Throw()

@@ -50,9 +50,9 @@ public class PlayerStats : CharStats
         }
     }
 
-    public override void TakeDamage(int dmg)
+    public override void TakeDamage(int dmg, bool weapon)
     {
-        base.TakeDamage(dmg);
+        base.TakeDamage(dmg, weapon);
         combatScript.ResetComboCount();
     }
 

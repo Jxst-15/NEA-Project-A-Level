@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    void TakeDamage(int dmg);
+    void TakeDamage(int dmg, bool weapon);
 }

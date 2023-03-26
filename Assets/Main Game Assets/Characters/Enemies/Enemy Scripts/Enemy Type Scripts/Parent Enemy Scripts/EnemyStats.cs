@@ -164,15 +164,15 @@ public class EnemyStats : CharStats
         }
     }
 
-    public override void TakeDamage(int dmg)
+    public override void TakeDamage(int dmg, bool weapon)
     {
-        if (PlayerStyleSwitch.fightStyle == weakTo)
+        if (PlayerStyleSwitch.fightStyle == weakTo && enemyScript.target.GetComponent<PlayerCombat>().weaponHeld == false && weapon == false)
         {
             Debug.Log("Advantage");
             int weakToAddOn = 10;
             dmg += weakToAddOn; 
         }
-        base.TakeDamage(dmg);
+        base.TakeDamage(dmg, weapon);
         flashScript.Flash(flashScript.GetFlashMaterial(0));
     }
 

@@ -53,7 +53,6 @@ public class Throwable : Weapon
         {
             isThrowing = true;
             // Gets the parent of the hand object (Either the enemy or the player gameobject)
-            // this.transform.parent.gameObject.transform.parent.GetComponent<IWeaponHandler>().SetWeaponHeld(false);
             this.transform.parent.gameObject.transform.parent.GetComponent<IWeaponHandler>().SetWeaponToNull();
             this.transform.parent = null;
             this.hand = null;

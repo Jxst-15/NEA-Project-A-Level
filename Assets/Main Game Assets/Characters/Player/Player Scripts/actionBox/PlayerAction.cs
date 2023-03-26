@@ -63,7 +63,7 @@ public class PlayerAction : MonoBehaviour
         if (weaponHolding.weaponHeld != true)
         {
             // Checks if player is holding a weapon, if yes then set weaponHeld to true
-            weaponHolding.SetWeaponHeld(true);
+            weaponHolding.weaponHeld = true;
 
             weaponHolding.playerStyleSwitch.fightStyleSnapshot = PlayerStyleSwitch.fightStyle;
 

@@ -47,6 +47,9 @@ public class MenuController : MonoBehaviour
     // Quits the game
     public void QuitButton()
     {
-
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+        Application.Quit();
     }
 }

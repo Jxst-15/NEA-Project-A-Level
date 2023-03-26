@@ -89,7 +89,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     public float attackRate
     { get; set; }
     public bool weaponHeld
-    { get; private set; }
+    { get; set; }
     #endregion
     #endregion
 
@@ -439,9 +439,9 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         parryable = false;
     }
 
-    public void SetWeaponHeld(bool val)
+    public void SetWeaponToNull()
     {
-        weaponHeld = val;
+        weapon = null;
     }
 
     // TEMPORARY

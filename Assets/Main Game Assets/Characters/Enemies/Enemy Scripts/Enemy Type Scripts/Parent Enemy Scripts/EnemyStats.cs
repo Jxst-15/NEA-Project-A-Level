@@ -160,7 +160,6 @@ public class EnemyStats : CharStats
     {
         if (PlayerStyleSwitch.fightStyle == weakTo && enemyScript.target.GetComponent<PlayerCombat>().weaponHeld == false && weapon == false)
         {
-            Debug.Log("Advantage");
             int weakToAddOn = 10;
             dmg += weakToAddOn; 
         }

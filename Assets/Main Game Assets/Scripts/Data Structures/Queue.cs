@@ -66,3 +66,36 @@ public class Queue <T>
         rear += 1;
     }
 }
+
+public class CircQ <T>
+{
+    private int[] queue = new int[10];
+    private int fPointer, rPointer = -1;
+
+    public int First()
+    {
+        int first = queue[fPointer];
+        return first;
+    }
+
+    public bool IsFull()
+    {
+        int l = queue.Length;
+        if (rPointer + 1 % l == fPointer)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void Enqueue(int item)
+    {
+        if (IsFull() != true)
+        {
+
+        }
+    }
+}

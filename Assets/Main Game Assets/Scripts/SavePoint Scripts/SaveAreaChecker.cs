@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class SaveAreaChecker : MonoBehaviour
 {
@@ -24,18 +23,6 @@ public class SaveAreaChecker : MonoBehaviour
         //{
         //    savePoint.canSave = false;
         //}
-    }
-
-    private bool CheckIfEnemyPresent(Collider2D entity, bool exit)
-    {
-        bool val = true;
-        
-        if (entity.gameObject.layer == LayerMask.NameToLayer("Enemy") && exit == false)
-        {
-            val = false;
-        }
-
-        return val;
     }
 
     private void AdjustList(Collider2D entity, bool exit)

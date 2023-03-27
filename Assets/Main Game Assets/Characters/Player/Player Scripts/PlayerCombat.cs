@@ -292,12 +292,10 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             {
                 if (lightAtk == true)
                 {
-                    UnityEngine.Debug.Log("Object Hit! (L)");
                     dmgToDeal = stats.lDmg;
                 }
                 else
                 {
-                    UnityEngine.Debug.Log("Object Hit! (H)");
                     dmgToDeal = stats.hDmg;
                 }
                 DealDamage(hittableObj, dmgToDeal);

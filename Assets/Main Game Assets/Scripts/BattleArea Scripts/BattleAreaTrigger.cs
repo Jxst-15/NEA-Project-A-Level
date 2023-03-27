@@ -6,8 +6,14 @@ public class BattleAreaTrigger : MonoBehaviour
 {
     #region Fields
     #region Gameobjects
+    public GameObject battleArea;
+
     public GameObject bWallL, bWallR;
     public GameObject eSpawnerL, eSpawnerR;
+    #endregion
+
+    #region Script references
+    private BattleArea areaControl;
     #endregion
 
     #region Variables
@@ -24,15 +30,15 @@ public class BattleAreaTrigger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        areaCleared = false;
+        areaControl = battleArea.GetComponent<BattleArea>();
 
-        AreaController(areaCleared);
+        AreaController(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (areaCleared == true)
+        if (areaControl.areaCleared == true)
         {
             activateArea = false;
             AreaController(activateArea);

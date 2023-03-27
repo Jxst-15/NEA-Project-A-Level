@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FlashScript : MonoBehaviour
 {
+    #region Fields
     #region Variables
     private SpriteRenderer spriteRenderer;
     private Material originalMat;
@@ -15,7 +16,9 @@ public class FlashScript : MonoBehaviour
     #endregion
 
     public List<Material> flashMaterials = new List<Material>();
+    #endregion
 
+    #region Unity Methods
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +26,7 @@ public class FlashScript : MonoBehaviour
         originalMat = spriteRenderer.material;
         duration = 0.09f;
     }
+    #endregion
 
     public void Flash(Material flash)
     {

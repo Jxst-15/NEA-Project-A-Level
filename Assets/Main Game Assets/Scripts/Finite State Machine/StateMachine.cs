@@ -114,7 +114,7 @@ public class StateMachine <T1, T2, T3> where T1 : Enum where T2 : Enum where T3 
         currentState.Exit();
         previousState = currentState;
         currentState = CheckIfTransitionValid(command);
-        Debug.Log("Now in state: " + currentState.thisStateID);
+        // Debug.Log("Now in state: " + currentState.thisStateID);
         currentState.Enter();
     }
 }

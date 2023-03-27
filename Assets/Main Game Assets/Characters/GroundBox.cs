@@ -15,6 +15,7 @@ public class GroundBox : MonoBehaviour
         {
             Physics2D.IgnoreLayerCollision(this.gameObject.layer, LayerMask.NameToLayer("Player"));
             Physics2D.IgnoreLayerCollision(this.gameObject.layer, LayerMask.NameToLayer("Enemy"));
+            Physics2D.IgnoreLayerCollision(this.gameObject.layer, LayerMask.NameToLayer("BattleWall"));
         }
     }
 }

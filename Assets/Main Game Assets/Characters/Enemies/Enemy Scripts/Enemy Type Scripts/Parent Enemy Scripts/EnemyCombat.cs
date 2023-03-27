@@ -75,6 +75,8 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     public bool gettingBlocked
     { get; set; }
     #endregion
+
+    private System.Random rng = new System.Random();
     #endregion
 
     #region Unity Methods
@@ -94,6 +96,10 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         enemyAI = GetComponent<EnemyAI>();
         enemyStats = GetComponent<EnemyStats>();
         flashScript = GetComponent<FlashScript>();
+
+        targetAttackStatus = target.GetComponent<PlayerCombat>();
+        targetBlockStats = target.GetComponent<PlayerBlock>();
+        targetStats = target.GetComponent<PlayerStats>();   
 
         attackRate = enemyStats.attackRate;
 
@@ -159,8 +165,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     public void ProbabilityOfActions()
     {
         // To determine which action to do
-        // randNum = 0;
-        int randNum = Random.Range(1, 11);
+        int randNum = rng.Next(1, 11);
         if (weapon != null && weapon.tag == "Weapons")
         {
             weaponHeld = true;
@@ -194,7 +199,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             if (doingUnblockable != true)
             {
                 // The probability of attacking
-                int randNum = Random.Range(1, 11);
+                int randNum = rng.Next(1, 11);
 
                 if (enemyStats.stun != true)
                 {

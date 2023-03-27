@@ -129,7 +129,7 @@ public class EnemyAIFSM : StateMachine<EnemyStates, EnemyCommands, EnemyAIFSM>
 
         public override void Enter()
         {
-            Debug.Log("Enemy defeated");
+            
         }
     }
     #endregion

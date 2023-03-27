@@ -38,11 +38,16 @@ public class PlayerBlock : MonoBehaviour
 
     private void Update()
     {
+        // If the player is not blocking
         if (!Input.GetKey(KeyCode.H))
         {
             foreach(Collider2D c in toBlock)
             {
-                c.GetComponent<EnemyCombat>().gettingBlocked = false;
+                // For each enemy in the toBlock collider, set gettingBlocked to false so they can attack normally
+                if (c != null)
+                {
+                    c.GetComponent<EnemyCombat>().gettingBlocked = false;
+                }
             }
         }
     }

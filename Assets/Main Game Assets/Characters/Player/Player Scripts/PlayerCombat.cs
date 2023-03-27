@@ -409,8 +409,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             }
             
             WeaponAttack(unique);
-        }
-       
+        }       
     }
 
     public void WeaponAttack(bool unique)
@@ -422,7 +421,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             if (weapon.GetComponent<Weapon>().Attack(lightAtk) == true)
             {
                 // Get the number of objects hit by attack and increase comboCount by amount
-                comboCount++;
+                comboCount += weapon.GetComponent<Weapon>().weaponAttack.GetObjectsHit().Count;
             }
         }
         else
@@ -430,7 +429,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             if (weapon.GetComponent<Weapon>().UniqueAttack() == true)
             {
                 // Get the number of objects hit by attack and increase comboCount by amount
-                comboCount++;
+                comboCount += weapon.GetComponent<Weapon>().uniqueWeaponAttack.GetObjectsHit().Count; // DOESNT WORK FOR THROWABLES
             }
         }
         attackCount++;

@@ -1,23 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stack : MonoBehaviour
+public class Stack <T>
 {
     #region Fields
-    private List<GameObject> stack;
+    private List<T> stack;
     #endregion
 
-    public Stack()
+    public Stack(int size)
     {
-        this.stack = new List<GameObject>();
+        this.stack = new List<T>();
     }
 
-    public int size()
-    { 
+    public int Size()
+    {
         return stack.Count;
     }
 
-    public bool isEmpty()
+    public bool IsEmpty()
     {
         bool empty = true;
         if (stack.Count == 0)
@@ -31,24 +31,24 @@ public class Stack : MonoBehaviour
         return empty;
     }
 
-    public GameObject top()
+    public T Top()
     {
-        int top = size() - 1;
-        if (size() <= 0)
+        int top = Size() - 1;
+        if (Size() <= 0)
         {
             Debug.Log("Stack is empty!");
         }
         return stack[top];
     }
 
-    public void push(GameObject item)
+    public void Push(T item)
     {
         stack.Add(item);
     }
 
-    public void pop()
+    public void Pop()
     {
-        int top = size() - 1;
+        int top = Size() - 1;
         stack.RemoveAt(top);
     }
 }

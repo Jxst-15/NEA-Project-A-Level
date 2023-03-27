@@ -55,6 +55,8 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     public void setName(string name) {  weaponName = name; }
     public int getHitsDone() { return hitsDone; }
     #endregion
+
+    private Collider2D col;
     #endregion
 
     #region Unity Methods
@@ -62,6 +64,8 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     {
         weaponAttack = attackBox.GetComponent<WeaponAttackBox>();
         uniqueWeaponAttack = uniqueAttackBox.GetComponent<WeaponAttackBox>();
+
+        col = this.GetComponent<Collider2D>();
 
         // scaleX = this.transform.localScale.x;
     }
@@ -94,14 +98,19 @@ public abstract class Weapon : MonoBehaviour, IInteractable
             
             this.transform.parent = hand.transform; 
 
+            // Gets the scale of the gameobject after it has been made a child object
             Vector3 newScale = this.transform.localScale;
             
+            // Moves the weapon to where the hand is
             this.transform.position = hand.transform.position;
 
             Flip(newScale);
+
+            col.enabled = false;
         }
     }
 
+    // Ensures that the gameobject is facing the right way
     protected void Flip(Vector3 newScale)
     {
         Vector3 parentScale = hand.transform.parent.transform.localScale;
@@ -114,7 +123,17 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         this.transform.localScale = newScale;
     }
 
-    // WIP
+    protected void DetectActionBox(Collider2D entity)
+    {
+        if (entity.gameObject.name == "actionBox")
+        {
+            if (entity.gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                hand = entity.transform.parent.Find("handPlayer").gameObject;
+            }
+        }
+    }
+
     // Code to drop weapon
     public void DropItem()
     {
@@ -122,10 +141,16 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
         attackBox.SetActive(false);
         uniqueAttackBox.SetActive(false);
+
+        hand = this.transform.parent.gameObject;
+        
+        // Moves the weapon down to the floor (the y pos of the gameobject holding the weapon)
+        this.transform.position = new Vector2(hand.transform.position.x, hand.transform.parent.transform.position.y);
         
         this.transform.parent = null;
-        this.transform.position = transform.TransformPoint(Vector3.down * 8.5f); // Still needs fixing
-        this.hand = null;
+
+        // Makes it so it is interactable again
+        col.enabled = true;
     }
 
     public virtual bool Attack(bool light)
@@ -207,8 +232,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected void BreakItem()
     {
         Debug.Log("Weapon was destroyed!");
-        attackBox.SetActive(false);
-        uniqueAttackBox.SetActive(false);
+  
         // Fully destroy this object
         Destroy(gameObject);
     }
@@ -217,24 +241,12 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     // Used to detect which object will pick up the weapon, sets the hand to the hand of that GameObject
     protected void OnTriggerEnter2D(Collider2D entity)
     {
-        if (entity.gameObject.name == "actionBox")
-        {
-            if (entity.gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                hand = entity.transform.parent.Find("handPlayer").gameObject;
-            }
-        }
+        DetectActionBox(entity);
     }
 
     protected void OnTriggerStay2D(Collider2D entity)
     {
-        if (entity.gameObject.name == "actionBox")
-        {
-            if (entity.gameObject.transform.parent.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                hand = entity.transform.parent.Find("handPlayer").gameObject;
-            }
-        }
+        DetectActionBox(entity);
     }
 
     // Once the object exits, the hand is set to null

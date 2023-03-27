@@ -73,11 +73,6 @@ public class EnemyMovement : CharMovement
     {
         base.SetVariables();
 
-        vSpeed = enemyStats.vSpeed;
-        hSpeed = enemyStats.hSpeed;
-        vRunSpeed = enemyStats.vRunSpeed;
-        hRunSpeed = enemyStats.hRunSpeed;
-
         canMove = true;
         isRunning = false;
 
@@ -104,7 +99,7 @@ public class EnemyMovement : CharMovement
             }
             else if (enemyAI.fsm.distanceFromTarget < runDistance)
             {
-                rb.velocity = new Vector2(direction.x * hSpeed, direction.y * vSpeed);
+                rb.velocity = new Vector2(direction.x * enemyStats.hSpeed, direction.y * enemyStats.vSpeed);
             }
         }
         else
@@ -115,12 +110,7 @@ public class EnemyMovement : CharMovement
 
     protected override void Run()
     {
-        rb.velocity = new Vector2(direction.x * hRunSpeed, direction.y * vRunSpeed);
-    }
-
-    public void StopMovement()
-    {
-        rb.velocity = Vector2.zero;
+        rb.velocity = new Vector2(direction.x * enemyStats.hRunSpeed, direction.y * enemyStats.vRunSpeed);
     }
 
     protected override void Dodge()

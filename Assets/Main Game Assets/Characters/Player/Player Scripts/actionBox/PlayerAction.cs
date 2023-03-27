@@ -54,7 +54,6 @@ public class PlayerAction : MonoBehaviour
     private void SaveInteract()
     {
         // Used for interacting with a save point 
-        Debug.Log("Accessed save point");
     }
 
     private void WeaponInteract()

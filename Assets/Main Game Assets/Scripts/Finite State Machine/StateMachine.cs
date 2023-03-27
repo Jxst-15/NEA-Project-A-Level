@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Generic type parameters where the constraint is making sure they are enums
+// Generic type parameters where the constraint is making sure they are enums (T1 and T2)
+// T3 is used for determining which fsm the state belongs to, it is a class
 public class StateMachine <T1, T2, T3> where T1 : Enum where T2 : Enum where T3 : class
 {
     #region Nested Classes

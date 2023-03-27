@@ -1,26 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Queue : MonoBehaviour
+// Need to turn into array/other
+// Maybe use for PlayerAction
+public class Queue <T>
 {
     #region Fields
-    private List<GameObject> queue;
+    private List<T> queue;
     private int front = 0;
     private int rear = -1;
     #endregion
 
     public Queue()
     {
-        queue = new List<GameObject>();
+        queue = new List<T>();
     }
 
-    public GameObject first()
+    public T First()
     {
-        GameObject first = queue[front];
+        T first = queue[front];
         return first;
     }
 
-    public int size()
+    public int Size()
     {
         int size = 0;
         if (rear > front)
@@ -30,7 +32,7 @@ public class Queue : MonoBehaviour
         return size;
     }
 
-    public bool isFull()
+    public bool IsFull()
     {
         int length = queue.Count;
 
@@ -44,12 +46,12 @@ public class Queue : MonoBehaviour
         }
     }
 
-    public GameObject dequeue()
+    public T Dequeue()
     {
         if (rear < front)
         {
             Debug.Log("Error! Empty queue");
-            return null;
+            return default(T);
         }
         else
         {
@@ -58,7 +60,7 @@ public class Queue : MonoBehaviour
         }
     }
 
-    public void enqueue(GameObject item)
+    public void Enqueue(T item)
     {
         queue.Add(item);
         rear += 1;

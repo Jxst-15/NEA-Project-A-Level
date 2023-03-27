@@ -10,6 +10,8 @@ public class PlayerController : CharMovement
     #region Script References
     public PlayerAction playerAction
     { get; private set; }
+    public PlayerStats playerStats
+    { get; private set; }
     #endregion
 
     #region Variables 
@@ -31,6 +33,7 @@ public class PlayerController : CharMovement
         base.Start();
 
         playerAction = actionBox.GetComponent<PlayerAction>();
+        playerStats = GetComponent<PlayerStats>();
     }
 
     // Update is called once per frame
@@ -87,11 +90,6 @@ public class PlayerController : CharMovement
     protected override void SetVariables()
     {
         base.SetVariables();
-
-        vSpeed = 2;
-        hSpeed = 3;
-        vRunSpeed = 4;
-        hRunSpeed = 5;
 
         startDodgeTime = 0.1f;
         dodgeTime = startDodgeTime;
@@ -160,13 +158,13 @@ public class PlayerController : CharMovement
 
     protected override void Movement()
     {
-        rb.velocity = new Vector2(hMove * hSpeed, vMove * vSpeed);
+        rb.velocity = new Vector2(hMove * playerStats.hSpeed, vMove * playerStats.vSpeed);
     }
 
     protected override void Run()
     {
         // Similar to normal movement but speed values replaced with run speed values
-        rb.velocity = new Vector2(hMove * hRunSpeed, vMove * vRunSpeed);
+        rb.velocity = new Vector2(hMove * playerStats.hRunSpeed, vMove * playerStats.vRunSpeed);
     }
 
     protected override void Dodge()

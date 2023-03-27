@@ -12,6 +12,11 @@ public class SavePointHandler : MonoBehaviour, IInteractable
     #region Script References
     public SaveMenu saveMenu;
     #endregion
+
+    #region Getters and Setters
+    public bool canSave
+    { get; set; }
+    #endregion
     #endregion
 
     #region Unity Methods
@@ -20,12 +25,21 @@ public class SavePointHandler : MonoBehaviour, IInteractable
     {
         UICanvas = GameObject.Find("UI Canvas");
         saveMenu = UICanvas.GetComponent<SaveMenu>();
+        canSave = true;
     }
     #endregion
 
     public void Interact()
     {
-        saveMenu.sp = this;
-        saveMenu.EnterSaveMenu();
+        if (canSave == true)
+        {
+            Debug.Log("Accessed save point");
+            saveMenu.sp = this;
+            saveMenu.EnterSaveMenu();
+        }
+        else
+        {
+            Debug.Log("Can't save now");
+        }
     }
 }

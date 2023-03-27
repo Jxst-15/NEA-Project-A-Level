@@ -41,10 +41,8 @@ public class EnemyAIFSM : StateMachine<EnemyStates, EnemyCommands, EnemyAIFSM>
     #region Getters and Setters
     public float distanceFromTarget
     { get; set; }
-
     public float maxTrackDistance
     { get; set; }
-
     public float attackDistance
     { get; private set; }
     #endregion

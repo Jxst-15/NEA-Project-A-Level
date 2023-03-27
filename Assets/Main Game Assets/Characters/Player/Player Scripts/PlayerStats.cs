@@ -25,6 +25,13 @@ public class PlayerStats : CharStats
         hDmg = 75;
         maxStamina = 200;
         nextRegen = 0f;
+
+        vSpeed = 2;
+        hSpeed = 3;
+        vRunSpeed = 4;
+        hRunSpeed = 5;
+
+        unstunCooldown = 5;
         base.SetVariables();
     }
 
@@ -67,6 +74,8 @@ public class PlayerStats : CharStats
 
         // Disables player movement
         controllerScript.canMove = false;
+
+        controllerScript.StopMovement();
 
         base.Stun();
     }

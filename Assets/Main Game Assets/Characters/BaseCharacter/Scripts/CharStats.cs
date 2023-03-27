@@ -16,6 +16,14 @@ public abstract class CharStats : MonoBehaviour, IDamageable
     #endregion
 
     #region Getters and Setters
+    public int vSpeed
+    { get; set; }
+    public int hSpeed
+    { get; set; }
+    public int vRunSpeed
+    { get; set; }
+    public int hRunSpeed
+    { get; set; }
     public int lDmg
     { get; set; }
     public int hDmg
@@ -31,6 +39,7 @@ public abstract class CharStats : MonoBehaviour, IDamageable
 
     #region Unity Methods
     protected abstract void Awake();
+    
     // Start is called before the first frame update
     protected virtual void Start()
     {

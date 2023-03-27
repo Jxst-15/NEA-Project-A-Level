@@ -16,7 +16,7 @@ public class ThrowableUnique : MonoBehaviour // Could have it inherit from attac
     }
     #endregion
 
-    private void ThrowingWeapon(Collider2D collision)
+    public void ThrowingWeapon(Collider2D collision)
     {
         if (thisWeapon.isThrowing)
         {

@@ -22,14 +22,6 @@ public class EnemyStats : CharStats
     #endregion
 
     #region Getters and Setters
-    public int vSpeed
-    { get; set; }
-    public int hSpeed
-    { get; set; }
-    public int vRunSpeed
-    { get; set; }
-    public int hRunSpeed
-    { get; set; }
     public float attackRate
     { get; set; }
     public int uDmg

@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// WIP
 public abstract class CharMovement : MonoBehaviour
 {
     #region Fields
@@ -58,6 +57,11 @@ public abstract class CharMovement : MonoBehaviour
     protected abstract void Movement();
 
     protected abstract void Run();
+
+    public void StopMovement()
+    {
+        rb.velocity = Vector2.zero;
+    }
 
     protected abstract void Dodge();
 

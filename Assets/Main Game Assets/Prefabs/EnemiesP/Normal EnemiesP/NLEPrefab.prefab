@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 2365643768180782486}
   - component: {fileID: 2365643768180782473}
   - component: {fileID: 2365643768180782472}
+  - component: {fileID: 2365643768180782482}
   - component: {fileID: 2365643768180782475}
   - component: {fileID: 2365643768180782474}
   - component: {fileID: 2365643768180782477}
-  - component: {fileID: 2365643768180782482}
   m_Layer: 9
   m_Name: NLEPrefab
   m_TagString: NormalEnemies
@@ -64,7 +64,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3554d79b54391a846a84dc3a08e31e3d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -168,6 +168,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
+--- !u!114 &2365643768180782482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237047135124992207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a40cb42fcc41f248928229f28bfa469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vSpeed: 0
+  vRunSpeed: 0
+  hSpeed: 0
+  hRunSpeed: 0
+  isRunning: 0
+  isDodging: 0
+  dodgeSpeed: 0
+  startDodgeTime: 0
+  side: 0
+  onGround: 0
+  enemyScript: {fileID: 0}
+  enemyStats: {fileID: 0}
+  enemyAI: {fileID: 0}
 --- !u!114 &2365643768180782475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +200,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237047135124992207}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b30c8316a4b62c4e8b87ad2ad0b2876, type: 3}
   m_Name: 
@@ -193,14 +218,6 @@ MonoBehaviour:
   attackBox: {fileID: 2365643768577748390}
   blockBox: {fileID: 2365643769284953415}
   parryBox: {fileID: 2365643768383293628}
-  player:
-    serializedVersion: 2
-    m_Bits: 256
-  hittableObject:
-    serializedVersion: 2
-    m_Bits: 1024
-  attackRange: 0
-  attackCount: 0
   stamDecLAttack: 0
   stamDecHAttack: 0
   stamDecUAttack: 0
@@ -245,31 +262,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e83d54f56638cca41a08f46a4ace4e20, type: 2}
   - {fileID: 2100000, guid: 4c6b3e9a45252464797a2541d6b443a5, type: 2}
   - {fileID: 2100000, guid: 92eff14f256f0434ba062dbc4af63555, type: 2}
---- !u!114 &2365643768180782482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1237047135124992207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a40cb42fcc41f248928229f28bfa469, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vSpeed: 0
-  vRunSpeed: 0
-  hSpeed: 0
-  hRunSpeed: 0
-  isRunning: 0
-  isDodging: 0
-  dodgeSpeed: 0
-  startDodgeTime: 0
-  side: 0
-  onGround: 0
-  enemyScript: {fileID: 0}
-  enemyStats: {fileID: 0}
-  enemyAI: {fileID: 0}
 --- !u!1 &2365643768383293628
 GameObject:
   m_ObjectHideFlags: 0

@@ -63,11 +63,11 @@ public class EnemyStats : CharStats
         switch (type)
         {
             case "NormalEnemies":
-                maxHealth = 400;
+                maxHealth = 300;
                 attackRate = 2;
-                lDmg = 40;
-                hDmg = 60;
-                uDmg = 80;
+                lDmg = 30;
+                hDmg = 50;
+                uDmg = 70;
 
                 maxStamina = 200;
                 regenCooldown = 5;
@@ -82,9 +82,9 @@ public class EnemyStats : CharStats
             case "NimbleEnemies":
                 maxHealth = 200;
                 attackRate = 3;
-                lDmg = 20;
-                hDmg = 30;
-                uDmg = 50;
+                lDmg = 10;
+                hDmg = 20;
+                uDmg = 40;
 
                 maxStamina = 300;
                 regenCooldown = 3;
@@ -97,11 +97,11 @@ public class EnemyStats : CharStats
                 weakTo = "Grass Style";
                 break;
             case "BulkyEnemies":
-                maxHealth = 600;
+                maxHealth = 500;
                 attackRate = 0.5f;
-                lDmg = 60;
-                hDmg = 80;
-                uDmg = 100;
+                lDmg = 50;
+                hDmg = 70;
+                uDmg = 90;
 
                 maxStamina = 100;
                 regenCooldown = 7;
@@ -114,7 +114,7 @@ public class EnemyStats : CharStats
                 weakTo = "Boulder Style";
                 break;
             case "BossEnemies":
-                maxHealth = 700;
+                maxHealth = 650;
                 attackRate = 0.5f;
                 lDmg = 70;
                 hDmg = 90;
@@ -158,6 +158,7 @@ public class EnemyStats : CharStats
 
     public override void TakeDamage(int dmg, bool weapon)
     {
+        // If the enemy is weak to the players; fighting style and the enemy is not holding a weapon and the damage is not being done by a weapon
         if (PlayerStyleSwitch.fightStyle == weakTo && enemyScript.target.GetComponent<PlayerCombat>().weaponHeld == false && weapon == false)
         {
             int weakToAddOn = 10;

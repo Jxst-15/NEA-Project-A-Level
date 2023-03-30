@@ -29,7 +29,7 @@ public class PlayerThrow : MonoBehaviour
     #endregion
 
     // Stores a list of colliders which will be used to determine which enemy to throw
-    List<Collider2D> objectsHit = new List<Collider2D>();
+    private List<Collider2D> objectsHit = new List<Collider2D>();
     #endregion
 
     #region Unity Methods

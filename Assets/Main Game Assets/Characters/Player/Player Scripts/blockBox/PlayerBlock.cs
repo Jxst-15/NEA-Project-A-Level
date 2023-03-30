@@ -7,12 +7,6 @@ using UnityEngine;
 public class PlayerBlock : MonoBehaviour
 {
     #region Fields
-    #region Script References
-    private PlayerCombat combatScript;
-
-    private EnemyCombat blockEnemy;
-    #endregion
-
     private List<Collider2D> toBlock = new List<Collider2D>();
 
     #region Getters and Setters
@@ -24,11 +18,6 @@ public class PlayerBlock : MonoBehaviour
     #endregion
 
     #region Unity Methods
-    private void Awake()
-    {
-        combatScript = GetComponentInParent<PlayerCombat>();
-    }
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -39,8 +28,9 @@ public class PlayerBlock : MonoBehaviour
     private void Update()
     {
         // If the player is not blocking
-        if (!Input.GetKey(KeyCode.H))
+        if (Input.GetKeyUp(KeyCode.H))
         {
+            Debug.Log("No Longer Blocking");
             foreach(Collider2D c in toBlock)
             {
                 // For each enemy in the toBlock collider, set gettingBlocked to false so they can attack normally
@@ -57,7 +47,10 @@ public class PlayerBlock : MonoBehaviour
     {
         foreach(Collider2D c in toBlock)
         {
-            c.GetComponent<EnemyCombat>().gettingBlocked = true;
+            if (c != null)
+            {
+                c.GetComponent<EnemyCombat>().gettingBlocked = true;
+            }
         }
     }
 

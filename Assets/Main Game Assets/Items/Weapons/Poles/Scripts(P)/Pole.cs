@@ -1,18 +1,8 @@
-using UnityEngine;
-
 public class Pole : Weapon
 {
-    #region Fields
-    #region Variables
-    private float spinRange;
-    #endregion
-    #endregion
-
     protected override void SetVariables()
     {
         weaponType = WeaponType.Pole;
-
-        spinRange = 2.5f;
         
         weaponLDmg = 60;
         weaponHDmg = 80;

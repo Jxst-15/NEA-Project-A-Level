@@ -1,11 +1,12 @@
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
+public class PlayerCombat : CharCombat, IWeaponHandler
 {
     #region Fields
     #region Script References
-    public PlayerStats stats
+    public PlayerStats playerStats
     { get; private set; }
     public PlayerStyleSwitch playerStyleSwitch
     { get; private set; }
@@ -13,7 +14,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     { get; private set; }
     public PlayerController playerController
     { get; private set; }
-    
+
     public PlayerAttack playerAttack
     { get; private set; }
     public PlayerThrow playerThrow
@@ -23,120 +24,69 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
     #endregion
 
     #region Variables
-    // Following is a weapon that has been picked up
-    [SerializeField] public GameObject weapon;
-
-    public GameObject attackBox, blockBox, parryBox, throwBox;
-    
-    // LayerMasks help to identify which objects can be hit
-    public LayerMask enemyLayer, canHit;
-
-    [SerializeField] private float attackRange;
-    [SerializeField] private int attackCount;
-    private float nextAttackTime;
-    
-    // How many attacks player has performed without getting hit (Field)
-    [SerializeField] private int comboCount;
-
-    // 0.5s, time which is needed for a parry to be valid
-    private const float parryDelay = 0.5f;
-    
-    private float throwRate, nextThrowTime;
+    private float nextFTime;
 
     // For determining whether 'H' is being held or pressed
-    private const float minHold = 0.2f;
     private float pressedTime;
     private bool keyHeld;
     
     private float tapSpeed;
     KeyCode lastKey;
-
-    private bool lightAtk;
     #endregion
+    
+    private const float minHold = 0.2f;
 
     #region Getters and Setters
-    // Variables for decreasing/increasing stat factors
-    public int stamDecLAttack
+    public int stamDecFinish
     { get; set; }
-    public int stamDecHAttack
-    { get; set; }
-    public int stamDecWUAttack
-    { get; set; }
-    public int stamDecThrow
-    { get; set; }
-    public int stamIncParry
-    { get; set; }
-    // Property to get and reset the combo count
-    public int _comboCount 
-    {
-        get { return comboCount; }
-        set { comboCount = value; }
-    }
-    public bool canAttack
-    { get; set; }
-    public bool canDefend
-    { get; set; }
+
     public bool canSwitch
     { get; set; }
-    public bool attacking
-    { get; set; }
-    public bool blocking
-    { get; set; }
-    public bool throwing
-    { get; set; }
-    public bool parryable
-    { get; set; }
-    public float attackRate
-    { get; set; }
-    public bool weaponHeld
+
+    public int comboCount
     { get; set; }
     #endregion
+
     #endregion
 
     #region Unity Methods
     // Used for getting the required scripts
     void Awake()
     {
-        stats = GetComponent<PlayerStats>();
+        playerStats = GetComponent<PlayerStats>();
         playerStyleSwitch = GetComponent<PlayerStyleSwitch>();
         comboMeter = GetComponent<PlayerComboMeter>();
         playerController = GetComponent<PlayerController>();
-        
+
         // Gets the PlayerAttack script from the attackBox GameObject
-        playerAttack = attackBox.GetComponent<PlayerAttack>(); 
-        
+        playerAttack = attackBox.GetComponent<PlayerAttack>();
+
         // Gets the PlayerBlock script from the blockBox GameObject
         playerBlock = blockBox.GetComponent<PlayerBlock>();
 
         playerThrow = throwBox.GetComponent<PlayerThrow>();
-        
+
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        SetVariables();
-    }
-
-    // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (PauseMenu.isPaused == false)
         {
-            // ComboMeter();
-
             // If player is able to attack
             if (canAttack == true)
             {
                 // If there is no weapon
-                if (weapon == null)
+                if (weaponHeld == false)
                 {
-                    weaponHeld = false;
+                    // weaponHeld = false;
                     AttackLogic();
                 }
                 else
                 {
-                    WeaponAttackLogic();
+                    if (weapon != null)
+                    {
+                        WeaponAttackLogic();
+                    }
                 }
             }
 
@@ -161,33 +111,16 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
 
                 playerStyleSwitch.StyleSwitcher.SetActive(false);
             }
-
-            // TEMPORARY
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                DropWeapon();
-            }
         }
     }
     #endregion
 
-    private void SetVariables()
+    protected override void SetVariables()
     {
-        // blockBox.SetActive(false);
         parryBox.SetActive(false);
 
-        enemyLayer = LayerMask.NameToLayer("Enemy");
-        canHit = LayerMask.NameToLayer("CanHit");
-
-        canAttack = true;
-        canDefend = true;
         canSwitch = true;
-        attacking = false;
-        blocking = false;
-        throwing = false;
-        parryable = false;
 
-        attackRange = 1.5f;
         attackCount = 0;
         nextAttackTime = 0f;
 
@@ -206,80 +139,48 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         stamDecWUAttack = 30;
         stamDecThrow = 35;
         stamIncParry = 20;
+        stamDecFinish = 40;
 
         weaponHeld = false;
+
+        base.SetVariables();
     }
 
-    private void AttackLogic()
-    {
-            if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
-            {
-                if (Input.GetButtonDown("lAttack"))
-                {
-                    lightAtk = true;
-                }
-                else if (Input.GetButtonDown("hAttack"))
-                {
-                    lightAtk = false;
-                }
-            
-                Attack();
-            }
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                Throw();
-            }
-    }
-
-    private void DefendLogic()
-    {
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                // Equal to time elapsed
-                pressedTime = Time.time;
-                keyHeld = false;
-            }
-            // Once key has been released, knows that key has been pressed not held
-            else if (Input.GetKeyUp(KeyCode.H))
-            {
-                if (keyHeld == false)
-                {
-                    UnityEngine.Debug.Log("Parry initiated");
-                    Parry();
-                }
-                keyHeld = false;
-            }
-            if (Input.GetKey(KeyCode.H))
-            {
-                // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
-                if (Time.time - pressedTime > minHold)
-                {
-                    Block();
-                    keyHeld = true;
-                }
-            }
-            // Once key has been released then player is no longer blocking and can attack 
-            else
-            {
-                parryBox.SetActive(false);
-                // blockBox.SetActive(false);
-                blocking = false;
-                canAttack = true;
-            }
-    }
- 
     public void ResetComboCount()
     {
-        comboCount = 0;
-        comboMeter.inCombo = false;
+        comboMeter.ResetCombo();
     }
 
     public void StartCombo()
     {
-        comboMeter.ComboStart();
+        comboMeter.ComboStart(comboCount);
     }
 
-    public void Attack()
+    protected override void AttackLogic()
+    {
+        if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack"))
+        {
+            if (Input.GetButtonDown("lAttack"))
+            {
+                lightAtk = true;
+            }
+            else if (Input.GetButtonDown("hAttack"))
+            {
+                lightAtk = false;
+            }
+
+            Attack();
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Throw();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Finisher();
+        }
+    }
+    protected override void Attack()
     {
         int dmgToDeal;
         // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
@@ -288,78 +189,120 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             attacking = true;
             parryable = true;
 
-            foreach (Collider2D hittableObj in playerAttack.GetObjectsHit())
+            // Damages all enemies in the collider
+            foreach (Collider2D hittableObj in playerAttack.GetObjectsHit().ToList())
             {
                 if (lightAtk == true)
                 {
-                    dmgToDeal = stats.lDmg;
+                    dmgToDeal = playerStats.lDmg;
                 }
                 else
                 {
-                    dmgToDeal = stats.hDmg;
+                    dmgToDeal = playerStats.hDmg;
                 }
                 DealDamage(hittableObj, dmgToDeal);
                 comboCount++;
                 StartCombo();
             }
-            
+
             attackCount++;
-            
+
             switch (lightAtk)
             {
                 case true:
                     UnityEngine.Debug.Log("Light Attack Performed");
                     // Decrease current stamina by stamDecLAttack
-                    stats.AffectCurrentStamima(stamDecLAttack, "dec");
+                    playerStats.AffectCurrentStamima(stamDecLAttack, "dec");
                     break;
                 case false:
                     UnityEngine.Debug.Log("Heavy Attack Performed");
                     // Decrease current stamina by stamDecHAttack
-                    stats.AffectCurrentStamima(stamDecHAttack, "dec");
+                    playerStats.AffectCurrentStamima(stamDecHAttack, "dec");
                     break;
             }
-            
+
             nextAttackTime = Time.time + 1f / attackRate;
         }
         attacking = false;
         parryable = false;
     }
 
-    // Actually dealing the damage to the targeted objects
-    private void DealDamage(Collider2D hittableObj, int dmgToDeal)
+    protected override void AttackWhenBlocking(Collider2D hittableObj)
     {
-        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal, false);
+        throw new System.NotImplementedException();
     }
 
-    // Performs a throw attack on the selected enemy, configured in the PlayerThrow class
-    public void Throw()
+    public void Finisher()
+    {
+        if (Time.time >= nextFTime && comboCount >= comboMeter.GetComboForF() && playerAttack.GetObjectsHit().ToList()[0] != null)
+        {
+            Collider2D hittableObj = playerAttack.GetObjectsHit()[0]; // Only damages the first enemy in the list
+            DealDamage(hittableObj, playerStats.fDmg);
+
+            comboMeter.UsedFinisher();
+            UnityEngine.Debug.Log("Used Finisher");
+
+            playerStats.AffectCurrentStamima(stamDecFinish, "dec");
+
+            nextFTime = Time.time + 9;
+        }
+    }
+
+    protected override void Throw()
     {
         // If the list in playerThrow has elements in it then execute following
         if (Time.time >= nextThrowTime && playerThrow.ObjectsHitCount() != 0)
         {
             attacking = true;
-                
+
             // Calls throw method
             playerThrow.Throw();
-            stats.AffectCurrentStamima(stamDecThrow, "dec");
+            playerStats.AffectCurrentStamima(stamDecThrow, "dec");
             attacking = false;
 
             // For cooldowns
             nextThrowTime = Time.time + 1f / throwRate;
         }
-        else if (Time.time < nextThrowTime)
+    }
+
+    protected override void DefendLogic()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            UnityEngine.Debug.Log("Throw is on cooldown");
+            // Equal to time elapsed
+            pressedTime = Time.time;
+            keyHeld = false;
         }
-        // If there are no elements in the list
-        else if (playerThrow.ObjectsHitCount() == 0)
+        // Once key has been released, knows that key has been pressed not held
+        else if (Input.GetKeyUp(KeyCode.H))
         {
-            UnityEngine.Debug.Log("No valid enemy to throw");
+            if (keyHeld == false)
+            {
+                UnityEngine.Debug.Log("Parry initiated");
+                Parry();
+            }
+            keyHeld = false;
+        }
+        if (Input.GetKey(KeyCode.H))
+        {
+            // If time elapsed - pressedTime > minHold (0.2s) then knows key has been held
+            if (Time.time - pressedTime > minHold)
+            {
+                Block();
+                keyHeld = true;
+            }
+        }
+        // Once key has been released then player is no longer blocking and can attack 
+        else
+        {
+            parryBox.SetActive(false);
+            // blockBox.SetActive(false);
+            blocking = false;
+            canAttack = true;
         }
     }
 
-    // Negates all incoming damage from enemies in direction player facing, deals chip damage and stamina to player
-    public void Block()
+    protected override void Block()
     {
         // Block feature will be configured here
         blocking = true;
@@ -367,12 +310,9 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         playerBlock.Block();
     }
 
-    // Allows player to parry incoming enemy attacks, player recieves no damage if successful and regains small stamina
-    public void Parry()
+    protected override void Parry()
     {
-        // Parry feature will be configured here
-        canAttack = false;
-        parryBox.SetActive(true);
+        throw new System.NotImplementedException();
     }
 
     private void SwitchStyle()
@@ -392,7 +332,7 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack") || Input.GetKeyDown(KeyCode.L))
         {
             bool unique = false;
-            
+
             if (Input.GetButtonDown("lAttack"))
             {
                 lightAtk = true;
@@ -405,9 +345,13 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
             {
                 unique = true;
             }
-            
+
             WeaponAttack(unique);
-        }       
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            DropWeapon();
+        }
     }
 
     public void WeaponAttack(bool unique)
@@ -418,22 +362,39 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         {
             if (weapon.GetComponent<Weapon>().Attack(lightAtk) == true)
             {
-                // Get the number of objects hit by attack and increase comboCount by amount
-                comboCount += weapon.GetComponent<Weapon>().weaponAttack.GetObjectsHit().Count;
+                if (weapon != null)
+                {
+                    // Get the number of objects hit by attack and increase comboCount by amount
+                    comboCount += weapon.GetComponent<Weapon>().weaponAttack.GetObjectsHit().ToList().Count;
+                    comboMeter.ComboStart(comboCount);
+                }
             }
         }
         else
         {
             if (weapon.GetComponent<Weapon>().UniqueAttack() == true)
             {
-                // Get the number of objects hit by attack and increase comboCount by amount
-                comboCount += weapon.GetComponent<Weapon>().uniqueWeaponAttack.GetObjectsHit().Count; // DOESNT WORK FOR THROWABLES
+                if (weapon != null)
+                {
+                    // Get the number of objects hit by attack and increase comboCount by amount
+                    // UniqueAttackComboHandler();
+                    comboCount += weapon.GetComponent<Weapon>().uniqueWeaponAttack.GetObjectsHit().ToList().Count;
+                    comboMeter.ComboStart(comboCount);
+                }
             }
         }
         attackCount++;
-        
+
         attacking = false;
         parryable = false;
+    }
+
+    private void UniqueAttackComboHandler()
+    {
+        if (weapon.TryGetComponent(out Weapon atk) == true) // Generates nullrefexception on throwable enemies
+        {
+            comboCount += atk.uniqueWeaponAttack.GetObjectsHit().ToList().Count;
+        }
     }
 
     public void SetWeaponToNull()
@@ -441,15 +402,19 @@ public class PlayerCombat : MonoBehaviour, ICharacterCombat, IWeaponHandler
         weapon = null;
     }
 
-    // TEMPORARY
+    public void SetWeaponHeld(bool val)
+    {
+        weaponHeld = val;
+    }
+
     public void DropWeapon()
     {
-        if (weapon != null)
-        {         
+        if (weaponHeld == true)
+        {
             weapon.GetComponent<Weapon>().DropItem();
             weapon = null;
             weaponHeld = false;
-            
+
             canSwitch = true;
         }
     }

@@ -1,9 +1,14 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
-public class EnemyCombat : MonoBehaviour, ICharacterCombat
+public class EnemyCombat : CharCombat, IWeaponHandler
 {
     #region Fields
+    #region Object References
+    private System.Random rng = new System.Random();
+    #endregion
+
     #region Script References
     [SerializeField] private EnemyScript enemyScript;
     [SerializeField] private EnemyAttack enemyAttack;
@@ -12,7 +17,6 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     [SerializeField] private EnemyStats enemyStats;
     [SerializeField] private FlashScript flashScript;
 
-    // These are set in the inspector within unity
     [SerializeField] private PlayerCombat targetAttackStatus;
     [SerializeField] private PlayerBlock targetBlockStats;
     [SerializeField] private PlayerStats targetStats;
@@ -23,32 +27,11 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     #endregion
     
     #region Variables
-    // Following is a weapon that has been picked up
-    [SerializeField] private GameObject weapon;
-
-    public GameObject attackBox, blockBox, parryBox;
-
-    // LayerMasks help to identify which objects can be hit
-    public LayerMask player, hittableObject;
-
-    // 0.5s, time which is needed for a parry to be valid
-    private const float parryDelay = 0.5f;
-
-    private float nextWAttackTime = 0f;
-    private const float wAttackRate = 2f;
-
-    private bool lightAtk;
-    [SerializeField] private float attackRange;
-    [SerializeField] private int attackCount;
-    private float nextAttackTime;
-
     private float uaRate, nextUATime;
     private bool doingUnblockable;
 
-    private float throwRate, nextThrowTime;
-
     // Variables for affecting stat factors
-    [SerializeField] private int stamDecLAttack, stamDecHAttack, stamDecUAttack, stamDecWUAttack, stamDecThrow, stamIncParry;
+    [SerializeField] private int stamDecUAttack;
     #endregion
 
     #region Getters and Setters
@@ -56,38 +39,18 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     { get; set; }
     [SerializeField] public int healthDecBlock
     { get; set; }
-    public bool canAttack
-    { get; set; }
-    public bool canDefend
-    { get; set; }
-    public bool attacking
-    { get; set; }
-    public bool blocking
-    { get; set; }
-    public bool throwing
-    { get; set; }
-    public bool parryable
-    {  get; set; }
-    public float attackRate
-    { get; set; }
-    public bool weaponHeld
-    { get; set; }
+    
     public bool gettingBlocked
     { get; set; }
     #endregion
-
-    private System.Random rng = new System.Random();
     #endregion
 
     #region Unity Methods
-    void Awake()
+    // Start is called before the first frame update
+    protected override void Start()
     {
         SetVariables();      
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        
         enemyScript = GetComponent<EnemyScript>();
         target = enemyScript.target;
 
@@ -98,7 +61,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         flashScript = GetComponent<FlashScript>();
 
         targetAttackStatus = target.GetComponent<PlayerCombat>();
-        targetBlockStats = target.GetComponent<PlayerBlock>();
+        targetBlockStats = target.GetComponentInChildren<PlayerBlock>();
         targetStats = target.GetComponent<PlayerStats>();   
 
         attackRate = enemyStats.attackRate;
@@ -107,7 +70,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (PauseMenu.isPaused == false || canAttack == false)
         {
@@ -132,37 +95,22 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     }
     #endregion
 
-    private void SetVariables()
+    protected override void SetVariables()
     {
-        canAttack = true;
-        canDefend = true;
-        attacking = false;
-        blocking = false;
-        throwing = false;
-        parryable = false;
-
-        attackRange = 1.5f;
-        attackCount = 0;
-        nextAttackTime = 0f;
-
         uaRate = 0.1f;
         nextUATime = 0f;
 
         throwRate = 0.3f;
         nextThrowTime = 0f;
 
-
-        stamDecLAttack = 15;
-        stamDecHAttack = 20;
         stamDecUAttack = 30;
-        stamDecWUAttack = 30;
-        stamDecThrow = 35;
         stamDecBlock = 10;
-        stamIncParry = 20;
         healthDecBlock = 5;
+
+        base.SetVariables();
     }
 
-    public void ProbabilityOfActions()
+    protected virtual void ProbabilityOfActions()
     {
         // To determine which action to do
         int randNum = rng.Next(1, 11);
@@ -171,7 +119,7 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
             weaponHeld = true;
         }
 
-        if (canAttack == true && canDefend == true && weaponHeld == false)
+        if (canAttack == true && canDefend == true && weaponHeld == false && enemyStats.stun != true)
         {
             if (1 <= randNum && randNum <= 7)
             {
@@ -191,7 +139,12 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         }
     }
 
-    public void Attack()
+    protected override void AttackLogic()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void Attack()
     {
         if (Time.time >= nextAttackTime)
         {
@@ -201,12 +154,12 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
                 // The probability of attacking
                 int randNum = rng.Next(1, 11);
 
-                if (enemyStats.stun != true)
+                if (1 <= randNum && randNum <= 8)
                 {
-                    if (1 <= randNum && randNum <= 8)
+                    int dmgToDeal = 0;
+                    foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit().ToList())
                     {
-                        int dmgToDeal = 0;
-                        foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+                        if (hittableObj != null)
                         {
                             switch (gettingBlocked)
                             {
@@ -230,25 +183,25 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
                             }
                         }
                     }
-
-                    // These attacks can still be done even if the player is blocking
-                    if (randNum == 9)
-                    {
-                        // Unblockable attack
-                        StartCoroutine(UnblockableAttack());
-                    }
-                    else if (randNum == 10)
-                    {
-                        Throw();
-                    }
-                    lightAtk = false;
-                    nextAttackTime = Time.time + 1f / attackRate;
                 }
+
+                // These attacks can still be done even if the player is blocking
+                if (randNum == 9)
+                {
+                    // Unblockable attack
+                    StartCoroutine(UnblockableAttack());
+                }
+                else if (randNum == 10)
+                {
+                    Throw();
+                }
+                lightAtk = false;
+                nextAttackTime = Time.time + 1f / attackRate;
             }
         }
     }
 
-    public void AttackWhenBlocking(Collider2D hittableObj)
+    protected override void AttackWhenBlocking(Collider2D hittableObj)
     {
         // The following decreases the targets current stamina and deals a small amount of damage
         targetStats.AffectCurrentStamima(targetBlockStats.stamDecBlock, "dec");
@@ -260,33 +213,30 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
     {
         if (Time.time >= nextUATime && doingUnblockable != true)
         {
-            doingUnblockable = true;
+            doingUnblockable = true; // To ensure the enemy can't use their unblockable attack twice
+
             flashScript.Flash(flashScript.GetFlashMaterial(1));
             enemyMovement.canMove = false;
+            enemyMovement.StopMovement();
             
             yield return new WaitForSeconds(1);
-            
-            enemyMovement.canMove = true; 
-            
-            foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit())
+             
+            foreach (Collider2D hittableObj in enemyAttack.GetObjectsHit().ToList())
             {
                 DealDamage(hittableObj, enemyStats.uDmg);
             }
             Debug.Log("(E) Unblockable attack performed");           
             
+            
             nextUATime = Time.time + 1f / uaRate;
             
             yield return new WaitForSeconds(1);
+            enemyMovement.canMove = true; 
             doingUnblockable = false;
         }
     }
 
-    public void DealDamage(Collider2D hittableObj, int dmgToDeal)
-    {
-        hittableObj.GetComponent<IDamageable>().TakeDamage(dmgToDeal, false);
-    }
-
-    public void Throw()
+    protected override void Throw()
     {
         if (Time.time >= nextThrowTime && doingUnblockable != true)
         {
@@ -295,13 +245,28 @@ public class EnemyCombat : MonoBehaviour, ICharacterCombat
         }
     }
 
-    public void Block()
+    protected override void DefendLogic()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void Block()
     {
 
     }
 
-    public void Parry()
+    protected override void Parry()
     {
 
+    }
+
+    public void SetWeaponToNull()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void SetWeaponHeld(bool val)
+    {
+        weaponHeld = val;
     }
 }

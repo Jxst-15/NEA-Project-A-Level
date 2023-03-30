@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerComboMeter : MonoBehaviour
+public class PlayerComboMeter : MonoBehaviour, IComboMeter
 {
     #region Fields
     #region Script Reference
@@ -17,7 +17,11 @@ public class PlayerComboMeter : MonoBehaviour
     { get; set; }
     public bool inCombo
     { get; set; }
+    public int highestCombo
+    { get; set; }
     #endregion
+
+    private const int comboForFinisher = 6;
     #endregion
 
     #region Unity Methods
@@ -38,21 +42,29 @@ public class PlayerComboMeter : MonoBehaviour
     }
     #endregion
 
-    public void ComboStart()
+    public void ComboStart(int val)
     {
-        // Combo meter will be configured here
-        if (playerCombat._comboCount >= 1 && inCombo == false)
-        {
-            inCombo = true;
-            comboSnapshot = playerCombat._comboCount;
-            comboEndTime = Time.time + comboDuration;
-        }
+        inCombo = true;
+        // comboSnapshot = playerCombat._comboCount;
+        comboSnapshot = val;
+        comboEndTime = Time.time + comboDuration;
     }
 
     public void ResetCombo()
     {
-        playerCombat._comboCount = 0;
+        CheckIfHighest();
+        
+        playerCombat.comboCount = 0;
+
         inCombo = false;
+    }
+
+    private void CheckIfHighest()
+    {
+        if (playerCombat.comboCount > highestCombo)
+        {
+            highestCombo = playerCombat.comboCount;
+        }
     }
 
     private void ComboTimer()
@@ -65,12 +77,21 @@ public class PlayerComboMeter : MonoBehaviour
         else 
         {
             // Check if there has been any changes in the combo count
-            if (playerCombat._comboCount != comboSnapshot)
+            if (playerCombat.comboCount != comboSnapshot)
             {
-                // If there are changes in combo count then keep the timer going and set new timer
-                comboEndTime = Time.time + comboDuration;
-                comboSnapshot = playerCombat._comboCount;
+                // If there are changes in combo count then keep the timer going and extend the timer
+                ComboStart(playerCombat.comboCount);
             }
         }
+    }
+
+    public void UsedFinisher()
+    {
+        ResetCombo();
+    }
+
+    public int GetComboForF()
+    {
+        return comboForFinisher;
     }
 }

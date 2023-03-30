@@ -23,18 +23,13 @@ public class BattleArea : MonoBehaviour
     #endregion
 
     #region Unity Methods
-    void Awake()
-    {
-        
-    }
-
     // Start is called before the first frame update
     void Start()
     {
         areaCleared = false;
         System.Random rand = new System.Random();
         
-        eToDefeat = rand.Next(10 / 2, 16 / 2) * 2;
+        eToDefeat = rand.Next(10 / 2, 14 / 2) * 2;
 
         waves = rand.Next(2, 4);
 

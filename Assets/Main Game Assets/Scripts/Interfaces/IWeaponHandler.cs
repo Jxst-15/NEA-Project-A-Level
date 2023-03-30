@@ -2,4 +2,6 @@
 public interface IWeaponHandler
 {
     void SetWeaponToNull();
+
+    void SetWeaponHeld(bool val);
 }

@@ -3,7 +3,11 @@ guid: 2819cc6b584c6cb4880f05d2021d505d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - thisSpawner: {instanceID: 0}
+  - thisBattleArea: {instanceID: 0}
+  - NormalE: {instanceID: 0}
+  - normalMaterial: {fileID: 2100000, guid: 3554d79b54391a846a84dc3a08e31e3d, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

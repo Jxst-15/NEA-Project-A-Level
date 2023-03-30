@@ -19,7 +19,7 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (camFollow == true)
+        if (camFollow == true && player != null)
         {
             transform.position = new Vector3(player.transform.position.x + offset, transform.position.y, transform.position.z);
         }

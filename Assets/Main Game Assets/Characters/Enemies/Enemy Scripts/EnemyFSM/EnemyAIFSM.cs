@@ -127,10 +127,6 @@ public class EnemyAIFSM : StateMachine<EnemyStates, EnemyCommands, EnemyAIFSM>
     {
         public Inactive(EnemyAIFSM enemyAIFSM) : base(EnemyStates.Inactive, true, enemyAIFSM) { }
 
-        public override void Enter()
-        {
-            
-        }
     }
     #endregion
 

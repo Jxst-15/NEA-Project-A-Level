@@ -3,6 +3,10 @@ using UnityEngine;
 public class Throwable : Weapon
 {
     #region Fields
+    #region Gameobjects
+    public GameObject throwEnd;
+    #endregion
+    
     #region Script References
     public ThrowableUnique unique
     { get; private set; }
@@ -16,7 +20,8 @@ public class Throwable : Weapon
 
     private Rigidbody2D rb;
 
-    public GameObject throwEnd;
+
+    private IComboMeter toUpdate;
     #endregion
 
     #region Unity Methods
@@ -54,10 +59,13 @@ public class Throwable : Weapon
 
     public override bool UniqueAttack()
     {
+        toUpdate = this.transform.parent.gameObject.transform.parent.gameObject.GetComponent<IComboMeter>();
+        
         isThrowing = true;
         // Gets the parent of the hand object (Either the enemy or the player gameobject)
-        this.transform.parent.gameObject.transform.parent.GetComponent<IWeaponHandler>().SetWeaponToNull();
+        objectHolding = this.transform.parent.gameObject.transform.parent.gameObject;
         this.transform.parent = null;
+
         this.hand = null;
         rb.isKinematic = false;
 
@@ -67,11 +75,14 @@ public class Throwable : Weapon
         // Add force to the object
         rb.AddForce(direction * throwSpeed, ForceMode2D.Impulse); // Does some weird thing where sometimes it throws it upwards? Needs fix
 
+        Destroy(gameObject, 2.5f);
+
         return true;
     }
 
     public void OnObjectHit()
     {
+        toUpdate.ComboStart(1);
         BreakItem();
     }
 }

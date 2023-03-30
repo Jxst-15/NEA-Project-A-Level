@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 // Generic type parameters where the constraint is making sure they are enums (T1 and T2)
 // T3 is used for determining which fsm the state belongs to, it is a class
@@ -83,15 +82,6 @@ public class StateMachine <T1, T2, T3> where T1 : Enum where T2 : Enum where T3 
     #endregion
     #endregion
 
-    // This constructor checks if the given generic parameters are enums
-    protected StateMachine()
-    {
-        if(typeof (T1).IsEnum != true || typeof (T2).IsEnum != true)
-        {
-            throw new Exception("Parameters are not an enum.");
-        }
-    }
-
     // Makes sure the next state is actually in the transition table
     private State CheckIfTransitionValid(T2 command)
     {
@@ -115,6 +105,9 @@ public class StateMachine <T1, T2, T3> where T1 : Enum where T2 : Enum where T3 
         previousState = currentState;
         currentState = CheckIfTransitionValid(command);
         // Debug.Log("Now in state: " + currentState.thisStateID);
-        currentState.Enter();
+        if (currentState.acceptingState == false)
+        {
+            currentState.Enter();
+        }
     }
 }

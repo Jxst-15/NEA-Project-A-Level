@@ -18,6 +18,6 @@ public class ComboController : UITextController
 
     protected override void UpdateText()
     {
-        text.text = ("x" + playerCombat._comboCount.ToString());
+        text.text = ("x" + playerCombat.comboCount.ToString());
     }
 }

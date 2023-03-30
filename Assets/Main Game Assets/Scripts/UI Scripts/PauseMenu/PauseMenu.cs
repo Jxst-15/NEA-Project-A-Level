@@ -22,7 +22,7 @@ public class PauseMenu : MonoBehaviour
     {
         isPaused = false;
         backgroundObject.SetActive(false);
-        pauseMenuObject.SetActive(false);  
+        ResumeGame();
     }
 
     // Update is called once per frame
@@ -35,6 +35,7 @@ public class PauseMenu : MonoBehaviour
             {
                 case true:
                     PauseGame();
+                    pauseMenuObject.SetActive(true);
                     break;
                 case false:
                     ResumeGame();
@@ -50,7 +51,6 @@ public class PauseMenu : MonoBehaviour
         isPaused = true;
         gameUI.SetActive(false);
         backgroundObject.SetActive(true);
-        pauseMenuObject.SetActive(true);
         Time.timeScale = 0f;
     }
 
@@ -74,7 +74,6 @@ public class PauseMenu : MonoBehaviour
     public void RestartButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        ResumeGame();
     }
 
     // Code for quitting game to menu

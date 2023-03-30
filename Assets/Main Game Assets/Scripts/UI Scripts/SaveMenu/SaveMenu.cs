@@ -6,14 +6,12 @@ public class SaveMenu : MonoBehaviour
 {
     #region Fields
     #region Gameobject References
-    public GameObject gameUI;
-    public GameObject backgroundObject;
     public GameObject saveMenuObject;
     #endregion
 
     #region Script References
     public SavePointHandler sp;
-    public SaveHandler saveHandler;
+    private SaveHandler saveHandler;
     private PauseMenu pausing;
     #endregion
     #endregion
@@ -26,19 +24,12 @@ public class SaveMenu : MonoBehaviour
         pausing = GetComponent<PauseMenu>();
         saveHandler = GetComponent<SaveHandler>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     #endregion
 
     public void EnterSaveMenu()
     {
         saveMenuObject.SetActive(true);
         pausing.PauseGame();
-        pausing.pauseMenuObject.SetActive(false);
     }
 
     // Will let player save the game

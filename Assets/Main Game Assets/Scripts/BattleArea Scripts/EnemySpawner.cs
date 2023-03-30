@@ -2,13 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemySpawner : MonoBehaviour
 {
     #region Fields
+    #region Object References
+    private readonly System.Random rng = new System.Random();
+    
+    private Dictionary<int, int> wavesMaxSpawn;
+    
+    public GameObject[] enemyPrefabs = new GameObject[3];
+    public MyQueue<GameObject> enemies = new MyQueue<GameObject>();
+    #endregion
+
     #region Gameobjects
     public GameObject thisSpawner;
     public GameObject thisBattleArea;
@@ -18,37 +25,32 @@ public class EnemySpawner : MonoBehaviour
     private BattleArea area;
     #endregion
 
-    #region Prefabs
-    [SerializeField] GameObject NormalE;
-    #endregion
-
     #region Variables
-    private UnityEngine.Vector3 spawnLocation;
+    private Vector3 spawnLocation;
 
-    private int enemiesSpawned, enemiesSpawnedInWave, maxToSpawn;
+    private int enemiesSpawnedInWave, maxToSpawn;
     private int spawnInterval;
 
-    private int waves, wavesDone;
+    private int maxWave, wavesDone;
     #endregion
 
     #region Getters and Setters
 
     #endregion
-    
-    private readonly System.Random rng = new System.Random();
-    private Dictionary<int, int> wavesMaxSpawn;
+      
+    public Material normalMaterial;
     #endregion
 
     #region Unity Methods
+    // Sets the necessary values to attributes
     void Awake()
     {
         thisSpawner = this.gameObject;
         thisBattleArea = this.transform.parent.gameObject;
         
         spawnLocation = thisSpawner.transform.position;
-        spawnLocation = new UnityEngine.Vector3(spawnLocation.x, spawnLocation.y, 0);
+        spawnLocation = new Vector3(spawnLocation.x, spawnLocation.y, 0);
 
-        enemiesSpawned = 0;
         spawnInterval = 0;
 
         area = thisBattleArea.GetComponent<BattleArea>();
@@ -57,99 +59,137 @@ public class EnemySpawner : MonoBehaviour
     void OnEnable()
     {
         wavesDone = 1;
-        waves = area.waves;
+        maxWave = area.waves;
         maxToSpawn = area.eToDefeat / 2;
 
-        Debug.Log("Wave " + wavesDone + " out of " + waves);
+        Debug.Log("Wave " + wavesDone + " out of " + maxWave);
 
         wavesMaxSpawn = new Dictionary<int, int>();
 
         int count = 1;
-        foreach (int i in GetEnemiesInWave(maxToSpawn, waves))
+
+        // Populates the wavesMaxSpawn dictionary with the number of waves and the enemies to spawn
+        foreach (int i in GetEnemiesInWave(maxToSpawn, maxWave))
         {
             wavesMaxSpawn.Add(count, i);
             count++;
         }
 
-        StartCoroutine(SpawnEnemy(NormalE, spawnInterval));
+        PopulateQueue(wavesMaxSpawn.ElementAt(wavesDone).Value);
+
+        StartCoroutine(SpawnEnemy(enemies.Dequeue(), spawnInterval));
 
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
+    // Update is called once per frame
     void Update()
     {
-        CheckWave(NormalE, spawnInterval);
+        CheckWave(spawnInterval);
     }
     #endregion
 
-    private void CheckEnemiesSpawned(GameObject enemy, int interval)
+    // Fills the queue with enemy gameobjects
+    private void PopulateQueue(int max)
+    {
+        for (int i = 0; i < maxToSpawn; i++)
+        {
+            enemies.Enqueue(ChooseEnemy());
+        }
+    }
+
+    // Returns a random enemy prefab from the enemyPrefabs array
+    private GameObject ChooseEnemy()
+    {
+        int rand = rng.Next(1, 7);
+        int index;
+        if (1 <= rand && rand <= 3)
+        {
+            index = 1;
+        }
+        else if (rand == 4 || rand == 5)
+        {
+            index = 0;
+        }
+        else
+        {
+            index = 2;
+        }
+        
+        // int index = rng.Next(0, enemyPrefabs.Length);
+        GameObject enemy = enemyPrefabs[index]; 
+
+        return enemy;
+    }
+
+    // Stops or starts the SpawnEnemy IEnumerator depending on if all enemies have been spawned
+    private void CheckEnemiesSpawned(int interval)
     {
         if (enemiesSpawnedInWave != wavesMaxSpawn.ElementAt(wavesDone - 1).Value)
         {
-            StartCoroutine(SpawnEnemy(enemy, interval));
+            StartCoroutine(SpawnEnemy(enemies.Dequeue(), interval));
         }
         else if (enemiesSpawnedInWave == wavesMaxSpawn.ElementAt(wavesDone - 1).Value)
         {
             Debug.Log("All enemies spawned for this wave");
-            StopCoroutine(SpawnEnemy(enemy, interval));
-            // CheckWave(enemy, interval);
+            StopCoroutine(SpawnEnemy(enemies.Dequeue(), interval));
         }
     }
 
-    private void CheckWave(GameObject enemy, int interval)
+    // Checks to see if the wave is the last wave or not
+    private void CheckWave(int interval)
     {
         if (enemiesSpawnedInWave == wavesMaxSpawn.ElementAt(wavesDone - 1).Value)
         {
-            if (wavesDone != waves && area.enemies.Count == 0)
+            if (wavesDone != maxWave && area.enemies.Count == 0)
             {
-                StartNewWave(enemy, interval);
+                StartNewWave(interval);
             }
-            else if (wavesDone == waves && area.enemies.Count == 0)
+            else if (wavesDone == maxWave && area.enemies.Count == 0)
             {
                 Debug.Log("Area Cleared");
-                StopCoroutine(SpawnEnemy(enemy, interval));
+                StopCoroutine(SpawnEnemy(enemies.Dequeue(), interval));
                 area.areaCleared = true;
             }
         }
     }
 
-    private void StartNewWave(GameObject enemy, int interval)
+    private void StartNewWave(int interval)
     {
         wavesDone++;
         Debug.Log("New Wave: Wave " + wavesDone);
-        enemiesSpawned = enemiesSpawnedInWave;
         enemiesSpawnedInWave = 0;
 
+        PopulateQueue(wavesMaxSpawn.ElementAt(wavesDone - 1).Value); // Repopulates the queue with enemies
 
-        StartCoroutine(SpawnEnemy(enemy, interval));
+        StartCoroutine(SpawnEnemy(enemies.Dequeue(), interval));
     }
 
+    // Splits up the amount of enemies to spawn in the wave based on the maxToSpawn variable
     public static IEnumerable<int> GetEnemiesInWave(int maxToSpawn, int waves)
     {
         int remainder;
-        int result = Math.DivRem(maxToSpawn, waves, out remainder);
+        int result = Math.DivRem(maxToSpawn, waves, out remainder); // Calculates the result and the remainder 
 
         for (int i = 0; i < waves; i++)
         {
-            yield return i < remainder ? result + 1 : result;
+            yield return i < remainder ? result + 1 : result; // Returns either the result + 1 if i < remainder is true, else output just the result
         }
     }
 
     private IEnumerator SpawnEnemy(GameObject toSpawn, int interval)
     {
-        spawnInterval = rng.Next(5, 9);
+        spawnInterval = rng.Next(6, 11); // Randomises the spawn time
         
         yield return new WaitForSeconds(interval);
         
-        GameObject enemy = Instantiate(toSpawn, spawnLocation, UnityEngine.Quaternion.identity);
+        GameObject enemy = Instantiate(toSpawn, spawnLocation, Quaternion.identity); // Creates the enemy gameobject at the given position with no rotation
+
+        enemy.GetComponent<SpriteRenderer>().material = normalMaterial; // Sets the material to default to prevent enemies which have the flash materials on
+        enemy.name = toSpawn.name + " " + enemiesSpawnedInWave;
 
         enemiesSpawnedInWave++;
         interval = spawnInterval;
 
-        CheckEnemiesSpawned(enemy, interval);
+        CheckEnemiesSpawned(interval);
     }
 }

@@ -7,6 +7,13 @@ public class PlayerStats : CharStats
     [SerializeField] private PlayerCombat combatScript;
     [SerializeField] private PlayerController controllerScript;
     #endregion
+
+    #region Getters and Setters
+    public int fDmg
+    { get; private set; }
+    public bool dead
+    { get; private set; }
+    #endregion
     #endregion
 
     #region Unity Methods
@@ -20,10 +27,11 @@ public class PlayerStats : CharStats
     protected override void SetVariables()
     {
         // Sets values for variables
-        maxHealth = 550;
+        maxHealth = 700;
         lDmg = 50;
         hDmg = 75;
-        maxStamina = 200;
+        fDmg = 100;
+        maxStamina = 350;
         nextRegen = 0f;
 
         vSpeed = 2;
@@ -101,7 +109,8 @@ public class PlayerStats : CharStats
     protected override void Death()
     {
         // Disable the game object
+        dead = true;
+
         gameObject.SetActive(false);
-        Debug.Log("Player was defeated");
     }
 }

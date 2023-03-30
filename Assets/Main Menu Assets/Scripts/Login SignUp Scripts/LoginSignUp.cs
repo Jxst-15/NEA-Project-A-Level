@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
+// Will handle the communcation between Unity and the myPHPadmin web address script
 public class LoginSignUp : MonoBehaviour
 {
     // Start is called before the first frame update

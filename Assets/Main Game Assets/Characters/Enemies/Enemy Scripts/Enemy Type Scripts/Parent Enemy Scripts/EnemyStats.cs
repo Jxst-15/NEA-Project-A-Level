@@ -198,8 +198,8 @@ public class EnemyStats : CharStats
         // As the enemy has no health left, switch states to Inactive
         enemyAI.fsm.MoveStates(EnemyCommands.NoHealth);
 
-        // On death, gives the player points
-        enemyScript.GivePoints();
+        // On death, gives the player points and increases their number of enemies defeated
+        enemyScript.OnDeath();
 
         flashScript.Flash(flashScript.GetFlashMaterial(2));
         

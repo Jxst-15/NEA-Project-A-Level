@@ -61,9 +61,10 @@ public class EnemyScript : MonoBehaviour
     }
     #endregion
 
-    public void GivePoints()
+    public void OnDeath()
     {
         // Give player points
         target.GetComponent<PlayerPoints>().ChangePoints(points, "inc");
+        PlayerData.instance.enemiesDefeated++;
     }
 }

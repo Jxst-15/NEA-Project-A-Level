@@ -45,6 +45,9 @@ public class PlayerCombat : CharCombat, IWeaponHandler
 
     public int comboCount
     { get; set; }
+
+    public int enemiesDefeated
+    { get; set; }
     #endregion
 
     #endregion

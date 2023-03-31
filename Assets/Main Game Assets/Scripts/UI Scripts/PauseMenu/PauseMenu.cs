@@ -73,14 +73,17 @@ public class PauseMenu : MonoBehaviour
     // Code for restarting game
     public void RestartButton()
     {
+        PlayerData.instance.ResetData();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // Code for quitting game to menu
     public void QuitButton()
     {
-        // Load menu scene
+        PlayerData.instance.ResetData();
         ResumeGame();
+        
+        // Load menu scene
         SceneManager.LoadScene("Main Menu");
     }
 }

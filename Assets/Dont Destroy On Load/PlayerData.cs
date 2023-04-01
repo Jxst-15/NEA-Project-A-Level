@@ -3,6 +3,8 @@ using UnityEngine;
 // Handles player data in relation to saving and loading data
 public class PlayerData : MonoBehaviour
 {
+    #region Fields
+    #region Getters and Setters
     public string username
     { get; set; }
     public int enemiesDefeated
@@ -11,8 +13,10 @@ public class PlayerData : MonoBehaviour
     { get; set; }
     public Vector2 playerPos
     { get; set; }
+    #endregion
 
     public static PlayerData instance;
+    #endregion
 
     private void Awake()
     {
@@ -24,6 +28,9 @@ public class PlayerData : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        username = "None";
+        points = 0;
     }
 
     public void ResetData()

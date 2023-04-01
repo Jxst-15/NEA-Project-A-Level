@@ -178,7 +178,7 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnEnemy(GameObject toSpawn, int interval)
     {
-        spawnInterval = rng.Next(6, 11); // Randomises the spawn time
+        spawnInterval = rng.Next(6, 12); // Randomises the spawn time
         
         yield return new WaitForSeconds(interval);
         

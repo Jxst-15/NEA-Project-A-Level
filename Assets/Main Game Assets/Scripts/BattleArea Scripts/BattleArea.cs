@@ -29,17 +29,11 @@ public class BattleArea : MonoBehaviour
         areaCleared = false;
         System.Random rand = new System.Random();
         
-        eToDefeat = rand.Next(10 / 2, 14 / 2) * 2;
+        eToDefeat = rand.Next(8 / 2, 11 / 2) * 2;
 
         waves = rand.Next(2, 4);
 
         enemies = new List<Collider2D>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     #endregion
 

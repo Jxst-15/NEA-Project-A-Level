@@ -5,7 +5,7 @@ public class MenuController : MonoBehaviour
 {
     #region Fields
     #region GameObject References
-
+    public GameObject needLogin;
     #endregion
 
     #region Variables
@@ -14,22 +14,26 @@ public class MenuController : MonoBehaviour
     #endregion
 
     #region Unity Methods
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
-
+        if (ConnectionHandler.instance.loggedIn == true)
+        {
+            needLogin.SetActive(false);
+        }
     }
     #endregion
 
     public void PlayButton()
     {
-        SceneManager.LoadScene("Main Game");
+        if (ConnectionHandler.instance.loggedIn == false)
+        {
+            needLogin.SetActive(true);
+        }
+        else
+        {
+            SceneManager.LoadScene("Main Game");
+        }
     }
 
     // Opens the save menu where player can access their saves

@@ -46,6 +46,10 @@ public class Throwable : Weapon
         weaponHDmg = 40;
         uniqueDmg = 55;
 
+        stamDecWLAtk = 5;
+        stamDecWHAtk = 10;
+        stamDecWUEAtk = 15;
+
         hitsDone = 0;
         hitsToBreak = 6;
     }
@@ -62,12 +66,18 @@ public class Throwable : Weapon
         toUpdate = this.transform.parent.gameObject.transform.parent.gameObject.GetComponent<IComboMeter>();
         
         isThrowing = true;
+        
         // Gets the parent of the hand object (Either the enemy or the player gameobject)
         objectHolding = this.transform.parent.gameObject.transform.parent.gameObject;
+
+        objectHolding.GetComponent<IWeaponHandler>().SetWeaponToNull();
+        objectHolding.GetComponent<IWeaponHandler>().SetWeaponHeld(false);
+
         this.transform.parent = null;
 
         this.hand = null;
-        rb.isKinematic = false;
+
+        rb.isKinematic = false; // Needed in order to addforce to the object
 
         // Determine the direction
         Vector2 direction = ((throwEnd.transform.position) - transform.position).normalized;

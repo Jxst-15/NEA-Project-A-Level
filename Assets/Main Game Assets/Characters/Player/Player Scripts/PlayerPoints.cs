@@ -27,5 +27,14 @@ public class PlayerPoints : MonoBehaviour
         {
             points-= pointsToChangeBy;
         }
+        CheckPoints();
+    }
+
+    private void CheckPoints()
+    {
+        if (points < 0)
+        {
+            points = 0;
+        }
     }
 }

@@ -8,6 +8,10 @@ public class BladedWeapon : Weapon
         weaponHDmg = 90;
         uniqueDmg = 105;
 
+        stamDecWLAtk = 15;
+        stamDecWHAtk = 25;
+        stamDecWUEAtk = 35;
+
         hitsDone = 0;
         hitsToBreak = 15;
     }

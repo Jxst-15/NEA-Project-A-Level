@@ -172,9 +172,11 @@ public class ConnectionHandler : MonoBehaviour
 
         yield return GetRequest(saveURL, form);
 
+        Debug.Log("\n" + dataString);
+
         string[] data = dataString.Split("*");
 
-        int success = Convert.ToInt32(data[0]);
+        int success = Convert.ToInt32(data[0]); // Inout string was not in correct format
         if (success == 1)
         {
             Debug.Log("Save was a success!");

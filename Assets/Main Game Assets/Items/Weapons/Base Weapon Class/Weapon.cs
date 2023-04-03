@@ -173,7 +173,9 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         if (Time.time >= nextWAttackTime)
         {
             int dmgToDeal;
-            foreach (Collider2D hittableObj in weaponAttack.GetObjectsHit().ToList())
+            foreach (Collider2D hittableObj in weaponAttack.GetObjectsHit().ToList()) // ERROR MissingReferenceException:
+                                                                                      // The object of type 'BoxCollider2D' has been destroyed but you are still trying to access it.
+                                                                                      // Your script should either check if it is null or you should not destroy the object.
             {
                 objHit = true;
                 switch (light)

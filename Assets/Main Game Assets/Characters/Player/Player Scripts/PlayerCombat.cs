@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCombat : CharCombat, IWeaponHandler
@@ -21,6 +22,9 @@ public class PlayerCombat : CharCombat, IWeaponHandler
     { get; private set; }
     public PlayerBlock playerBlock
     { get; private set; }
+
+    public Weapon weaponScript
+    { get; set; }
     #endregion
 
     #region Variables
@@ -186,6 +190,7 @@ public class PlayerCombat : CharCombat, IWeaponHandler
     protected override void Attack()
     {
         int dmgToDeal;
+        int toDecBy = 0;
         // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
         if (Time.time >= nextAttackTime)
         {
@@ -198,10 +203,12 @@ public class PlayerCombat : CharCombat, IWeaponHandler
                 if (lightAtk == true)
                 {
                     dmgToDeal = playerStats.lDmg;
+                    toDecBy = stamDecLAttack;
                 }
                 else
                 {
                     dmgToDeal = playerStats.hDmg;
+                    toDecBy = stamDecHAttack;
                 }
                 DealDamage(hittableObj, dmgToDeal);
                 comboCount++;
@@ -210,19 +217,21 @@ public class PlayerCombat : CharCombat, IWeaponHandler
 
             attackCount++;
 
-            switch (lightAtk)
-            {
-                case true:
-                    UnityEngine.Debug.Log("Light Attack Performed");
-                    // Decrease current stamina by stamDecLAttack
-                    playerStats.AffectCurrentStamima(stamDecLAttack, "dec");
-                    break;
-                case false:
-                    UnityEngine.Debug.Log("Heavy Attack Performed");
-                    // Decrease current stamina by stamDecHAttack
-                    playerStats.AffectCurrentStamima(stamDecHAttack, "dec");
-                    break;
-            }
+            //switch (lightAtk)
+            //{
+            //    case true:
+            //        UnityEngine.Debug.Log("Light Attack Performed");
+            //        // Decrease current stamina by stamDecLAttack
+            //        playerStats.AffectCurrentStamima(stamDecLAttack, "dec");
+            //        break;
+            //    case false:
+            //        UnityEngine.Debug.Log("Heavy Attack Performed");
+            //        // Decrease current stamina by stamDecHAttack
+            //        playerStats.AffectCurrentStamima(stamDecHAttack, "dec");
+            //        break;
+            //}
+
+            playerStats.AffectCurrentStamima(toDecBy, "dec");
 
             nextAttackTime = Time.time + 1f / attackRate;
         }
@@ -315,7 +324,7 @@ public class PlayerCombat : CharCombat, IWeaponHandler
 
     protected override void Parry()
     {
-        throw new System.NotImplementedException();
+        UnityEngine.Debug.Log("Parry");
     }
 
     private void SwitchStyle()
@@ -334,22 +343,26 @@ public class PlayerCombat : CharCombat, IWeaponHandler
     {
         if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack") || Input.GetKeyDown(KeyCode.L))
         {
+            int toDecBy = 0;
             bool unique = false;
 
             if (Input.GetButtonDown("lAttack"))
             {
                 lightAtk = true;
+                toDecBy = weapon.GetComponent<Weapon>().stamDecWLAtk;
             }
             else if (Input.GetButtonDown("hAttack"))
             {
                 lightAtk = false;
+                toDecBy = weapon.GetComponent<Weapon>().stamDecWHAtk;
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
                 unique = true;
+                toDecBy = weapon.GetComponent<Weapon>().stamDecWUEAtk;
             }
 
-            WeaponAttack(unique);
+            WeaponAttack(unique, toDecBy);
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -357,7 +370,7 @@ public class PlayerCombat : CharCombat, IWeaponHandler
         }
     }
 
-    public void WeaponAttack(bool unique)
+    public void WeaponAttack(bool unique, int toDecBy)
     {
         attacking = true;
         parryable = true;
@@ -370,6 +383,7 @@ public class PlayerCombat : CharCombat, IWeaponHandler
                     // Get the number of objects hit by attack and increase comboCount by amount
                     comboCount += weapon.GetComponent<Weapon>().weaponAttack.GetObjectsHit().ToList().Count;
                     comboMeter.ComboStart(comboCount);
+                    playerStats.AffectCurrentStamima(toDecBy, "dec");
                 }
             }
         }
@@ -380,9 +394,9 @@ public class PlayerCombat : CharCombat, IWeaponHandler
                 if (weapon != null)
                 {
                     // Get the number of objects hit by attack and increase comboCount by amount
-                    // UniqueAttackComboHandler();
                     comboCount += weapon.GetComponent<Weapon>().uniqueWeaponAttack.GetObjectsHit().ToList().Count;
                     comboMeter.ComboStart(comboCount);
+                    playerStats.AffectCurrentStamima(toDecBy, "dec");
                 }
             }
         }
@@ -390,14 +404,6 @@ public class PlayerCombat : CharCombat, IWeaponHandler
 
         attacking = false;
         parryable = false;
-    }
-
-    private void UniqueAttackComboHandler()
-    {
-        if (weapon.TryGetComponent(out Weapon atk) == true) // Generates nullrefexception on throwable enemies
-        {
-            comboCount += atk.uniqueWeaponAttack.GetObjectsHit().ToList().Count;
-        }
     }
 
     public void SetWeaponToNull()

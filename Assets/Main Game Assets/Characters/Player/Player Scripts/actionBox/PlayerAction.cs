@@ -64,6 +64,8 @@ public class PlayerAction : MonoBehaviour
             // Checks if player is holding a weapon, if yes then set weaponHeld to true
             weaponHolding.weaponHeld = true;
 
+            weaponHolding.weaponScript = interact[0].gameObject.GetComponent<Weapon>();
+
             // weaponHolding.playerStyleSwitch.fightStyleSnapshot = PlayerStyleSwitch.fightStyle;
 
             // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to

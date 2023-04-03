@@ -42,8 +42,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     protected int weaponLDmg;
     protected int weaponHDmg;
    
-    public int uniqueDmg
-    { get; set; }
     protected float nextWUAttackTime;
     protected const float wUAttackRate = 0.25f;
 
@@ -53,6 +51,15 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     #endregion
 
     #region Getters and Setters
+    public int uniqueDmg
+    { get; set; }
+
+    public int stamDecWLAtk
+    { get; protected set; }
+    public int stamDecWHAtk
+    { get; protected set; }
+    public int stamDecWUEAtk
+    { get; protected set; }
     public string getName() { return weaponName; }
     public void setName(string name) {  weaponName = name; }
     public int getHitsDone() { return hitsDone; }

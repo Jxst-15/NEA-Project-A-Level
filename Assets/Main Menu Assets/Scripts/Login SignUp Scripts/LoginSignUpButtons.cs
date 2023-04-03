@@ -15,12 +15,9 @@ public class LoginSignUpButtons : MonoBehaviour
     public GameObject loggedIn;
     #endregion
 
-    #region Script References
-    private LoginSignUpHandler handler;
-    #endregion
-
     #region Variables
-    private string user;
+    public string user
+    { get; set; }
     private string pass;
     #endregion
 
@@ -28,7 +25,13 @@ public class LoginSignUpButtons : MonoBehaviour
 
     private void Awake()
     {
-        handler = GetComponent<LoginSignUpHandler>();
+        user = LoginSignUpHandler.defVal;
+        pass = "";
+
+        if (ConnectionHandler.instance.loggedIn == true)
+        {
+            logSuGO.SetActive(false);
+        }
     }
 
     public void LoginButton()
@@ -55,22 +58,50 @@ public class LoginSignUpButtons : MonoBehaviour
 
     public void AccountLoginButton()
     {
-        logFields.SetActive(false);
+        Debug.Log(user + " " + pass);
+        if (user != "" && pass != "")
+        {
+            logFields.SetActive(false);
 
-        handler.Login(user, pass);
+            Debug.Log("Login");
+            StartCoroutine(ConnectionHandler.instance.AttemptLogin(user, pass));
+        }
+        else
+        {
+            ConnectionHandler.instance.EmptyFieldError();
+            logFields.SetActive(false);
+        }
     }
 
-    public void AccountSignInButton()
+    public void AccountSignUpButton()
     {
-        handler.SignIn(user, pass);
+        if (user != "" && pass != "")
+        {
+            signFields.SetActive(false);
+
+            StartCoroutine(ConnectionHandler.instance.AttemptSignUp(user, pass));
+        }
+        else
+        {
+            ConnectionHandler.instance.EmptyFieldError();
+            signFields.SetActive(false);
+        }
     }
 
     public void BackButton()
     {
         errorScreen.SetActive(false);
+        ConnectionHandler.instance.error = false;
         logFields.SetActive(false);
         signFields.SetActive(false);
 
+        logSuGO.SetActive(true);
+    }
+
+    public void LogOuButtont()
+    {
+        user = "";
+        ConnectionHandler.instance.LogOut();
         logSuGO.SetActive(true);
     }
 }

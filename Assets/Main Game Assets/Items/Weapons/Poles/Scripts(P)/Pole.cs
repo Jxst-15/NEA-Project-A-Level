@@ -8,6 +8,10 @@ public class Pole : Weapon
         weaponHDmg = 80;
         uniqueDmg = 95;
 
+        stamDecWLAtk = 15;
+        stamDecWHAtk = 20;
+        stamDecWUEAtk = 30;
+
         hitsDone = 0;
         hitsToBreak = 20;
     }

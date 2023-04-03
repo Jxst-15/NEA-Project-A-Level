@@ -4,9 +4,6 @@ public abstract class CharStats : MonoBehaviour, IDamageable
 {
     #region Fields
     #region Variables
-    [SerializeField] protected int maxHealth;
-    [SerializeField] protected int maxStamina;
-
     protected float nextRegen;
     protected float regenCooldown;
     protected int toIncBy;
@@ -16,6 +13,15 @@ public abstract class CharStats : MonoBehaviour, IDamageable
     #endregion
 
     #region Getters and Setters
+    public int maxHealth
+    { get; set; }
+    public int maxStamina
+    { get; set; }
+    public int currentHealth
+    { get; protected set; }
+    public int currentStamina
+    { get; protected set; }
+    
     public int vSpeed
     { get; set; }
     public int hSpeed
@@ -24,16 +30,13 @@ public abstract class CharStats : MonoBehaviour, IDamageable
     { get; set; }
     public int hRunSpeed
     { get; set; }
+    
     public int lDmg
     { get; set; }
     public int hDmg
     { get; set; }
     public bool stun
     { get; set; }
-    public int currentHealth
-    { get; protected set; }
-    public int currentStamina
-    { get; protected set; }
     #endregion
     #endregion
 

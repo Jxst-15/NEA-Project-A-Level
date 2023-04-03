@@ -34,6 +34,8 @@ public class PlayerController : CharMovement
 
         playerAction = actionBox.GetComponent<PlayerAction>();
         playerStats = GetComponent<PlayerStats>();
+
+        transform.position = new Vector2(PlayerData.instance.posX, PlayerData.instance.posY);
     }
 
     // Update is called once per frame

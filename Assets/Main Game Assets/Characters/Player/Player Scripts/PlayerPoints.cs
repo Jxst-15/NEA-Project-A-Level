@@ -13,7 +13,7 @@ public class PlayerPoints : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        points = 0;
+        points = PlayerData.instance.points;
     }
     #endregion
 
@@ -26,6 +26,15 @@ public class PlayerPoints : MonoBehaviour
         else if (incOrDec == "dec")
         {
             points-= pointsToChangeBy;
+        }
+        CheckPoints();
+    }
+
+    private void CheckPoints()
+    {
+        if (points < 0)
+        {
+            points = 0;
         }
     }
 }

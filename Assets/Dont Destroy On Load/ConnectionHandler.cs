@@ -157,7 +157,6 @@ public class ConnectionHandler : MonoBehaviour
     {
         loggedIn = false;
     }
-
     public IEnumerator SaveGame(string saveName, int health, int stamina, float posX, float posY, int points)
     {
         Debug.Log("Running SaveGame");

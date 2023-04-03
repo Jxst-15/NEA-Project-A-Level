@@ -21,7 +21,6 @@ public class PlayerData : MonoBehaviour
     { get; set; }
     public float posY
     { get; set; }
-    
     #endregion
 
     public static PlayerData instance;

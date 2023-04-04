@@ -80,7 +80,6 @@ public class PauseMenu : MonoBehaviour
     // Code for quitting game to menu
     public void QuitButton()
     {
-        PlayerData.instance.ResetData();
         ResumeGame();
         
         // Load menu scene

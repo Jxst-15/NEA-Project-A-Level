@@ -19,7 +19,6 @@ public class SaveMenu : MonoBehaviour
 
     private PlayerPoints playerPoints;
     private PlayerStats playerStats;
-    private PlayerController playerController;
     #endregion
     #endregion
 
@@ -35,7 +34,6 @@ public class SaveMenu : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerPoints = player.GetComponent<PlayerPoints>();
         playerStats = player.GetComponent<PlayerStats>();
-        playerController = player.GetComponent<PlayerController>();
     }
     #endregion
 

@@ -27,6 +27,7 @@ public class ConnectionHandler : MonoBehaviour
     private const string loginURL = "http://localhost/compSciNeaDB/login.php";
     private const string signupURL = "http://localhost/compSciNeaDB/signup.php";
     private const string saveURL = "http://localhost/compSciNeaDB/saving.php";
+    private const string loadURL = "http://localhost/compSciNeaDB/loading.php";
     #endregion
     #endregion
 
@@ -105,6 +106,7 @@ public class ConnectionHandler : MonoBehaviour
 
     public IEnumerator AttemptLogin(string u, string p)
     {
+        PlayerData.instance.ResetData();
         form = new WWWForm();
 
         form.AddField("username", u);
@@ -121,6 +123,7 @@ public class ConnectionHandler : MonoBehaviour
 
             PlayerData.instance.username = u;
             // PlayerData.instance.points = Convert.ToInt32(data[1]);
+            StartCoroutine(LoadGame(u));
         }
         else
         {
@@ -133,6 +136,7 @@ public class ConnectionHandler : MonoBehaviour
 
     public IEnumerator AttemptSignUp(string u, string p)
     {
+        PlayerData.instance.ResetData();
         form = new WWWForm();
 
         form.AddField("username", u);
@@ -144,6 +148,7 @@ public class ConnectionHandler : MonoBehaviour
         {
             loggedIn = true;
             PlayerData.instance.username = u;
+            StartCoroutine(SaveGame("", PlayerData.instance.currentHealth, PlayerData.instance.currentStamina, PlayerData.instance.posX, PlayerData.instance.posY, PlayerData.instance.points));
         }
         else
         {
@@ -159,7 +164,6 @@ public class ConnectionHandler : MonoBehaviour
     }
     public IEnumerator SaveGame(string saveName, int health, int stamina, float posX, float posY, int points)
     {
-        Debug.Log("Running SaveGame");
         form = new WWWForm();
 
         form.AddField("username", PlayerData.instance.username);
@@ -168,17 +172,46 @@ public class ConnectionHandler : MonoBehaviour
         form.AddField("currentStamina", stamina);
         form.AddField("posX", posX.ToString());
         form.AddField("posY", posY.ToString());
+        form.AddField("enemiesDefeated", PlayerData.instance.enemiesDefeated);
 
         yield return GetRequest(saveURL, form);
+
+        string[] data = dataString.Split("*");
+
+        int success = Convert.ToInt32(data[0]);
+        if (success == 1)
+        {
+            Debug.Log("Save was a success!");
+        }
+        else
+        {
+            Debug.Log("Error");
+        }
+        dataString = "";
+    }
+
+    public IEnumerator LoadGame(string u)
+    {
+        form = new WWWForm();
+
+        form.AddField("username", u);
+
+        yield return GetRequest(loadURL, form);
 
         Debug.Log("\n" + dataString);
 
         string[] data = dataString.Split("*");
 
-        int success = Convert.ToInt32(data[0]); // Inout string was not in correct format
+        int success = Convert.ToInt32(data[0]); // Inout string was not in correct format      
         if (success == 1)
         {
-            Debug.Log("Save was a success!");
+            Debug.Log("Load was a success!");
+            PlayerData.instance.points = Convert.ToInt32(data[1]);
+            PlayerData.instance.currentHealth = Convert.ToInt32(data[2]);
+            PlayerData.instance.currentStamina = Convert.ToInt32(data[3]);
+            PlayerData.instance.posX = float.Parse(data[4], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            PlayerData.instance.posY = float.Parse(data[5], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            PlayerData.instance.enemiesDefeated = Convert.ToInt32(data[6]);
         }
         else
         {

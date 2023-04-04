@@ -37,12 +37,15 @@ public class PlayerData : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
+        enemiesDefeated = 0;
         username = "None";
         points = 0;
         currentHealth = 700;
         currentStamina = 350;
         posX = -32.70996f;
         posY = -4.51f;
+
+        Debug.Log("Set Data");
     }
 
     public void ResetData()

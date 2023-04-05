@@ -57,10 +57,17 @@ public class SaveMenu : MonoBehaviour
         int cost = 5;
         if (PlayerPoints.points >= cost)
         {
-            int toHealBy = 100;
-            playerStats.Heal(toHealBy);
-            playerPoints.ChangePoints(cost, "dec");
-            healthBarManager.SetBarVal(playerStats.currentHealth);
+            if (playerStats.currentHealth != playerStats.maxHealth)
+            {
+                int toHealBy = 100;
+                playerStats.Heal(toHealBy);
+                playerPoints.ChangePoints(cost, "dec");
+                healthBarManager.SetBarVal(playerStats.currentHealth);
+            }
+            else
+            {
+                Debug.Log("Health is full");
+            }
         }
         else
         {

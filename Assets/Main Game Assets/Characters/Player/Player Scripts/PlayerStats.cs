@@ -27,7 +27,7 @@ public class PlayerStats : CharStats
     protected override void SetVariables()
     {
         // Sets values for variables
-        maxHealth = 700;
+        maxHealth = 800;
         lDmg = 50;
         hDmg = 75;
         fDmg = 100;

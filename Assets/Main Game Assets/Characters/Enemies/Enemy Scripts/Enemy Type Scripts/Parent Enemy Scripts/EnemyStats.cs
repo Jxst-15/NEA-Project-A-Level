@@ -114,19 +114,21 @@ public class EnemyStats : CharStats
                 weakTo = "Boulder Style";
                 break;
             case "BossEnemies":
-                maxHealth = 650;
-                attackRate = 0.5f;
-                lDmg = 70;
-                hDmg = 90;
-                uDmg = 110;
+                maxHealth = 1000;
+                attackRate = 1f;
+                lDmg = 80;
+                hDmg = 95;
+                uDmg = 115;
 
                 maxStamina = 400;
                 regenCooldown = 10;
 
                 vSpeed = 2;
                 hSpeed = 3;
-                vRunSpeed = 4;
-                hRunSpeed = 5;
+                vRunSpeed = 5;
+                hRunSpeed = 6;
+
+                weakTo = "None";
                 break;
         }
 

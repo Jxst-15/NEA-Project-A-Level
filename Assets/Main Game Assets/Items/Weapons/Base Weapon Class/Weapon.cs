@@ -156,8 +156,8 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         attackBox.SetActive(false);
         uniqueAttackBox.SetActive(false);
 
-        hand = this.transform.parent.gameObject;
-        
+        hand = this.transform.parent.gameObject; // NullReferenceException: Object reference not set to an instance of an object, happens when fighting with weapon and weapon breaks
+
         // Moves the weapon down to the floor (the y pos of the gameobject holding the weapon)
         this.transform.position = new Vector2(hand.transform.position.x, hand.transform.parent.transform.position.y);
         
@@ -177,21 +177,24 @@ public abstract class Weapon : MonoBehaviour, IInteractable
                                                                                       // The object of type 'BoxCollider2D' has been destroyed but you are still trying to access it.
                                                                                       // Your script should either check if it is null or you should not destroy the object.
             {
-                objHit = true;
-                switch (light)
+                if (hittableObj != null)
                 {
-                    case true:
-                        // Do light damage
-                        dmgToDeal = weaponLDmg;
-                        Debug.Log("Light weapon attack");
-                        break;
-                    case false:
-                        // Do heavy damage
-                        dmgToDeal = weaponHDmg;
-                        Debug.Log("Heavy weapon attack");
-                        break;
+                    objHit = true;
+                    switch (light)
+                    {
+                        case true:
+                            // Do light damage
+                            dmgToDeal = weaponLDmg;
+                            Debug.Log("Light weapon attack");
+                            break;
+                        case false:
+                            // Do heavy damage
+                            dmgToDeal = weaponHDmg;
+                            Debug.Log("Heavy weapon attack");
+                            break;
+                    }
+                    DealDamage(hittableObj, dmgToDeal, 1);
                 }
-                DealDamage(hittableObj, dmgToDeal, 1);
             }
             nextWAttackTime = Time.time + 1f / wAttackRate;
         }

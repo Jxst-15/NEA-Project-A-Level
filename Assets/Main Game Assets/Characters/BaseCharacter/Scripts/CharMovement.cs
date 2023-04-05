@@ -5,7 +5,6 @@ public abstract class CharMovement : MonoBehaviour
     #region Fields
     #region Variables
     // Variables for movement
-    [SerializeField] protected int vSpeed, vRunSpeed, hSpeed, hRunSpeed;
     [SerializeField] protected bool isRunning;
     
     // For flipping the character

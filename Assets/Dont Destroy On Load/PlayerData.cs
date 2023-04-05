@@ -55,7 +55,7 @@ public class PlayerData : MonoBehaviour
     {
         enemiesDefeated = 0;
         points = 0;
-        currentHealth = 700;
+        currentHealth = 800;
         currentStamina = 350;
         posX = -32.70996f;
         posY = -4.51f;

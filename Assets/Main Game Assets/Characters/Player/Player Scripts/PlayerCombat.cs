@@ -408,11 +408,13 @@ public class PlayerCombat : CharCombat, IWeaponHandler
     public void SetWeaponToNull()
     {
         weapon = null;
+        Debug.Log("Weapon set to null");
     }
 
     public void SetWeaponHeld(bool val)
     {
         weaponHeld = val;
+        Debug.Log("Weapon held is false");
     }
 
     public void DropWeapon()

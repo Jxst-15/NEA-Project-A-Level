@@ -64,14 +64,12 @@ public class EnemySpawner : MonoBehaviour
 
     protected virtual void SetWavesAndMaxSpawn()
     {
-        // maxWave = rng.Next(2, 4);
-
         int eToDefeat = rng.Next(4 / 2, 7 / 2) * 2;
         maxToSpawn = eToDefeat;
     }
 
     // Fills the queue with enemy gameobjects
-    protected void PopulateQueue(int max)
+    protected virtual void PopulateQueue(int max)
     {
         for (int i = 0; i < maxToSpawn; i++)
         {

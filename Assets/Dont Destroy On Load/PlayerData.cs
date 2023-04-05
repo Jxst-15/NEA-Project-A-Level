@@ -26,6 +26,8 @@ public class PlayerData : MonoBehaviour
     { get; set; }
     public string lastSaveDate
     { get; set; }
+    public string colour
+    { get; set; }
     #endregion
 
     public static PlayerData instance; // So data can be modified without needing a reference to it 
@@ -45,6 +47,7 @@ public class PlayerData : MonoBehaviour
         username = "None";
         accCreated = "2005-04-15";
         lastSaveDate = "2005-04-15";
+        colour = "Default";
         ResetData();
     }
 

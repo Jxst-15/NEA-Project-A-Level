@@ -6,9 +6,6 @@ public class PlayerStats : CharStats
     #region Script References
     [SerializeField] private PlayerCombat combatScript;
     [SerializeField] private PlayerController controllerScript;
-
-    // [SerializeField] private HealthBarManager healthBarGameUI;
-    // [SerializeField] private StamBarManager stamBar;
     #endregion
 
     #region Getters and Setters
@@ -24,8 +21,6 @@ public class PlayerStats : CharStats
     {
         combatScript = GetComponent<PlayerCombat>();
         controllerScript = GetComponent<PlayerController>();
-        // healthBarGameUI = GameObject.Find("HealthBar").GetComponent<HealthBarManager>();
-        // stamBar = GameObject.Find("StamBar").GetComponent<StamBarManager>();
     }
     #endregion
 
@@ -39,13 +34,13 @@ public class PlayerStats : CharStats
         maxStamina = 350;
         nextRegen = 0f;
 
-        vSpeed = 2;
-        hSpeed = 3;
-        vRunSpeed = 4;
-        hRunSpeed = 5;
+        vSpeed = 3;
+        hSpeed = 4;
+        vRunSpeed = 5;
+        hRunSpeed = 6;
 
         unstunCooldown = 5;
-        // base.SetVariables();
+
         currentHealth = PlayerData.instance.currentHealth;
         currentStamina = PlayerData.instance.currentStamina;
     }
@@ -57,7 +52,6 @@ public class PlayerStats : CharStats
         {
             currentHealth = maxHealth;
         }
-        // healthBarGameUI.SetBarVal(currentHealth);
     }
 
 
@@ -66,6 +60,7 @@ public class PlayerStats : CharStats
         if (Time.time >= nextRegen)
         {
             int toIncBy = 0;
+            
             // Following if block is to determine the speed and the amount to regen stamina by
             if (currentStamina < maxStamina && currentStamina > maxStamina / 2)
             {
@@ -77,17 +72,16 @@ public class PlayerStats : CharStats
                 toIncBy = 20;
                 nextRegen = Time.time + 2.5f;
             }
+            
             // If the time elapsed is more than or equal to whenever the next regen time is, increase stamina by set amount
             AffectCurrentStamima(toIncBy, "inc");
         }
-        // stamBar.SetBarVal(currentStamina);
     }
 
     public override void TakeDamage(int dmg, bool weapon)
     {
         base.TakeDamage(dmg, weapon);
         combatScript.ResetComboCount();
-        // healthBarGameUI.SetBarVal(currentHealth);
     }
 
     public override void Stun()

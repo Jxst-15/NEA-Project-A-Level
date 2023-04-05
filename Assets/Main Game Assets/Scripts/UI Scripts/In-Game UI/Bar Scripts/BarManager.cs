@@ -14,7 +14,7 @@ public abstract class BarManager : MonoBehaviour
     #endregion
 
     #region Unity Methods
-    private void Start()
+    protected void Start()
     {
         barSlider = GetComponent<Slider>();
 
@@ -23,12 +23,13 @@ public abstract class BarManager : MonoBehaviour
 
         SetValues();
     }
-    #endregion
 
-    protected abstract void SetValues();
+    protected abstract void Update();
+    #endregion
 
     public void SetBarVal(int val)
     {
         barSlider.value = val;
     }
+    protected abstract void SetValues();
 }

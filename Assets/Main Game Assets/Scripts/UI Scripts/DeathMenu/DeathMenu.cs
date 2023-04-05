@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeathMenu : MonoBehaviour
 {
@@ -42,8 +43,12 @@ public class DeathMenu : MonoBehaviour
 
     public void RestartFromSave()
     {
-        // deathScreen.SetActive(false);
+        deathScreen.SetActive(false);
         Debug.Log("Restarting from save");
+        
+        StartCoroutine(ConnectionHandler.instance.LoadGame(PlayerData.instance.username));
+        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void QuitButton()

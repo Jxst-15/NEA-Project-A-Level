@@ -17,14 +17,14 @@ public class BattleArea : MonoBehaviour
     { get; private set; }
     
     public List<Collider2D> enemies 
-    { get; private set; }
+    { get; protected set; }
     #endregion
 
     #endregion
 
     #region Unity Methods
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         areaCleared = false;
         System.Random rand = new System.Random();
@@ -38,7 +38,7 @@ public class BattleArea : MonoBehaviour
     #endregion
 
     #region OnTrigger Methods
-    private void OnTriggerEnter2D(Collider2D entity)
+    protected void OnTriggerEnter2D(Collider2D entity)
     {
         if (entity.gameObject.layer == LayerMask.NameToLayer("Enemy") && !enemies.Contains(entity) && entity.gameObject.name != "groundBox")
         {
@@ -46,7 +46,7 @@ public class BattleArea : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D entity)
+    protected void OnTriggerExit2D(Collider2D entity)
     {
         if (enemies.Contains(entity))
         {

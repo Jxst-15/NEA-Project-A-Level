@@ -1,9 +1,11 @@
 public class StamBarManager : BarManager
 {
-    private void Update()
+    #region Unity Methods
+    protected override void Update()
     {
         SetBarVal(playerStats.currentStamina);
     }
+    #endregion
 
     protected override void SetValues()
     {

@@ -17,18 +17,18 @@ public class BattleAreaTrigger : MonoBehaviour
     #endregion
 
     #region Variables
-    [SerializeField] private bool areaCleared;
+    [SerializeField] protected bool areaCleared;
     #endregion
 
     #region Getters and Setters
-    private bool activateArea
+    protected bool activateArea
     { get; set; }
     #endregion
     #endregion
 
     #region Unity Methods
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         areaControl = battleArea.GetComponent<BattleArea>();
 
@@ -36,17 +36,32 @@ public class BattleAreaTrigger : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        if (areaControl.areaCleared == true)
+        if (eSpawnerL != null && eSpawnerR != null)
         {
-            activateArea = false;
-            AreaController(activateArea);
+            CheckIfAreaFinished();
         }
     }
     #endregion
 
-    private void AreaController(bool val)
+    protected virtual void CheckIfAreaFinished()
+    {
+        if (eSpawnerL.GetComponent<BattleAreaEnemySpawner>().spawning == false && eSpawnerR.GetComponent<BattleAreaEnemySpawner>().spawning == false)
+        {
+            if (areaControl.enemies.Count <= 0 && activateArea == true)
+            {
+                activateArea = false;
+                areaCleared = true;
+                AreaController(activateArea);
+                Debug.Log("Area Cleared");
+                Destroy(gameObject.transform.parent.gameObject);
+            }
+        }
+    }
+
+    // Activates or deactivates the area
+    protected virtual void AreaController(bool val)
     {
         bWallL.SetActive(val);
         bWallR.SetActive(val);
@@ -55,6 +70,7 @@ public class BattleAreaTrigger : MonoBehaviour
         eSpawnerR.SetActive(val);
     }
 
+    // Detects whether or not the player has entered the trigger to activate the area
     #region OnTrigger Methods
     void OnTriggerEnter2D(Collider2D player)
     {
@@ -62,6 +78,7 @@ public class BattleAreaTrigger : MonoBehaviour
         {
             if (player.gameObject.tag == "Player")
             {
+                Debug.Log("Activated Area");
                 activateArea = true;
                 AreaController(activateArea);
             }

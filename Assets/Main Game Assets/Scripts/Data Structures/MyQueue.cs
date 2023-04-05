@@ -26,7 +26,7 @@ public class MyQueue <T>
     public int Size()
     {
         int size = 0;
-        if (tail > head)
+        if (tail >= head)
         {
             size = tail - head + 1;
         }
@@ -45,12 +45,13 @@ public class MyQueue <T>
     {
         if (tail < head)
         {
-            Debug.Log("Error! Empty queue");
+            // Debug.Log("Error! Empty queue");
             return default;
         }
         else
         {
             head += 1;
+            Debug.Log("Dequed");
             return queue[head - 1];
         }
     }

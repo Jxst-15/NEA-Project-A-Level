@@ -171,6 +171,7 @@ public class ConnectionHandler : MonoBehaviour
         form.AddField("posX", posX.ToString());
         form.AddField("posY", posY.ToString());
         form.AddField("enemiesDefeated", PlayerData.instance.enemiesDefeated);
+        form.AddField("colour", PlayerData.instance.colour);
 
         yield return GetRequest(saveURL, form);
 
@@ -211,6 +212,7 @@ public class ConnectionHandler : MonoBehaviour
             PlayerData.instance.posX = float.Parse(data[4], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
             PlayerData.instance.posY = float.Parse(data[5], System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
             PlayerData.instance.enemiesDefeated = Convert.ToInt32(data[6]);
+            PlayerData.instance.colour = data[7];
         }
         else
         {

@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7895229522280438444}
-  - component: {fileID: 710374903087651838}
+  - component: {fileID: 2840610514030984465}
+  - component: {fileID: 2840610514030984464}
   m_Layer: 0
   m_Name: ESPrefab
   m_TagString: Untagged
@@ -24,15 +25,41 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7623533085080984704}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.109994, y: -2.9699998, z: 0.4804017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.63, y: 0.03, z: -0.07193266}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &710374903087651838
+--- !u!61 &2840610514030984465
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7623533085080984704}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 12, y: 10}
+  m_EdgeRadius: 0
+--- !u!114 &2840610514030984464
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,13 +68,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7623533085080984704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2819cc6b584c6cb4880f05d2021d505d, type: 3}
+  m_Script: {fileID: 11500000, guid: 528019e0b820cc54683ce768716b990b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefabs:
   - {fileID: 1237047135124992207, guid: 20bec0d385b7efd4d89f0e42c018e4b8, type: 3}
   - {fileID: 9194837821079550132, guid: 717050fe6b70855468e53456732cffef, type: 3}
   - {fileID: 1007956655872667336, guid: f6e7a2feda7a9dc4b9c7b72120a08122, type: 3}
-  thisSpawner: {fileID: 0}
-  thisBattleArea: {fileID: 0}
   normalMaterial: {fileID: 2100000, guid: 3554d79b54391a846a84dc3a08e31e3d, type: 2}

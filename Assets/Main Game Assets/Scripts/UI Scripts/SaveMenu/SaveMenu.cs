@@ -8,6 +8,8 @@ public class SaveMenu : MonoBehaviour
     #region Gameobject References
     public GameObject saveMenuObject;
     public GameObject healthBar;
+    public GameObject InsuffPoints;
+
     public GameObject player;
     #endregion
 
@@ -63,12 +65,14 @@ public class SaveMenu : MonoBehaviour
         else
         {
             Debug.Log("Insufficient Points");
+            InsuffPoints.SetActive(true);
         }
     }
 
     // Player leaves the save menu
     public void LeaveButton()
     {
+        InsuffPoints.SetActive(false);
         saveMenuObject.SetActive(false);
         pausing.ResumeGame();
     }

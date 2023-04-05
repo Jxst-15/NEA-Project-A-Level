@@ -8,59 +8,48 @@ public class EnemySpawner : MonoBehaviour
 {
     #region Fields
     #region Object References
-    private readonly System.Random rng = new System.Random();
-    
-    private Dictionary<int, int> wavesMaxSpawn;
-    
+    protected readonly System.Random rng = new System.Random();
+
+    protected Dictionary<int, int> wavesMaxSpawn;
+
     public GameObject[] enemyPrefabs = new GameObject[3];
-    public MyQueue<GameObject> enemies = new MyQueue<GameObject>();
+    protected MyQueue<GameObject> enemies = new MyQueue<GameObject>();
     #endregion
 
     #region Gameobjects
-    public GameObject thisSpawner;
-    public GameObject thisBattleArea;
-    #endregion
-
-    #region Script References
-    private BattleArea area;
+    protected GameObject thisSpawner;
     #endregion
 
     #region Variables
-    private Vector3 spawnLocation;
+    protected Vector3 spawnLocation;
 
-    private int enemiesSpawnedInWave, maxToSpawn;
-    private int spawnInterval;
+    protected int enemiesSpawnedInWave, maxToSpawn;
+    protected int spawnInterval;
 
-    private int maxWave, wavesDone;
+    protected int maxWave, wavesDone;
+
+    protected bool areaCleared;
     #endregion
 
-    #region Getters and Setters
-
-    #endregion
-      
     public Material normalMaterial;
     #endregion
 
     #region Unity Methods
     // Sets the necessary values to attributes
-    void Awake()
+    protected virtual void Awake()
     {
         thisSpawner = this.gameObject;
-        thisBattleArea = this.transform.parent.gameObject;
-        
+
         spawnLocation = thisSpawner.transform.position;
         spawnLocation = new Vector3(spawnLocation.x, spawnLocation.y, 0);
 
         spawnInterval = 0;
-
-        area = thisBattleArea.GetComponent<BattleArea>();
     }
-    
-    void OnEnable()
+
+    protected void OnEnable()
     {
         wavesDone = 1;
-        maxWave = area.waves;
-        maxToSpawn = area.eToDefeat / 2;
+        SetWavesAndMaxSpawn();
 
         Debug.Log("Wave " + wavesDone + " out of " + maxWave);
 
@@ -82,14 +71,22 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         CheckWave(spawnInterval);
     }
     #endregion
 
+    protected virtual void SetWavesAndMaxSpawn()
+    {
+        maxWave = rng.Next(2,4);
+        
+        int eToDefeat = rng.Next(8 / 2, 11 / 2) * 2;
+        maxToSpawn = eToDefeat / 2;
+    }
+
     // Fills the queue with enemy gameobjects
-    private void PopulateQueue(int max)
+    protected void PopulateQueue(int max)
     {
         for (int i = 0; i < maxToSpawn; i++)
         {
@@ -98,7 +95,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // Returns a random enemy prefab from the enemyPrefabs array
-    private GameObject ChooseEnemy()
+    protected GameObject ChooseEnemy()
     {
         int rand = rng.Next(1, 7);
         int index;
@@ -114,15 +111,15 @@ public class EnemySpawner : MonoBehaviour
         {
             index = 2;
         }
-        
+
         // int index = rng.Next(0, enemyPrefabs.Length);
-        GameObject enemy = enemyPrefabs[index]; 
+        GameObject enemy = enemyPrefabs[index];
 
         return enemy;
     }
 
     // Stops or starts the SpawnEnemy IEnumerator depending on if all enemies have been spawned
-    private void CheckEnemiesSpawned(int interval)
+    protected void CheckEnemiesSpawned(int interval)
     {
         if (enemiesSpawnedInWave != wavesMaxSpawn.ElementAt(wavesDone - 1).Value)
         {
@@ -136,24 +133,23 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // Checks to see if the wave is the last wave or not
-    private void CheckWave(int interval)
+    protected virtual void CheckWave(int interval)
     {
         if (enemiesSpawnedInWave == wavesMaxSpawn.ElementAt(wavesDone - 1).Value)
         {
-            if (wavesDone != maxWave && area.enemies.Count == 0)
+            if (wavesDone != maxWave)
             {
                 StartNewWave(interval);
             }
-            else if (wavesDone == maxWave && area.enemies.Count == 0)
+            else
             {
-                Debug.Log("Area Cleared");
+                Debug.Log("All enemies spawned");
                 StopCoroutine(SpawnEnemy(enemies.Dequeue(), interval));
-                area.areaCleared = true;
             }
         }
     }
 
-    private void StartNewWave(int interval)
+    protected void StartNewWave(int interval)
     {
         wavesDone++;
         Debug.Log("New Wave: Wave " + wavesDone);
@@ -165,7 +161,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // Splits up the amount of enemies to spawn in the wave based on the maxToSpawn variable
-    public static IEnumerable<int> GetEnemiesInWave(int maxToSpawn, int waves)
+    protected IEnumerable<int> GetEnemiesInWave(int maxToSpawn, int waves)
     {
         int remainder;
         int result = Math.DivRem(maxToSpawn, waves, out remainder); // Calculates the result and the remainder 
@@ -176,16 +172,16 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnEnemy(GameObject toSpawn, int interval)
+    protected IEnumerator SpawnEnemy(GameObject toSpawn, int interval)
     {
         spawnInterval = rng.Next(6, 12); // Randomises the spawn time
-        
+
         yield return new WaitForSeconds(interval);
-        
+
         GameObject enemy = Instantiate(toSpawn, spawnLocation, Quaternion.identity); // Creates the enemy gameobject at the given position with no rotation
 
         enemy.GetComponent<SpriteRenderer>().material = normalMaterial; // Sets the material to default to prevent enemies which have the flash materials on
-        enemy.name = toSpawn.name + " " + enemiesSpawnedInWave;
+        enemy.name = toSpawn.name + " " + enemiesSpawnedInWave; // Adjusts the name of the enemy spawned
 
         enemiesSpawnedInWave++;
         interval = spawnInterval;

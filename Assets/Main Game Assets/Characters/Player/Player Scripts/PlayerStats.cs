@@ -7,8 +7,8 @@ public class PlayerStats : CharStats
     [SerializeField] private PlayerCombat combatScript;
     [SerializeField] private PlayerController controllerScript;
 
-    [SerializeField] private HealthBarManager healthBarGameUI;
-    [SerializeField] private StamBarManager stamBar;
+    // [SerializeField] private HealthBarManager healthBarGameUI;
+    // [SerializeField] private StamBarManager stamBar;
     #endregion
 
     #region Getters and Setters
@@ -24,8 +24,8 @@ public class PlayerStats : CharStats
     {
         combatScript = GetComponent<PlayerCombat>();
         controllerScript = GetComponent<PlayerController>();
-        healthBarGameUI = GameObject.Find("HealthBar").GetComponent<HealthBarManager>();
-        stamBar = GameObject.Find("StamBar").GetComponent <StamBarManager>();
+        // healthBarGameUI = GameObject.Find("HealthBar").GetComponent<HealthBarManager>();
+        // stamBar = GameObject.Find("StamBar").GetComponent<StamBarManager>();
     }
     #endregion
 
@@ -57,7 +57,7 @@ public class PlayerStats : CharStats
         {
             currentHealth = maxHealth;
         }
-        healthBarGameUI.SetBarVal(currentHealth);
+        // healthBarGameUI.SetBarVal(currentHealth);
     }
 
 
@@ -80,14 +80,14 @@ public class PlayerStats : CharStats
             // If the time elapsed is more than or equal to whenever the next regen time is, increase stamina by set amount
             AffectCurrentStamima(toIncBy, "inc");
         }
-        stamBar.SetBarVal(currentStamina);
+        // stamBar.SetBarVal(currentStamina);
     }
 
     public override void TakeDamage(int dmg, bool weapon)
     {
         base.TakeDamage(dmg, weapon);
         combatScript.ResetComboCount();
-        healthBarGameUI.SetBarVal(currentHealth);
+        // healthBarGameUI.SetBarVal(currentHealth);
     }
 
     public override void Stun()

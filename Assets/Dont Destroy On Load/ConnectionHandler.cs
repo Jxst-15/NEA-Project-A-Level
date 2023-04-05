@@ -7,6 +7,11 @@ using UnityEngine.Networking;
 public class ConnectionHandler : MonoBehaviour
 {
     #region Fields
+    #region Object References
+    public WWWForm form;
+    public static ConnectionHandler instance;
+    #endregion
+   
     #region Getters and Setters
     public string url
     { get; set; }
@@ -20,9 +25,7 @@ public class ConnectionHandler : MonoBehaviour
     { get; private set; }
     #endregion
 
-    public WWWForm form;
-    public static ConnectionHandler instance;
-
+    // Denotes the php scripts used to communicate to the MySQL database
     #region URLs
     private const string loginURL = "http://localhost/compSciNeaDB/login.php";
     private const string signupURL = "http://localhost/compSciNeaDB/signup.php";
@@ -34,6 +37,7 @@ public class ConnectionHandler : MonoBehaviour
     #region Unity Methods
     void Awake()
     {
+        // Ensures that there is only one instance of this in the project
         if (instance != null)
         {
             Destroy(gameObject);
@@ -41,7 +45,7 @@ public class ConnectionHandler : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject); // Ensures this does not get destroyed when loading a new scene e.g. from the menu to the game
     }
 
     // Start is called before the first frame update
@@ -50,25 +54,7 @@ public class ConnectionHandler : MonoBehaviour
         dataString = "";
         errorMsg = "";
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     #endregion
-
-    public void OpenConn(string url, WWWForm form)
-    {
-        if (url != null)
-        {
-            StartCoroutine(GetRequest(url, form));
-        }
-        else
-        {
-            Debug.Log("Error: URL string is empty");
-        }
-    }
 
     public void EmptyFieldError()
     {
@@ -80,11 +66,12 @@ public class ConnectionHandler : MonoBehaviour
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
         {
-            yield return webRequest.SendWebRequest();
+            yield return webRequest.SendWebRequest(); // Communicates with the php script, php scripts can be run on websites which is why they are provided as URLs 
 
             string[] pages = url.Split('/');
             int page = pages.Length - 1;
 
+            // Sees what the result of the attempted connection and sets errorMsg if necessary
             switch (webRequest.result)
             {
                 case UnityWebRequest.Result.ConnectionError:
@@ -106,7 +93,6 @@ public class ConnectionHandler : MonoBehaviour
 
     public IEnumerator AttemptLogin(string u, string p)
     {
-        PlayerData.instance.ResetData();
         form = new WWWForm();
 
         form.AddField("username", u);
@@ -114,15 +100,17 @@ public class ConnectionHandler : MonoBehaviour
 
         yield return GetRequest(loginURL, form);
       
-        string[] data = dataString.Split("*");
+        string[] data = dataString.Split("*"); // Splits the data string into an array, the array contains the player data to set
 
         int success = Convert.ToInt32(data[0]);
         if (success == 1)
         {
             loggedIn = true;
 
+            // Player has just logged in so set player data variables accordingly to what was indicated by the data string
             PlayerData.instance.username = u;
-            // PlayerData.instance.points = Convert.ToInt32(data[1]);
+            PlayerData.instance.accCreated = data[1];
+            PlayerData.instance.lastSaveDate = data[2];
             StartCoroutine(LoadGame(u));
         }
         else
@@ -136,19 +124,25 @@ public class ConnectionHandler : MonoBehaviour
 
     public IEnumerator AttemptSignUp(string u, string p)
     {
-        PlayerData.instance.ResetData();
         form = new WWWForm();
 
         form.AddField("username", u);
         form.AddField("password", p);
 
         yield return GetRequest(signupURL, form);
+        
+        string[] data = dataString.Split("*");
 
-        if (dataString == "1")
+        int success = Convert.ToInt32(data[0]); // First value is always whether or not the process was successful or not
+        if (success == 1)
         {
             loggedIn = true;
+
             PlayerData.instance.username = u;
-            StartCoroutine(SaveGame("", PlayerData.instance.currentHealth, PlayerData.instance.currentStamina, PlayerData.instance.posX, PlayerData.instance.posY, PlayerData.instance.points));
+            PlayerData.instance.accCreated = data[1];
+
+            // As a new user has been created, this creates a record for the user in the savestbl within the database
+            StartCoroutine(SaveGame(PlayerData.instance.currentHealth, PlayerData.instance.currentStamina, PlayerData.instance.posX, PlayerData.instance.posY, PlayerData.instance.points));
         }
         else
         {
@@ -158,14 +152,18 @@ public class ConnectionHandler : MonoBehaviour
         dataString = "";
     }
 
+    // Player has logged out therefore reset all player data to default values
     public void LogOut()
     {
         loggedIn = false;
+        PlayerData.instance.ResetData();
     }
-    public IEnumerator SaveGame(string saveName, int health, int stamina, float posX, float posY, int points)
+
+    public IEnumerator SaveGame(int health, int stamina, float posX, float posY, int points)
     {
         form = new WWWForm();
 
+        // Adding fields is a way to make these variables useable in the php scripts
         form.AddField("username", PlayerData.instance.username);
         form.AddField("points", points);
         form.AddField("currentHealth", health);
@@ -182,6 +180,7 @@ public class ConnectionHandler : MonoBehaviour
         if (success == 1)
         {
             Debug.Log("Save was a success!");
+            PlayerData.instance.lastSaveDate = data[1];
         }
         else
         {
@@ -192,20 +191,20 @@ public class ConnectionHandler : MonoBehaviour
 
     public IEnumerator LoadGame(string u)
     {
-        form = new WWWForm();
+        form = new WWWForm(); // new WWWForm object used to send data to the php scripts
 
         form.AddField("username", u);
 
         yield return GetRequest(loadURL, form);
 
-        Debug.Log("\n" + dataString);
-
         string[] data = dataString.Split("*");
 
-        int success = Convert.ToInt32(data[0]); // Inout string was not in correct format      
+        int success = Convert.ToInt32(data[0]);  
         if (success == 1)
         {
             Debug.Log("Load was a success!");
+
+            // Player has just loaded the game so set the player data values accordingly
             PlayerData.instance.points = Convert.ToInt32(data[1]);
             PlayerData.instance.currentHealth = Convert.ToInt32(data[2]);
             PlayerData.instance.currentStamina = Convert.ToInt32(data[3]);
@@ -217,7 +216,6 @@ public class ConnectionHandler : MonoBehaviour
         {
             Debug.Log("Error");
         }
-        Debug.Log("\n" + dataString);
         dataString = "";
     }
 }

@@ -1,6 +1,4 @@
-using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LoginSignUpButtons : MonoBehaviour
 {
@@ -78,7 +76,6 @@ public class LoginSignUpButtons : MonoBehaviour
         if (user != "" && pass != "")
         {
             signFields.SetActive(false);
-
             StartCoroutine(ConnectionHandler.instance.AttemptSignUp(user, pass));
         }
         else

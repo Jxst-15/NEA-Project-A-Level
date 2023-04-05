@@ -13,6 +13,6 @@ public class SaveHandler : MonoBehaviour
         PlayerData.instance.currentStamina = stamina;
         PlayerData.instance.points = points;
         
-        StartCoroutine(ConnectionHandler.instance.SaveGame("", health, stamina, posX, posY, points));
+        StartCoroutine(ConnectionHandler.instance.SaveGame(health, stamina, posX, posY, points));
     }
 }

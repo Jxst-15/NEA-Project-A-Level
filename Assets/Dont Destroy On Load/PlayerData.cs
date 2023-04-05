@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     #region Fields
+    // Denotes the data that the player has
     #region Getters and Setters
     public string username
     { get; set; }
@@ -21,9 +22,13 @@ public class PlayerData : MonoBehaviour
     { get; set; }
     public float posY
     { get; set; }
+    public string accCreated
+    { get; set; }
+    public string lastSaveDate
+    { get; set; }
     #endregion
 
-    public static PlayerData instance;
+    public static PlayerData instance; // So data can be modified without needing a reference to it 
     #endregion
 
     private void Awake()
@@ -37,15 +42,10 @@ public class PlayerData : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        enemiesDefeated = 0;
         username = "None";
-        points = 0;
-        currentHealth = 700;
-        currentStamina = 350;
-        posX = -32.70996f;
-        posY = -4.51f;
-
-        Debug.Log("Set Data");
+        accCreated = "2005-04-15";
+        lastSaveDate = "2005-04-15";
+        ResetData();
     }
 
     public void ResetData()

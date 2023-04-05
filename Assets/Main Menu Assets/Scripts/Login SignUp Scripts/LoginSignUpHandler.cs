@@ -33,7 +33,6 @@ public class LoginSignUpHandler : MonoBehaviour
             }
             else
             {
-                PlayerData.instance.username = defVal;
                 buttons.loggedIn.SetActive(false);
             }
         }

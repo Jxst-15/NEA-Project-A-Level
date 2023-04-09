@@ -1,30 +1,27 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStats : CharStats
+public abstract class EnemyStats : CharStats
 {
     #region Fields
     #region Script References
-    [SerializeField] private EnemyScript enemyScript;
-    [SerializeField] private EnemyCombat enemyCombat;
-    [SerializeField] private EnemyMovement enemyMovement;
-    [SerializeField] private EnemyAI enemyAI;
+    [SerializeField] protected EnemyScript enemyScript;
+    [SerializeField] protected EnemyCombat enemyCombat;
+    [SerializeField] protected EnemyMovement enemyMovement;
+    [SerializeField] protected EnemyAI enemyAI;
 
-    [SerializeField] private FlashScript flashScript;
-    #endregion
-
-    #region Script Reference Variables
-    [SerializeField] private string type;
+    [SerializeField] protected FlashScript flashScript;
     #endregion
 
     #region Variables
-    private string weakTo;
+    protected string weakTo; // Indicates which player fighting style the enemy is weak to
+
+    protected int toIncBy; // To increase stamina by
     #endregion
 
     #region Getters and Setters
     public float attackRate
     { get; set; }
-    public int uDmg
+    public int uDmg // Ultimate damage
     { get; set; }
     #endregion
     #endregion
@@ -49,101 +46,11 @@ public class EnemyStats : CharStats
     }
     #endregion
 
-    protected void StartInit()
+    protected virtual void StartInit()
     {
         enemyScript = GetComponent<EnemyScript>();
         flashScript = GetComponent<FlashScript>();
         base.Start();
-    }
-
-    protected override void SetVariables()
-    {
-        type = enemyScript.type;
-        // Based on the tag of the game object, sets the stats accordingly
-        switch (type)
-        {
-            case "NormalEnemies":
-                maxHealth = 300;
-                attackRate = 2;
-                lDmg = 30;
-                hDmg = 50;
-                uDmg = 70;
-
-                maxStamina = 200;
-                regenCooldown = 5;
-
-                vSpeed = 2;
-                hSpeed = 3;
-                vRunSpeed = 4;
-                hRunSpeed = 5;
-
-                weakTo = "Iron Fist";
-                break;
-            case "NimbleEnemies":
-                maxHealth = 200;
-                attackRate = 3;
-                lDmg = 10;
-                hDmg = 20;
-                uDmg = 40;
-
-                maxStamina = 300;
-                regenCooldown = 3;
-
-                vSpeed = 3;
-                hSpeed = 4;
-                vRunSpeed = 5;
-                hRunSpeed = 6;
-
-                weakTo = "Grass Style";
-                break;
-            case "BulkyEnemies":
-                maxHealth = 500;
-                attackRate = 0.5f;
-                lDmg = 50;
-                hDmg = 70;
-                uDmg = 90;
-
-                maxStamina = 100;
-                regenCooldown = 7;
-
-                vSpeed = 1;
-                hSpeed = 2;
-                vRunSpeed = 3;
-                hRunSpeed = 4;
-
-                weakTo = "Boulder Style";
-                break;
-            case "BossEnemies":
-                maxHealth = 1000;
-                attackRate = 1f;
-                lDmg = 80;
-                hDmg = 95;
-                uDmg = 115;
-
-                maxStamina = 400;
-                regenCooldown = 10;
-
-                vSpeed = 2;
-                hSpeed = 3;
-                vRunSpeed = 5;
-                hRunSpeed = 6;
-
-                weakTo = "None";
-                break;
-        }
-
-        if (type != "BossEnemies")
-        {
-            toIncBy = 5;
-            unstunCooldown = 7;
-        }
-        else
-        {
-            toIncBy = 15;
-            unstunCooldown = 10;
-        }
-
-        base.SetVariables();
     }
 
     protected override void StaminaRegen()
@@ -161,22 +68,23 @@ public class EnemyStats : CharStats
     public override void TakeDamage(int dmg, bool weapon)
     {
         // If the enemy is weak to the players; fighting style and the enemy is not holding a weapon and the damage is not being done by a weapon
-        if (PlayerStyleSwitch.fightStyle == weakTo && enemyScript.target.GetComponent<PlayerCombat>().weaponHeld == false && weapon == false)
+        if (PlayerStyleSwitch.fightStyle == weakTo && enemyScript.target.GetComponent<PlayerWCHandler>().weaponHeld == false && weapon == false)
         {
             int weakToAddOn = 10;
-            dmg += weakToAddOn; 
+            dmg += weakToAddOn; // Add on extra damage to do to enemy
         }
         base.TakeDamage(dmg, weapon);
         flashScript.Flash(flashScript.GetFlashMaterial(0));
     }
 
     public override void Stun()
-    { 
+    {
         enemyCombat.canAttack = false;
         enemyCombat.canDefend = false;
         enemyCombat.blocking = false;
 
         enemyMovement.canMove = false;
+        enemyMovement.StopMovement();
 
         base.Stun();
     }
@@ -204,8 +112,9 @@ public class EnemyStats : CharStats
         enemyScript.OnDeath();
 
         flashScript.Flash(flashScript.GetFlashMaterial(2));
-        
+
         // Destroying the game object helps to manage memory and declutter screen
         Destroy(gameObject);
     }
+    
 }

@@ -1,43 +1,34 @@
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerCombat : CharCombat, IWeaponHandler
+public class PlayerCombat : CharCombat
 {
     #region Fields
     #region Script References
-    public PlayerStats playerStats
-    { get; private set; }
-    public PlayerStyleSwitch playerStyleSwitch
-    { get; private set; }
+    private PlayerStats playerStats;
+    private PlayerStyleSwitch playerStyleSwitch;
     public PlayerComboMeter comboMeter
     { get; private set; }
-    public PlayerController playerController
-    { get; private set; }
+    private PlayerController playerController;
+    private PlayerWCHandler playerWCHandler;
 
-    public PlayerAttack playerAttack
-    { get; private set; }
-    public PlayerThrow playerThrow
-    { get; private set; }
-    public PlayerBlock playerBlock
-    { get; private set; }
+    private PlayerAttack playerAttack;
+    private PlayerThrow playerThrow;
+    private PlayerBlock playerBlock;
 
     public Weapon weaponScript
     { get; set; }
     #endregion
 
     #region Variables
-    private float nextFTime;
+    private float nextFTime; // Next finisher time
 
     // For determining whether 'H' is being held or pressed
     private float pressedTime;
     private bool keyHeld;
-    
-    private float tapSpeed;
-    KeyCode lastKey;
     #endregion
     
-    private const float minHold = 0.2f;
+    private const float minHold = 0.2f; // Determines how long a button has to be held for to be classed as being held, used for blocking and parrying
 
     #region Getters and Setters
     public int stamDecFinish
@@ -63,14 +54,15 @@ public class PlayerCombat : CharCombat, IWeaponHandler
         playerStyleSwitch = GetComponent<PlayerStyleSwitch>();
         comboMeter = GetComponent<PlayerComboMeter>();
         playerController = GetComponent<PlayerController>();
+        playerWCHandler = GetComponent<PlayerWCHandler>();
 
         // Gets the PlayerAttack script from the attackBox GameObject
         playerAttack = attackBox.GetComponent<PlayerAttack>();
 
+        playerThrow = throwBox.GetComponent<PlayerThrow>();
+
         // Gets the PlayerBlock script from the blockBox GameObject
         playerBlock = blockBox.GetComponent<PlayerBlock>();
-
-        playerThrow = throwBox.GetComponent<PlayerThrow>();
 
     }
 
@@ -82,16 +74,16 @@ public class PlayerCombat : CharCombat, IWeaponHandler
             if (canAttack == true)
             {
                 // If there is no weapon
-                if (weaponHeld == false)
+                if (playerWCHandler.weaponHeld == false)
                 {
                     // weaponHeld = false;
                     AttackLogic();
                 }
                 else
                 {
-                    if (weapon != null)
+                    if (playerWCHandler.weapon != null)
                     {
-                        WeaponAttackLogic();
+                        playerWCHandler.WeaponAttackLogic();
                     }
                 }
             }
@@ -127,7 +119,6 @@ public class PlayerCombat : CharCombat, IWeaponHandler
 
         canSwitch = true;
 
-        attackCount = 0;
         nextAttackTime = 0f;
 
         throwRate = 0.2f;
@@ -146,8 +137,6 @@ public class PlayerCombat : CharCombat, IWeaponHandler
         stamDecThrow = 35;
         stamIncParry = 20;
         stamDecFinish = 40;
-
-        weaponHeld = false;
 
         base.SetVariables();
     }
@@ -188,11 +177,12 @@ public class PlayerCombat : CharCombat, IWeaponHandler
     }
     protected override void Attack()
     {
-        int dmgToDeal;
-        int toDecBy = 0;
         // If the time elapsed since game started is more or equal to nextAttackTime, prevents spam
         if (Time.time >= nextAttackTime)
         {
+            int dmgToDeal;
+            int toDecBy = 0;
+        
             attacking = true;
             parryable = true;
 
@@ -213,29 +203,12 @@ public class PlayerCombat : CharCombat, IWeaponHandler
                 comboCount++;
                 StartCombo();
             }
-
-            attackCount++;
-
-            //switch (lightAtk)
-            //{
-            //    case true:
-            //        UnityEngine.Debug.Log("Light Attack Performed");
-            //        // Decrease current stamina by stamDecLAttack
-            //        playerStats.AffectCurrentStamima(stamDecLAttack, "dec");
-            //        break;
-            //    case false:
-            //        UnityEngine.Debug.Log("Heavy Attack Performed");
-            //        // Decrease current stamina by stamDecHAttack
-            //        playerStats.AffectCurrentStamima(stamDecHAttack, "dec");
-            //        break;
-            //}
-
             playerStats.AffectCurrentStamima(toDecBy, "dec");
 
+            attacking = false;
+            parryable = false;
             nextAttackTime = Time.time + 1f / attackRate;
         }
-        attacking = false;
-        parryable = false;
     }
 
     protected override void AttackWhenBlocking(Collider2D hittableObj)
@@ -250,12 +223,12 @@ public class PlayerCombat : CharCombat, IWeaponHandler
             Collider2D hittableObj = playerAttack.GetObjectsHit()[0]; // Only damages the first enemy in the list
             DealDamage(hittableObj, playerStats.fDmg);
 
-            comboMeter.UsedFinisher();
-            UnityEngine.Debug.Log("Used Finisher");
+            comboMeter.ResetCombo();
+            Debug.Log("Used Finisher");
 
             playerStats.AffectCurrentStamima(stamDecFinish, "dec");
 
-            nextFTime = Time.time + 9;
+            nextFTime = Time.time + 7;
         }
     }
 
@@ -289,7 +262,7 @@ public class PlayerCombat : CharCombat, IWeaponHandler
         {
             if (keyHeld == false)
             {
-                UnityEngine.Debug.Log("Parry initiated");
+                Debug.Log("Parry initiated");
                 Parry();
             }
             keyHeld = false;
@@ -323,7 +296,7 @@ public class PlayerCombat : CharCombat, IWeaponHandler
 
     protected override void Parry()
     {
-        UnityEngine.Debug.Log("Parry");
+        Debug.Log("Parry");
     }
 
     private void SwitchStyle()
@@ -336,97 +309,4 @@ public class PlayerCombat : CharCombat, IWeaponHandler
             playerStyleSwitch.SwitchStyle();
         }
     }
-
-    #region Weapon Code
-    private void WeaponAttackLogic()
-    {
-        if (Input.GetButtonDown("lAttack") || Input.GetButtonDown("hAttack") || Input.GetKeyDown(KeyCode.L))
-        {
-            int toDecBy = 0;
-            bool unique = false;
-
-            if (Input.GetButtonDown("lAttack"))
-            {
-                lightAtk = true;
-                toDecBy = weapon.GetComponent<Weapon>().stamDecWLAtk;
-            }
-            else if (Input.GetButtonDown("hAttack"))
-            {
-                lightAtk = false;
-                toDecBy = weapon.GetComponent<Weapon>().stamDecWHAtk;
-            }
-            else if (Input.GetKeyDown(KeyCode.L))
-            {
-                unique = true;
-                toDecBy = weapon.GetComponent<Weapon>().stamDecWUEAtk;
-            }
-
-            WeaponAttack(unique, toDecBy);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            DropWeapon();
-        }
-    }
-
-    public void WeaponAttack(bool unique, int toDecBy)
-    {
-        attacking = true;
-        parryable = true;
-        if (!unique)
-        {
-            if (weapon.GetComponent<Weapon>().Attack(lightAtk) == true)
-            {
-                if (weapon != null)
-                {
-                    // Get the number of objects hit by attack and increase comboCount by amount
-                    comboCount += weapon.GetComponent<Weapon>().weaponAttack.GetObjectsHit().ToList().Count;
-                    comboMeter.ComboStart(comboCount);
-                    playerStats.AffectCurrentStamima(toDecBy, "dec");
-                }
-            }
-        }
-        else
-        {
-            if (weapon.GetComponent<Weapon>().UniqueAttack() == true)
-            {
-                if (weapon != null)
-                {
-                    // Get the number of objects hit by attack and increase comboCount by amount
-                    comboCount += weapon.GetComponent<Weapon>().uniqueWeaponAttack.GetObjectsHit().ToList().Count;
-                    comboMeter.ComboStart(comboCount);
-                    playerStats.AffectCurrentStamima(toDecBy, "dec");
-                }
-            }
-        }
-        attackCount++;
-
-        attacking = false;
-        parryable = false;
-    }
-
-    public void SetWeaponToNull()
-    {
-        weapon = null;
-        Debug.Log("Weapon set to null");
-    }
-
-    public void SetWeaponHeld(bool val)
-    {
-        weaponHeld = val;
-        Debug.Log("Weapon held is false");
-    }
-
-    public void DropWeapon()
-    {
-        if (weaponHeld == true)
-        {
-            weapon.GetComponent<Weapon>().DropItem();
-            weapon = null;
-            weaponHeld = false;
-
-            canSwitch = true;
-        }
-    }
-    #endregion
 }

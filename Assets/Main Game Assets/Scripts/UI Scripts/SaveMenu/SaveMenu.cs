@@ -14,7 +14,6 @@ public class SaveMenu : MonoBehaviour
     #endregion
 
     #region Script References
-    public SavePointHandler sp;
     private SaveHandler saveHandler;
     private PauseMenu pausing;
     private HealthBarManager healthBarManager;
@@ -62,7 +61,7 @@ public class SaveMenu : MonoBehaviour
                 int toHealBy = 100;
                 playerStats.Heal(toHealBy);
                 playerPoints.ChangePoints(cost, "dec");
-                healthBarManager.SetBarVal(playerStats.currentHealth);
+                healthBarManager.SetBarVal(playerStats.currentHealth); // Ensures the bar in the save menu is set
             }
             else
             {

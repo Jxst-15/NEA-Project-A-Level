@@ -1,31 +1,20 @@
 using System;
 using UnityEngine;
 
-//[RequireComponent(typeof(EnemyStats))]
-//[RequireComponent(typeof(EnemyAI))]
-//[RequireComponent(typeof(EnemyCombat))]
-
 public class EnemyScript : MonoBehaviour
 {
-    #region Script References
-    //[SerializeField] private EnemyStats enemyStats;
-    //[SerializeField] private EnemyCombat enemyCombat;
-    //[SerializeField] private EnemyAI enemyAI;
-    #endregion
-
+    // Denotes how many points should be given depending on the tag of enemy
     private enum EnemyPoints
     {
-        NormalEnemy = 1,
+        NormalEnemy = 3,
         NimbleEnemy = 2,
-        BulkyEnemy = 3,
-        BossEnemy = 6
+        BulkyEnemy = 4,
+        BossEnemy = 8
     }
 
     #region Fields
     #region Getters and Setters
     public GameObject target
-    { get; set; }
-    public string type
     { get; set; }
     public int points
     { get; set; }
@@ -38,9 +27,9 @@ public class EnemyScript : MonoBehaviour
     private void Awake()
     {
         // Sets the enemy type to the tag which is given in the editor
-        type = gameObject.tag;
+        string type = gameObject.tag;
 
-        // Sets the points depending on the type using the EnemyPoints enum
+        // Sets the points depending on the type (tag) using the EnemyPoints enum
         switch(type)
         {
             case "NormalEnemies":

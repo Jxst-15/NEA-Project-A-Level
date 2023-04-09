@@ -18,7 +18,7 @@ public class StyleSwitchUIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Creates the dictionary
+        // Creates the dictionary, values are the associating circles for the style in the UI
         StyleUI = new Dictionary<string, GameObject>()
         {
             {"Iron Fist", StyleCirc1},

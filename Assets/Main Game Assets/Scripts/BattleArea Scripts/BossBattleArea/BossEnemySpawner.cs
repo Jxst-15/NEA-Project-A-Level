@@ -1,23 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class BossEnemySpawner : EnemySpawner
+public class BossEnemySpawner : BattleAreaEnemySpawner
 {
     #region Fields
+    #region Objects
+    private List<Collider2D> enemiesInArea;
+    #endregion
+
     #region Gameobjects
     public GameObject bossEnemy;
     #endregion
     #endregion
 
-    #region Unity Methods
-    protected override void Awake()
+    protected override void SetAreaMinAndMax()
     {
-        base.Awake();
-        minInterval = 6;
-        maxInterval = 12;
+        area.min = 4;
+        area.max = 7;
     }
-    #endregion
+
+    protected override void SetWavesAndMaxSpawn()
+    {
+        base.SetWavesAndMaxSpawn();
+        maxToSpawn *= 2;
+    }
 
     protected override void PopulateQueue(int max)
     {
@@ -26,26 +34,5 @@ public class BossEnemySpawner : EnemySpawner
             enemies.Enqueue(ChooseEnemy());
         }
         enemies.Enqueue(bossEnemy);
-    }
-
-    protected override void CheckEnemiesSpawned(int interval)
-    {
-        if (enemiesSpawned != maxToSpawn)
-        {
-            Debug.Log(enemies.Size() + " " + enemiesSpawned);
-            StartCoroutine(SpawnEnemy(interval));
-        }
-        else if (enemiesSpawned == maxToSpawn - 1)
-        {
-            StartCoroutine(SpawnEnemy(9));
-        }
-        else
-        {
-            Debug.Log("All enemies spawned");
-            spawning = false;
-            StopCoroutine(SpawnEnemy(interval));
-
-            Destroy(gameObject);
-        }
     }
 }

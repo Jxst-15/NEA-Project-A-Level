@@ -14,14 +14,10 @@ public class EnemyMovement : CharMovement
     #endregion
 
     #region Variables
-    protected const bool notNeeded = false;
-
-    protected float enemyScaleX, enemyScaleY;
-
-    protected Vector2 direction;
-
     protected float runDistance;
     #endregion
+    
+    protected const bool notNeeded = false;
     #endregion
 
     #region Unity Methods
@@ -33,8 +29,6 @@ public class EnemyMovement : CharMovement
         enemyAI = GetComponent<EnemyAI>();
         
         base.Start();
-        enemyScaleX = this.transform.localScale.x;
-        enemyScaleY = this.transform.localScale.y;
     }
 
     // Update is called once per frame
@@ -44,9 +38,9 @@ public class EnemyMovement : CharMovement
         {
             if (canMove == true)
             {
-                Flip(notNeeded, enemyScaleX, enemyScaleY);
+                Flip(notNeeded, scaleX, scaleY);
             }
-            // Action();
+            // Action(); // Where the action method would go
         }
     }
 
@@ -63,7 +57,7 @@ public class EnemyMovement : CharMovement
                     Movement();
                 }
 
-                // Dodge();
+                // Dodge(); // Where the dodge method would go
             }
         }
     }
@@ -73,29 +67,26 @@ public class EnemyMovement : CharMovement
     {
         base.SetVariables();
 
-        canMove = true;
-        isRunning = false;
-
-        isDodging = false;
         startDodgeTime = 0.1f;
         dodgeTime = startDodgeTime;
         dodgeSpeed = 35;
         side = 0;
 
-        runDistance = 8f;
+        runDistance = 8f; // If distance is less than or equal this than will walk, else then run
 
-        targetPos = enemyScript.target.transform;
+        targetPos = enemyScript.target.transform; // The position of the target
     }
 
     protected override void Movement()
     {
-        direction = (targetPos.position - transform.position).normalized;
+        Vector2 direction = (targetPos.position - transform.position).normalized;
 
+        // IF the enemy state is in tracking
         if (enemyAI.fsm.currentState.thisStateID == EnemyStates.Tracking)
         {
             if (enemyAI.fsm.distanceFromTarget >= runDistance)
             {
-                Run();
+                Run(direction);
             }
             else if (enemyAI.fsm.distanceFromTarget < runDistance)
             {
@@ -108,8 +99,9 @@ public class EnemyMovement : CharMovement
         }
     }
 
-    protected override void Run()
+    protected override void Run(Vector2 direction)
     {
+        // Manipulates the velocity of the rigidbody
         rb.velocity = new Vector2(direction.x * enemyStats.hRunSpeed, direction.y * enemyStats.vRunSpeed);
     }
 

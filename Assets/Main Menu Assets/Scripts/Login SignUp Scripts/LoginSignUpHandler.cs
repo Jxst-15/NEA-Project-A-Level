@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LoginSignUpHandler : MonoBehaviour
@@ -7,10 +5,6 @@ public class LoginSignUpHandler : MonoBehaviour
     #region Fields
     #region Script References
     public LoginSignUpButtons buttons;
-    private ConnectionHandler connHandler;
-    #endregion
-
-    #region Getters and Setters
     #endregion
 
     public const string defVal = "None";
@@ -18,7 +12,6 @@ public class LoginSignUpHandler : MonoBehaviour
 
     void Awake()
     {
-        connHandler = GameObject.Find("DataHandler").GetComponent<ConnectionHandler>();
         buttons = GetComponent<LoginSignUpButtons>();
     }
 
@@ -29,6 +22,7 @@ public class LoginSignUpHandler : MonoBehaviour
         {
             if (ConnectionHandler.instance.loggedIn == true)
             {
+                // Show login screen
                 buttons.loggedIn.SetActive(true);
             }
             else
@@ -38,6 +32,7 @@ public class LoginSignUpHandler : MonoBehaviour
         }
         else
         {
+            // Show the error screen
             buttons.errorScreen.SetActive(true);
         }
     }

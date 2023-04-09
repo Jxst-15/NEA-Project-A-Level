@@ -11,7 +11,6 @@ public abstract class CharCombat : MonoBehaviour
     #endregion
 
     #region Variables
-    [SerializeField] protected int attackCount;
     protected float nextAttackTime;
     protected bool lightAtk;
 
@@ -51,9 +50,6 @@ public abstract class CharCombat : MonoBehaviour
     { get; set; }
     public bool parryable
     { get; set; }
-   
-    public bool weaponHeld
-    { get; set; }
     #endregion
     #endregion
 
@@ -80,8 +76,6 @@ public abstract class CharCombat : MonoBehaviour
         nextAttackTime = 0f;
 
         lightAtk = false;
-
-        weaponHeld = false;
 
         stamDecLAttack = 15;
         stamDecHAttack = 20;

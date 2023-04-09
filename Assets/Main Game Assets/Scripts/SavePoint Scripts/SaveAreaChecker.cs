@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,14 +14,6 @@ public class SaveAreaChecker : MonoBehaviour
     void Start()
     {
         savePoint = GetComponentInParent<SavePointHandler>();
-    }
-
-    private void Update()
-    {
-        //if (gameObjects.Count > 0)
-        //{
-        //    savePoint.canSave = false;
-        //}
     }
 
     private void AdjustList(Collider2D entity, bool exit)

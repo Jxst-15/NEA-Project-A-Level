@@ -18,12 +18,12 @@ public class PlayerController : CharMovement
     // Variables for player movement
     private float vMove, hMove;
 
-    [SerializeField] private const int jumpHeight = 3;
-
     // For double tapping key
     private float doubleTapSpeed;
     private KeyCode lastKey;
     #endregion
+    
+    [SerializeField] private const int jumpHeight = 3;
     #endregion
 
     #region Unity Methods
@@ -124,7 +124,6 @@ public class PlayerController : CharMovement
                 if (doubleTapSpeed > Time.time && lastKey == KeyCode.D)
                 {
                     side = 2;
-                    // doubleTapped = true;
                     isDodging = true;
                 }
                 else
@@ -145,7 +144,6 @@ public class PlayerController : CharMovement
                 {
                     // Indicates left side
                     side = 1;
-                    // doubleTapped = true; // Key has been double tapped
                     isDodging = true;
                 }
                 else
@@ -171,19 +169,21 @@ public class PlayerController : CharMovement
 
     protected override void Dodge()
     {
+        // Only starts when moving/facing in a direction using the movement keys
         if (side != 0)
         {
             if (dodgeTime <= 0)
             {
                 side = 0;
-                dodgeTime = startDodgeTime;
-                rb.velocity = Vector2.zero;
+                dodgeTime = startDodgeTime; // Set the time back to normal
+                StopMovement();
             }
             else
             {
-                dodgeTime -= Time.deltaTime;
+                dodgeTime -= Time.deltaTime; // How long the dodge lasts for
                 if (side == 1)
                 {
+                    // Dodge left
                     rb.velocity = Vector2.left * dodgeSpeed;
                 }
                 else if (side == 2)
@@ -194,8 +194,7 @@ public class PlayerController : CharMovement
         }
     }
 
-    // Action button can be worked on at later date when items added
-    // Allows for the player interact with various objects in the stage e.g. weapons
+    // Allows for the player interact with various objects in the stage e.g. weapons, save points
     protected override void Action()
     {      
         playerAction.Action();

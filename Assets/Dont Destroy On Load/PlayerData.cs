@@ -16,8 +16,6 @@ public class PlayerData : MonoBehaviour
     { get; set; }
     public int currentStamina
     { get; set; }
-    public Vector2 playerPos
-    { get; set; }
     public float posX
     { get; set; }
     public float posY
@@ -30,11 +28,12 @@ public class PlayerData : MonoBehaviour
     { get; set; }
     #endregion
 
-    public static PlayerData instance; // So data can be modified without needing a reference to it 
+    public static PlayerData instance; // So data can be modified without needing a reference to it, able to be kept the same between scenes
     #endregion
 
     private void Awake()
     {
+        // If there is already a PlayerData in the scene then destroy the newly created gameobject
         if (instance != null)
         {
             Destroy(gameObject);
@@ -55,8 +54,8 @@ public class PlayerData : MonoBehaviour
     {
         enemiesDefeated = 0;
         points = 0;
-        currentHealth = 800;
-        currentStamina = 350;
+        currentHealth = 900;
+        currentStamina = 450;
         posX = -32.70996f;
         posY = -4.51f;
     }

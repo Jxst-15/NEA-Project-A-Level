@@ -45,7 +45,6 @@ public class PlayerComboMeter : MonoBehaviour, IComboMeter
     public void ComboStart(int val)
     {
         inCombo = true;
-        // comboSnapshot = playerCombat._comboCount;
         comboSnapshot = val;
         comboEndTime = Time.time + comboDuration;
     }
@@ -85,11 +84,7 @@ public class PlayerComboMeter : MonoBehaviour, IComboMeter
         }
     }
 
-    public void UsedFinisher()
-    {
-        ResetCombo();
-    }
-
+    // Combo for finisher
     public int GetComboForF()
     {
         return comboForFinisher;

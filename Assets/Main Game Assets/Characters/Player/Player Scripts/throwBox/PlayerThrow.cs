@@ -9,7 +9,7 @@ public class PlayerThrow : MonoBehaviour
     #endregion
 
     #region GameObjects
-    public GameObject throwEnd;
+    public GameObject throwEnd; // Which direction the player is facing in
 
     private GameObject toThrow;
     #endregion
@@ -17,9 +17,6 @@ public class PlayerThrow : MonoBehaviour
     #region Variables
     private float speed;
     private float throwDuration;
-
-    // Indicates which way to throw the enemy
-    private Vector2 direction;
     #endregion
 
     #region Getters and Setters
@@ -41,7 +38,7 @@ public class PlayerThrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        speed = 3f;
+        speed = 4f;
         maxThrowDuration = 3f;
         throwDuration = maxThrowDuration;
     }
@@ -62,6 +59,8 @@ public class PlayerThrow : MonoBehaviour
                 
                 toThrow.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 throwDuration = maxThrowDuration;
+
+                toThrow = null;
             }
             // If the throw duration has not reached 0 yet
             else if (throwDuration > 0)
@@ -77,7 +76,8 @@ public class PlayerThrow : MonoBehaviour
     {
         // Takes the position of the throwEnd object and takes it away from the current position of this object 
         // It is normalized so that it only stores its direction
-        direction = ((throwEnd.transform.position) - transform.position).normalized;
+        Vector2 direction = ((throwEnd.transform.position) - transform.position).normalized;
+        
         if (objectsHit.Count == 0 || objectsHit[0].gameObject.layer != LayerMask.NameToLayer("Enemy"))
         {
             Debug.Log("No valid enemy to throw");

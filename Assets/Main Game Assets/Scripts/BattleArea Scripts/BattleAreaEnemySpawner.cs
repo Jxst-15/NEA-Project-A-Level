@@ -36,6 +36,10 @@ public class BattleAreaEnemySpawner : EnemySpawner
 
         minInterval = 6;
         maxInterval = 12;
+
+        SetAreaMinAndMax();
+
+        gameObject.SetActive(false);
     }
 
     protected override void OnEnable()
@@ -68,6 +72,13 @@ public class BattleAreaEnemySpawner : EnemySpawner
     }
     #endregion
 
+
+    protected virtual void SetAreaMinAndMax()
+    {
+        area.min = 8;
+        area.max = 11;
+    }
+
     protected override void SetWavesAndMaxSpawn()
     {
         maxWave = area.waves;
@@ -94,9 +105,9 @@ public class BattleAreaEnemySpawner : EnemySpawner
         {
             if (wavesDone != maxWave && area.enemies.Count == 0)
             {
-                StartNewWave(interval);
+                StartNewWave(6);
             }
-            else if (wavesDone == maxWave && area.enemies.Count == 0)
+            else if (wavesDone == maxWave && area.enemies.Count == 0) // If it's the final wave and all enemies have been defeated
             {
                 StopCoroutine(SpawnEnemy(interval));
                 spawning = false;

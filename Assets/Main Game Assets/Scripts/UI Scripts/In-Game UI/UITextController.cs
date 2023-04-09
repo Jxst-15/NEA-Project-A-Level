@@ -1,11 +1,11 @@
 using UnityEngine;
 using TMPro;
 
-public class UITextController : MonoBehaviour
+public abstract class UITextController : MonoBehaviour
 {
     #region Fields
     #region Text Reference
-    [SerializeField] protected TMP_Text text;
+    [SerializeField] protected TMP_Text text; // Text object
     #endregion
     #endregion
 

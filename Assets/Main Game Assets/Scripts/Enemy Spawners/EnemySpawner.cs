@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -10,8 +7,8 @@ public class EnemySpawner : MonoBehaviour
     #region Object References
     protected readonly System.Random rng = new System.Random();
 
-    public GameObject[] enemyPrefabs = new GameObject[3];
-    protected MyQueue<GameObject> enemies = new MyQueue<GameObject>();
+    protected MyQueue<GameObject> enemies = new MyQueue<GameObject>(); // Custom queue class
+    public GameObject[] enemyPrefabs = new GameObject[3]; // An array containing enemy prefabs except boss enemy
     #endregion
 
     #region Gameobjects
@@ -54,8 +51,6 @@ public class EnemySpawner : MonoBehaviour
         SetWavesAndMaxSpawn();
 
         PopulateQueue(maxToSpawn);
-
-        Debug.Log(maxToSpawn);
     }
 
     // Update is called once per frame
@@ -84,15 +79,15 @@ public class EnemySpawner : MonoBehaviour
         int index;
         if (1 <= rand && rand <= 3)
         {
-            index = 1;
+            index = 1; // Nimble enemy
         }
         else if (rand == 4 || rand == 5)
         {
-            index = 0;
+            index = 0; // Normal enemy
         }
         else
         {
-            index = 2;
+            index = 2; // Bulky enemy
         }
 
         GameObject enemy = enemyPrefabs[index];
@@ -145,7 +140,7 @@ public class EnemySpawner : MonoBehaviour
 
     // Activates the spawner if the player has entered the trigger area
     #region OnTrigger Methods
-    private void OnTriggerEnter2D(Collider2D entity)
+    protected virtual void OnTriggerEnter2D(Collider2D entity)
     {
         if (entity.tag == "Player")
         {
@@ -154,7 +149,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D entity)
+    protected virtual void OnTriggerExit2D(Collider2D entity)
     {
         if (entity.tag == "Player")
         {

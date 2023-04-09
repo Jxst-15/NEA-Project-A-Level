@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 4428490755899047049}
   - component: {fileID: 4428490755899047047}
   - component: {fileID: 4428490755899047048}
-  - component: {fileID: 4428490755899047055}
   - component: {fileID: 4428490755899047054}
+  - component: {fileID: -7356564449933988027}
   m_Layer: 9
   m_Name: BYEPrefab
   m_TagString: BulkyEnemies
@@ -41,6 +41,7 @@ Transform:
   - {fileID: 4428490756163590613}
   - {fileID: 4428490756039997853}
   - {fileID: 4428490755825771087}
+  - {fileID: 6626311686138077849}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -180,10 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a40cb42fcc41f248928229f28bfa469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vSpeed: 0
-  vRunSpeed: 0
-  hSpeed: 0
-  hRunSpeed: 0
   isRunning: 0
   isDodging: 0
   dodgeSpeed: 0
@@ -205,45 +202,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b30c8316a4b62c4e8b87ad2ad0b2876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackBox: {fileID: 4428490756013627741}
+  blockBox: {fileID: 4428490756163590619}
+  parryBox: {fileID: 4428490756039998051}
+  throwBox: {fileID: 0}
+  weapon: {fileID: 0}
   enemyScript: {fileID: 0}
-  enemyAttack: {fileID: 0}
   enemyMovement: {fileID: 0}
   enemyAI: {fileID: 0}
   enemyStats: {fileID: 0}
+  enemyAttack: {fileID: 0}
+  enemyWCHandler: {fileID: 0}
   flashScript: {fileID: 0}
   targetAttackStatus: {fileID: 0}
   targetBlockStats: {fileID: 0}
   targetStats: {fileID: 0}
-  weapon: {fileID: 0}
-  attackBox: {fileID: 4428490756013627741}
-  blockBox: {fileID: 4428490756163590619}
-  parryBox: {fileID: 4428490756039998051}
-  stamDecLAttack: 0
-  stamDecHAttack: 0
   stamDecUAttack: 0
-  stamDecWUAttack: 0
-  stamDecThrow: 0
-  stamIncParry: 0
---- !u!114 &4428490755899047055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007956655872667336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12906c8361992bb489216870023e8ab5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 0
-  maxStamina: 0
-  enemyScript: {fileID: 0}
-  enemyCombat: {fileID: 0}
-  enemyMovement: {fileID: 0}
-  enemyAI: {fileID: 0}
-  flashScript: {fileID: 0}
-  type: 
 --- !u!114 &4428490755899047054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +236,23 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e83d54f56638cca41a08f46a4ace4e20, type: 2}
   - {fileID: 2100000, guid: 4c6b3e9a45252464797a2541d6b443a5, type: 2}
   - {fileID: 2100000, guid: 92eff14f256f0434ba062dbc4af63555, type: 2}
+--- !u!114 &-7356564449933988027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007956655872667336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582e62ccb277c624988e3a3a367fd087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyScript: {fileID: 0}
+  enemyCombat: {fileID: 0}
+  enemyMovement: {fileID: 0}
+  enemyAI: {fileID: 0}
+  flashScript: {fileID: 0}
 --- !u!1 &4428490755825771086
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,3 +511,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.166441, y: 2.6068196}
   m_EdgeRadius: 0
+--- !u!1 &6830155168228780733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6626311686138077849}
+  m_Layer: 9
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6626311686138077849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6830155168228780733}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.85, y: 2.97, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4640238032023529011}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

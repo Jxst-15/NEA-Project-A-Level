@@ -4,9 +4,9 @@ public class Pole : Weapon
     {
         weaponType = WeaponType.Pole;
         
-        weaponLDmg = 60;
-        weaponHDmg = 80;
-        uniqueDmg = 95;
+        weaponLDmg = 45;
+        weaponHDmg = 65;
+        uniqueDmg = 80;
 
         stamDecWLAtk = 15;
         stamDecWHAtk = 20;
@@ -14,12 +14,5 @@ public class Pole : Weapon
 
         hitsDone = 0;
         hitsToBreak = 20;
-    }
-
-    public override bool Attack(bool light)
-    {
-        bool objHit =  base.Attack(light);
-        // Code for attacking with this weapon
-        return objHit;
     }
 }

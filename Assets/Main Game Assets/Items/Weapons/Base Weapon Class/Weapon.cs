@@ -33,8 +33,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
 
     #region Variables
     protected WeaponType weaponType;
-    protected string weaponName;
-    protected float weaponRange;
 
     protected float nextWAttackTime;
     protected const float wAttackRate = 1.5f;
@@ -58,14 +56,11 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     { get; protected set; }
     public int stamDecWHAtk
     { get; protected set; }
-    public int stamDecWUEAtk
+    public int stamDecWUEAtk // Weapon unique attack stamina decrease
     { get; protected set; }
-    public string getName() { return weaponName; }
-    public void setName(string name) {  weaponName = name; }
-    public int getHitsDone() { return hitsDone; }
     #endregion
 
-    private Collider2D col;
+    private Collider2D col; // Collider for interaction
     #endregion
 
     #region Unity Methods
@@ -73,17 +68,15 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     {
         weaponAttack = attackBox.GetComponent<WeaponAttackBox>();
         uniqueWeaponAttack = uniqueAttackBox.GetComponent<WeaponAttackBox>();
+        attackBox.SetActive(false);
+        uniqueAttackBox.SetActive(false);
 
         col = this.GetComponent<Collider2D>();
-
-        // scaleX = this.transform.localScale.x;
     }
 
     // I have made these methods virtual so they can be overriden in the actual weapon scripts
     protected virtual void Start()
     {
-        attackBox.SetActive(false);
-        uniqueAttackBox.SetActive(false);
         SetVariables();
     }
 
@@ -107,7 +100,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
             attackBox.SetActive(true);
             uniqueAttackBox.SetActive(true);
             
-            this.transform.parent = hand.transform; 
+            this.transform.parent = hand.transform; // Sets the weapon as a child object of the hand
 
             // Gets the scale of the gameobject after it has been made a child object
             Vector3 newScale = this.transform.localScale;
@@ -118,7 +111,6 @@ public abstract class Weapon : MonoBehaviour, IInteractable
             Flip(newScale);
 
             col.enabled = false;
-
         }
     }
 
@@ -132,7 +124,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
             newScale.x *= -1;
         }
         
-        this.transform.localScale = newScale;
+        this.transform.localScale = newScale; // Sets the scale of the gameobject appropriately
     }
 
     protected void DetectActionBox(Collider2D entity)
@@ -172,14 +164,12 @@ public abstract class Weapon : MonoBehaviour, IInteractable
         bool objHit = false;
         if (Time.time >= nextWAttackTime)
         {
-            int dmgToDeal;
-            foreach (Collider2D hittableObj in weaponAttack.GetObjectsHit().ToList()) // ERROR MissingReferenceException:
-                                                                                      // The object of type 'BoxCollider2D' has been destroyed but you are still trying to access it.
-                                                                                      // Your script should either check if it is null or you should not destroy the object.
+            foreach (Collider2D hittableObj in weaponAttack.GetObjectsHit().ToList()) 
             {
                 if (hittableObj != null)
                 {
                     objHit = true;
+                    int dmgToDeal;
                     switch (light)
                     {
                         case true:
@@ -205,7 +195,7 @@ public abstract class Weapon : MonoBehaviour, IInteractable
     public virtual bool UniqueAttack()
     {
         bool objHit = false;      
-        if (Time.time >= nextWUAttackTime && uniqueWeaponAttack.GetObjectsHit().Count != 0)
+        if (Time.time >= nextWUAttackTime && uniqueWeaponAttack.GetObjectsHit().Count != 0) // Only if there are objects in the attacking collider
         {
             foreach (Collider2D hittableObj in uniqueWeaponAttack.GetObjectsHit().ToList())
             {
@@ -216,9 +206,10 @@ public abstract class Weapon : MonoBehaviour, IInteractable
                     DealDamage(hittableObj, uniqueDmg, 0);
                 }
             }
-            UpdateHitsDone(5);
+            UpdateHitsDone(5); // Increase hits done by 5
+
             nextWUAttackTime = Time.time + 1f / wUAttackRate;
-            nextWAttackTime = nextWUAttackTime;
+            nextWAttackTime = nextWUAttackTime; // Delay to attack with weapon is set to the same as the next unique attack time
         }
         return objHit;
     }

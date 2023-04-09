@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// WIP
 public class PauseMenu : MonoBehaviour
 {
     #region Fields
@@ -74,6 +73,14 @@ public class PauseMenu : MonoBehaviour
     public void RestartButton()
     {
         PlayerData.instance.ResetData();
+        StartCoroutine(ConnectionHandler.instance.SaveGame
+            (
+            PlayerData.instance.currentHealth, 
+            PlayerData.instance.currentStamina, 
+            PlayerData.instance.posX, 
+            PlayerData.instance.posY, 
+            PlayerData.instance.points)
+            );
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

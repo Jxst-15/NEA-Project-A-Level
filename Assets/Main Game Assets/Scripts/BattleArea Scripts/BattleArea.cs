@@ -15,6 +15,11 @@ public class BattleArea : MonoBehaviour
 
     public int waves
     { get; private set; }
+
+    public int min
+    { get; set; }
+    public int max
+    { get; set; }
     
     public List<Collider2D> enemies 
     { get; protected set; }
@@ -29,7 +34,7 @@ public class BattleArea : MonoBehaviour
         areaCleared = false;
         System.Random rand = new System.Random();
         
-        eToDefeat = rand.Next(8 / 2, 11 / 2) * 2;
+        eToDefeat = rand.Next(min / 2, max / 2) * 2;
 
         waves = rand.Next(2, 4);
 

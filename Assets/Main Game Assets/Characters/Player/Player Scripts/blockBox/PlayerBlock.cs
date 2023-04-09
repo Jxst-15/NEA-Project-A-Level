@@ -27,7 +27,7 @@ public class PlayerBlock : MonoBehaviour
 
     private void Update()
     {
-        // If the player is not blocking
+        // If the player is not blocking, H key has been released
         if (Input.GetKeyUp(KeyCode.H))
         {
             Debug.Log("No Longer Blocking");
@@ -59,6 +59,7 @@ public class PlayerBlock : MonoBehaviour
     {
         if (!toBlock.Contains(enemy) && enemy.gameObject.layer == LayerMask.NameToLayer("Enemy") && enemy.gameObject.name != "groundBox")
         {
+            // Adds enemy to list so they can be blocked if player chooses
             toBlock.Add(enemy);
         }
     }

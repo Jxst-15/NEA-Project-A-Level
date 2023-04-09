@@ -7,6 +7,7 @@ public class SaveHandler : MonoBehaviour
     {
         Debug.Log("Saved");
         
+        // Sets the player data
         PlayerData.instance.posX = posX; 
         PlayerData.instance.posY = posY;
         PlayerData.instance.currentHealth = health;

@@ -6,7 +6,8 @@ public class PlayerAction : MonoBehaviour
     #region Fields
     // For the weaponHeld variable
     #region Script References
-    public PlayerCombat weaponHolding;
+    public PlayerCombat playerCombat;
+    public PlayerWCHandler playerWCHandler;
     #endregion
 
     #region Getters and Setters
@@ -22,7 +23,8 @@ public class PlayerAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        weaponHolding = gameObject.GetComponentInParent<PlayerCombat>();
+        playerCombat = gameObject.GetComponentInParent<PlayerCombat>();
+        playerWCHandler = gameObject.GetComponentInParent<PlayerWCHandler>();
         canInteract = true;
     }
     #endregion
@@ -36,9 +38,6 @@ public class PlayerAction : MonoBehaviour
             //Prioritises the first item in the list to interact with
             switch (interact[0].gameObject.tag)
             {
-                case "SavePoint":
-                    SaveInteract();
-                    break;
                 case "Weapons":
                     WeaponInteract();
                     break;
@@ -51,25 +50,18 @@ public class PlayerAction : MonoBehaviour
         }
     }
 
-    private void SaveInteract()
-    {
-        // Used for interacting with a save point 
-    }
-
     private void WeaponInteract()
     {
         // Checks if player already holding weapon
-        if (weaponHolding.weaponHeld != true)
+        if (playerWCHandler.weaponHeld == false)
         {
             // Checks if player is holding a weapon, if yes then set weaponHeld to true
-            weaponHolding.weaponHeld = true;
+            playerWCHandler.weaponHeld = true;
 
-            weaponHolding.weaponScript = interact[0].gameObject.GetComponent<Weapon>();
+            playerWCHandler.weaponScript = interact[0].gameObject.GetComponent<Weapon>();
 
-            // weaponHolding.playerStyleSwitch.fightStyleSnapshot = PlayerStyleSwitch.fightStyle;
-
-            // Sets the weapon GameObject variable in PlayerCombat to the GameObject that the collider is attached to
-            weaponHolding.weapon = interact[0].gameObject;
+            // Sets the weapon GameObject variable in playerWCHandler to the GameObject that the collider is attached to
+            playerWCHandler.weapon = interact[0].gameObject;
         }
         else
         {
@@ -88,7 +80,7 @@ public class PlayerAction : MonoBehaviour
                 interact.Add(toInteract);
             }
             // If the item is not already in the list, it's a weapon and the player is not holding anything currently
-            else if (toInteract.gameObject.layer == LayerMask.NameToLayer("Weapons") && weaponHolding.weaponHeld == false)
+            else if (toInteract.gameObject.layer == LayerMask.NameToLayer("Weapons") && playerWCHandler.weaponHeld == false)
             {
                 // Add to list
                 interact.Add(toInteract);

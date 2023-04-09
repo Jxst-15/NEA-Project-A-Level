@@ -13,8 +13,6 @@ public class ConnectionHandler : MonoBehaviour
     #endregion
    
     #region Getters and Setters
-    public string url
-    { get; set; }
     public string dataString
     { get; private set; }
     public bool error
@@ -25,8 +23,8 @@ public class ConnectionHandler : MonoBehaviour
     { get; private set; }
     #endregion
 
-    // Denotes the php scripts used to communicate to the MySQL database
     #region URLs
+    // Denotes the php scripts used to communicate to the MySQL database
     private const string loginURL = "http://localhost/compSciNeaDB/login.php";
     private const string signupURL = "http://localhost/compSciNeaDB/signup.php";
     private const string saveURL = "http://localhost/compSciNeaDB/saving.php";
@@ -62,6 +60,7 @@ public class ConnectionHandler : MonoBehaviour
         errorMsg = "Error: username or password field was empty";
     }
 
+    // Starts a web request for the PHP scripts using the given URL and the form, from the Unity Documentation
     private IEnumerator GetRequest(string url, WWWForm form)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, form))
@@ -96,9 +95,9 @@ public class ConnectionHandler : MonoBehaviour
         form = new WWWForm();
 
         form.AddField("username", u);
-        form.AddField("password", p);
+        form.AddField("password", PasswordEncrypter.SHA256Encryption(p));
 
-        yield return GetRequest(loginURL, form);
+        yield return GetRequest(loginURL, form); 
       
         string[] data = dataString.Split("*"); // Splits the data string into an array, the array contains the player data to set
 
@@ -127,9 +126,9 @@ public class ConnectionHandler : MonoBehaviour
         form = new WWWForm();
 
         form.AddField("username", u);
-        form.AddField("password", p);
+        form.AddField("password", PasswordEncrypter.SHA256Encryption(p));
 
-        yield return GetRequest(signupURL, form);
+        yield return GetRequest(signupURL, form); // Waits for the web request to finish before continuing
         
         string[] data = dataString.Split("*");
 
@@ -181,7 +180,7 @@ public class ConnectionHandler : MonoBehaviour
         if (success == 1)
         {
             Debug.Log("Save was a success!");
-            PlayerData.instance.lastSaveDate = data[1];
+            PlayerData.instance.lastSaveDate = data[1]; // Gets the piece of data from the returned string
         }
         else
         {

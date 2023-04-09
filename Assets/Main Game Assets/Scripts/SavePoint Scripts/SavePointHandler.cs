@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SavePointHandler : MonoBehaviour, IInteractable
@@ -34,7 +32,6 @@ public class SavePointHandler : MonoBehaviour, IInteractable
         if (canSave == true)
         {
             Debug.Log("Accessed save point");
-            saveMenu.sp = this;
             saveMenu.EnterSaveMenu();
         }
         else

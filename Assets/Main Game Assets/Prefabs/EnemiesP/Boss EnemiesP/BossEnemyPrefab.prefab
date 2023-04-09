@@ -273,7 +273,7 @@ GameObject:
   - component: {fileID: 7735297275787031489}
   - component: {fileID: 7735297275787031488}
   - component: {fileID: 7735297275787031491}
-  - component: {fileID: 7735297275787031490}
+  - component: {fileID: 5459040748265978705}
   - component: {fileID: 7735297275787031493}
   - component: {fileID: 7735297275787031492}
   m_Layer: 9
@@ -443,18 +443,17 @@ MonoBehaviour:
   parryBox: {fileID: 7735297276881810072}
   throwBox: {fileID: 0}
   weapon: {fileID: 0}
-  attackCount: 0
   enemyScript: {fileID: 0}
-  enemyAttack: {fileID: 0}
   enemyMovement: {fileID: 0}
   enemyAI: {fileID: 0}
   enemyStats: {fileID: 0}
+  enemyAttack: {fileID: 0}
   flashScript: {fileID: 0}
   targetAttackStatus: {fileID: 0}
   targetBlockStats: {fileID: 0}
   targetStats: {fileID: 0}
   stamDecUAttack: 0
---- !u!114 &7735297275787031490
+--- !u!114 &5459040748265978705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -463,7 +462,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8790324091883499672}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12906c8361992bb489216870023e8ab5, type: 3}
+  m_Script: {fileID: 11500000, guid: 24952418feb23fc4b9495b38d71e2fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyScript: {fileID: 0}
@@ -471,7 +470,6 @@ MonoBehaviour:
   enemyMovement: {fileID: 0}
   enemyAI: {fileID: 0}
   flashScript: {fileID: 0}
-  type: 
 --- !u!114 &7735297275787031493
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public abstract class BarManager : MonoBehaviour
 
     protected PlayerStats playerStats;
 
-    public Slider barSlider;
+    public Slider barSlider; // Used to show the value of the variable given in the child classes
     #endregion
     #endregion
 

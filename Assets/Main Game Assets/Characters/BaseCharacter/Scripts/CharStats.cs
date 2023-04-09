@@ -4,12 +4,9 @@ public abstract class CharStats : MonoBehaviour, IDamageable
 {
     #region Fields
     #region Variables
-    protected float nextRegen;
-    protected float regenCooldown;
-    protected int toIncBy;
+    protected float nextRegen, regenCooldown;
 
-    protected float tillUnstun;
-    protected float unstunCooldown;
+    protected float tillUnstun, unstunCooldown;
     #endregion
 
     #region Getters and Setters

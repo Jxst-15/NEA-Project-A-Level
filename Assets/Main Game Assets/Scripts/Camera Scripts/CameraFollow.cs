@@ -21,18 +21,8 @@ public class CameraFollow : MonoBehaviour
     {
         if (camFollow == true && player != null)
         {
+            // Sets the position of the camera
             transform.position = new Vector3(player.transform.position.x + offset, transform.position.y, transform.position.z);
-        }
-    }
-    #endregion
-
-    #region OnTrigger Methods
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.tag == "Boundary")
-        {
-            camFollow = false;
-            Debug.Log("Collided with boundary");
         }
     }
     #endregion

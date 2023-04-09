@@ -66,6 +66,7 @@ public class LoginSignUpButtons : MonoBehaviour
         }
         else
         {
+            // Shows an error
             ConnectionHandler.instance.EmptyFieldError();
             logFields.SetActive(false);
         }

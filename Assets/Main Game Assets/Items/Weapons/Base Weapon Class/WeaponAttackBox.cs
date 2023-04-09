@@ -13,6 +13,11 @@ public class WeaponAttackBox : AttackBox
                 // If the hand belongs to the player the toAttack layer is set to Enemy
                 toAttack = LayerMask.NameToLayer("Enemy");
             }
+            else if (GetComponentInParent<Weapon>().hand.transform.parent.gameObject.layer == LayerMask.NameToLayer("Enemy")) // If it is an enemy holding
+            {
+                toAttack = LayerMask.NameToLayer("Player");
+                Debug.Log("Active");
+            }
         }
     }
 

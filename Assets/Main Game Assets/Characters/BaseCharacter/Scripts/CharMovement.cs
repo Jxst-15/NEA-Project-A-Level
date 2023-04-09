@@ -55,7 +55,9 @@ public abstract class CharMovement : MonoBehaviour
 
     protected abstract void Movement();
 
-    protected abstract void Run();
+    protected virtual void Run() { }
+
+    protected virtual void Run(Vector2 direction) { }
 
     public void StopMovement()
     {

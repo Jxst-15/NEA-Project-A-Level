@@ -27,11 +27,11 @@ public class PlayerStats : CharStats
     protected override void SetVariables()
     {
         // Sets values for variables
-        maxHealth = 800;
+        maxHealth = 900;
         lDmg = 50;
         hDmg = 75;
         fDmg = 100;
-        maxStamina = 350;
+        maxStamina = 450;
         nextRegen = 0f;
 
         vSpeed = 3;
@@ -54,7 +54,6 @@ public class PlayerStats : CharStats
         }
     }
 
-
     protected override void StaminaRegen()
     {
         if (Time.time >= nextRegen)
@@ -64,7 +63,7 @@ public class PlayerStats : CharStats
             // Following if block is to determine the speed and the amount to regen stamina by
             if (currentStamina < maxStamina && currentStamina > maxStamina / 2)
             {
-                toIncBy = 5;
+                toIncBy = 10;
                 nextRegen = Time.time + 5f;
             }
             else if (currentStamina < maxStamina && currentStamina <= maxStamina / 2)

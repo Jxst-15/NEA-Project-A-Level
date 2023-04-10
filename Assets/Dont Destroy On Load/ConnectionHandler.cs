@@ -29,6 +29,7 @@ public class ConnectionHandler : MonoBehaviour
     private const string signupURL = "http://localhost/compSciNeaDB/signup.php";
     private const string saveURL = "http://localhost/compSciNeaDB/saving.php";
     private const string loadURL = "http://localhost/compSciNeaDB/loading.php";
+    private const string deleteURL = "http://localhost/compSciNeaDB/deleteUser.php";
     #endregion
     #endregion
 
@@ -216,6 +217,32 @@ public class ConnectionHandler : MonoBehaviour
         else
         {
             Debug.Log("Error");
+        }
+        dataString = "";
+    }
+
+    // Deletes the user and their save file from the database
+    public IEnumerator DeleteUser(string u)
+    {
+        form = new WWWForm();
+
+        form.AddField("username", u);
+
+        Debug.Log("Deleting account");
+
+        yield return GetRequest(deleteURL, form);
+
+        // If the php script echoed 1
+        if (dataString == "1")
+        {
+            Debug.Log("Success, account deleted");
+            LogOut();
+        }
+        else
+        {
+            Debug.Log("Error");
+            error = true;
+            errorMsg = "Could not delete account";
         }
         dataString = "";
     }

@@ -149,4 +149,18 @@ public class LoginSignUpButtons : MonoBehaviour
             Debug.Log("Inputs reset");
         }
     }
+
+    public void DeleteUser()
+    {
+        // Only works if the user is logged in
+        if (ConnectionHandler.instance.loggedIn == true)
+        {
+            logSuGO.SetActive(true);
+            StartCoroutine(ConnectionHandler.instance.DeleteUser(PlayerData.instance.username));
+        }
+        else
+        {
+            Debug.Log("Error, not logged in");
+        }
+    }
 }

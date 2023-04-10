@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 4428490755899047048}
   - component: {fileID: 4428490755899047054}
   - component: {fileID: -7356564449933988027}
+  - component: {fileID: 2122584855364190931}
   m_Layer: 9
   m_Name: BYEPrefab
   m_TagString: BulkyEnemies
@@ -253,6 +254,20 @@ MonoBehaviour:
   enemyMovement: {fileID: 0}
   enemyAI: {fileID: 0}
   flashScript: {fileID: 0}
+--- !u!114 &2122584855364190931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007956655872667336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b625d89cf550297438debeafbe367aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyStats: {fileID: 0}
+  enemyCombat: {fileID: 0}
 --- !u!1 &4428490755825771086
 GameObject:
   m_ObjectHideFlags: 0

@@ -276,6 +276,7 @@ GameObject:
   - component: {fileID: 5459040748265978705}
   - component: {fileID: 7735297275787031493}
   - component: {fileID: 7735297275787031492}
+  - component: {fileID: 6540899439566137707}
   m_Layer: 9
   m_Name: BossEnemyPrefab
   m_TagString: BossEnemies
@@ -448,6 +449,7 @@ MonoBehaviour:
   enemyAI: {fileID: 0}
   enemyStats: {fileID: 0}
   enemyAttack: {fileID: 0}
+  enemyWCHandler: {fileID: 0}
   flashScript: {fileID: 0}
   targetAttackStatus: {fileID: 0}
   targetBlockStats: {fileID: 0}
@@ -509,3 +511,17 @@ MonoBehaviour:
   enemyScript: {fileID: 0}
   enemyStats: {fileID: 0}
   enemyAI: {fileID: 0}
+--- !u!114 &6540899439566137707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8790324091883499672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b625d89cf550297438debeafbe367aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyStats: {fileID: 0}
+  enemyCombat: {fileID: 0}

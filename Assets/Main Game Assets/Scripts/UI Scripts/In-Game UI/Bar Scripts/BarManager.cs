@@ -16,7 +16,7 @@ public abstract class BarManager : MonoBehaviour
     #region Unity Methods
     protected void Start()
     {
-        barSlider = GetComponent<Slider>();
+        barSlider = GetComponent<Slider>(); // Gets the slider component, used to show the value
 
         player = GameObject.FindWithTag("Player");
         playerStats = player.GetComponent<PlayerStats>();

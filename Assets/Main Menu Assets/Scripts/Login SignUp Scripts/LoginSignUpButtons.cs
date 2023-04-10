@@ -1,8 +1,14 @@
 using UnityEngine;
+using TMPro;
 
 public class LoginSignUpButtons : MonoBehaviour
 {
     #region Fields
+    #region Input Fields
+    public TMP_InputField userInput;
+    public TMP_InputField passInput;
+    #endregion
+
     #region Gameobjects
     public GameObject logSuGO;
     public GameObject errorScreen;
@@ -18,15 +24,16 @@ public class LoginSignUpButtons : MonoBehaviour
     { get; set; }
     private string pass;
     #endregion
-
     #endregion
 
     private void Awake()
     {
-        user = LoginSignUpHandler.defVal;
-        pass = "";
-
-        if (ConnectionHandler.instance.loggedIn == true)
+        if (ConnectionHandler.instance.loggedIn == false)
+        {
+            user = "";
+            pass = "";
+        }
+        else
         {
             logSuGO.SetActive(false);
         }
@@ -36,14 +43,23 @@ public class LoginSignUpButtons : MonoBehaviour
     {
         logSuGO.SetActive(false);
         logFields.SetActive(true);
+
+        Debug.Log(logFields.transform.childCount);
+
+        SetUserInputs(logFields, "Username Login", "Password Login");
     }
 
     public void SignUpButton()
     {
         logSuGO.SetActive(false);
         signFields.SetActive(true);
+
+        Debug.Log(signFields.transform.childCount);
+
+        SetUserInputs(signFields, "Username SignUp", "Password SignUp");
     }
 
+    // Both read strings are assigned to the text inputs
     public void ReadStringInputUser(string s)
     {
         user = s;
@@ -54,6 +70,7 @@ public class LoginSignUpButtons : MonoBehaviour
         pass = s;
     }
 
+    // Pressing the login button, assigned to the UI button
     public void AccountLoginButton()
     {
         Debug.Log(user + " " + pass);
@@ -62,22 +79,25 @@ public class LoginSignUpButtons : MonoBehaviour
             logFields.SetActive(false);
 
             Debug.Log("Login");
-            StartCoroutine(ConnectionHandler.instance.AttemptLogin(user, pass));
+            StartCoroutine(ConnectionHandler.instance.AttemptLogin(user, pass)); // Starts a coroutine for login
+            ResetUserInputs();
         }
         else
         {
-            // Shows an error
+            // Shows error message to the user
             ConnectionHandler.instance.EmptyFieldError();
             logFields.SetActive(false);
         }
     }
 
+    // Pressing the sign up button, assigned to the UI button
     public void AccountSignUpButton()
     {
         if (user != "" && pass != "")
         {
             signFields.SetActive(false);
             StartCoroutine(ConnectionHandler.instance.AttemptSignUp(user, pass));
+            ResetUserInputs();
         }
         else
         {
@@ -86,6 +106,7 @@ public class LoginSignUpButtons : MonoBehaviour
         }
     }
 
+    // Pressing the back button in the UI to visit a previous menu
     public void BackButton()
     {
         errorScreen.SetActive(false);
@@ -93,13 +114,39 @@ public class LoginSignUpButtons : MonoBehaviour
         logFields.SetActive(false);
         signFields.SetActive(false);
 
+        ResetUserInputs();
+
         logSuGO.SetActive(true);
     }
 
-    public void LogOuButtont()
+    public void LogOutButton()
     {
-        user = "";
         ConnectionHandler.instance.LogOut();
         logSuGO.SetActive(true);
+    }
+
+    // Gets the user input fields and sets them to their variables
+    private void SetUserInputs(GameObject fields, string userField, string passField)
+    {
+        userInput = fields.transform.Find(userField).GetComponent<TMP_InputField>();
+        passInput = fields.transform.Find(passField).GetComponent<TMP_InputField>();
+        Debug.Log("Inputs Set");
+    }
+
+    // Makes it so the user input fields are empty 
+    private void ResetUserInputs()
+    {
+        if (userInput != null && passInput != null)
+        {
+            userInput.text = "";
+            passInput.text = "";
+
+            userInput = null;
+            passInput = null;
+
+            user = "";
+            pass = "";
+            Debug.Log("Inputs reset");
+        }
     }
 }

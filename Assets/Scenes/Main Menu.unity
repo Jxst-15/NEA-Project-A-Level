@@ -5080,6 +5080,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c927cb75541984abc799166582d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userInput: {fileID: 0}
+  passInput: {fileID: 0}
   logSuGO: {fileID: 1535169219}
   errorScreen: {fileID: 1061752139}
   logFields: {fileID: 218838700}
@@ -8296,7 +8298,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1288400287}
         m_TargetAssemblyTypeName: LoginSignUpButtons, Assembly-CSharp
-        m_MethodName: LogOuButtont
+        m_MethodName: LogOutButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

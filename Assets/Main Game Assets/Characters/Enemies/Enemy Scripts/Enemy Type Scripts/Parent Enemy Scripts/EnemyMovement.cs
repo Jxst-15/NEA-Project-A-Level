@@ -17,7 +17,7 @@ public class EnemyMovement : CharMovement
     protected float runDistance;
     #endregion
     
-    protected const bool notNeeded = false;
+    protected const bool notNeeded = false; // As movement does not depend on inputs and depends on player, does not need to know if facing right when updating
     #endregion
 
     #region Unity Methods

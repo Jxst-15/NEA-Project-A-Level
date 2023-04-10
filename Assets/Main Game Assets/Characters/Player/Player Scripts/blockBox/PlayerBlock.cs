@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// WIP
 // Want to fix block implementation/ improve it
 public class PlayerBlock : MonoBehaviour
 {

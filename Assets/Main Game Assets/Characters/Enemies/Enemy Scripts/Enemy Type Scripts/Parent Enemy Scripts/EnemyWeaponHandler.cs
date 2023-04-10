@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyWeaponHandler : MonoBehaviour
@@ -16,7 +14,6 @@ public class EnemyWeaponHandler : MonoBehaviour
     #endregion
 
     #region Script References
-    private EnemyCombat enemyCombat;
     private EnemyWCHandler enemyWCHandler;
     #endregion
     #endregion
@@ -24,7 +21,6 @@ public class EnemyWeaponHandler : MonoBehaviour
     #region Unity Methods
     private void Awake()
     {
-        enemyCombat = GetComponent<EnemyCombat>();
         enemyWCHandler = GetComponent<EnemyWCHandler>();
     }
 

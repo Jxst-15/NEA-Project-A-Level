@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 #region Enums
 public enum EnemyStates
@@ -26,6 +25,7 @@ public class EnemyAIFSM : StateMachine<EnemyStates, EnemyCommands, EnemyAIFSM>
 {
     #region Fields
     #region Object References
+    // All the states in this FSM
     public Active activeState
     { get; private set; }
     public Idle idleState
@@ -157,14 +157,5 @@ public class EnemyAIFSM : StateMachine<EnemyStates, EnemyCommands, EnemyAIFSM>
             { new StateTransition(attackingState, EnemyCommands.NotInAttackRange), trackingState },
             { new StateTransition(attackingState, EnemyCommands.NoHealth), inactiveState },
         };
-
-        //foreach (var kvp in transitionTable)
-        //{
-        //    Debug.Log("CurrentState: " + kvp.Key.currentState + " Command: " + kvp.Key.command + " NextState: " + kvp.Value);
-        //    //if (kvp.Key.currentState == null)
-        //    //{
-        //    //    Debug.Log("N");
-        //    //}
-        //}
     }
 }

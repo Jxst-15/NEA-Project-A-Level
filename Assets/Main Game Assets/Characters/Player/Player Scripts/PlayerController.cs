@@ -67,8 +67,6 @@ public class PlayerController : CharMovement
             isDodging = false;
             if (canMove == true)
             {
-                // Jump();
-
                 // If player not currently dodging or running
                 if (isDodging == false || isRunning == false)
                 {
@@ -100,18 +98,6 @@ public class PlayerController : CharMovement
 
         facingRight = true;
     }
-
-    // WIP
-    //public void Jump()
-    //{
-    //    if (Input.GetButtonDown("Jump"))
-    //    {
-    //        // onGround = false;
-    //        Debug.Log("Player jumped!");
-    //        // rb.AddForce(new Vector2(0f, jumpHeight) * 5, ForceMode2D.Impulse);
-    //        // onGround = true;
-    //    }
-    //}
 
     private void DoubleTappingMovement()
     {

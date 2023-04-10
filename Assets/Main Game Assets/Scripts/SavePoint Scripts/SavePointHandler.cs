@@ -21,8 +21,8 @@ public class SavePointHandler : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     void Start()
     {
-        UICanvas = GameObject.Find("UI Canvas");
-        saveMenu = UICanvas.GetComponent<SaveMenu>();
+        UICanvas = GameObject.Find("UI Canvas"); 
+        saveMenu = UICanvas.GetComponent<SaveMenu>(); // The UI
         canSave = true;
     }
     #endregion
@@ -32,7 +32,7 @@ public class SavePointHandler : MonoBehaviour, IInteractable
         if (canSave == true)
         {
             Debug.Log("Accessed save point");
-            saveMenu.EnterSaveMenu();
+            saveMenu.EnterSaveMenu(); // Can now save
         }
         else
         {

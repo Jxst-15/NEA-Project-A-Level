@@ -18,7 +18,7 @@ public class BossEStats : EnemyStats
         vRunSpeed = 4;
         hRunSpeed = 5;
 
-        weakTo = "None";
+        weakTo = "None"; // Boss Enemy has no weakness
 
         toIncBy = 15;
         unstunCooldown = 10;

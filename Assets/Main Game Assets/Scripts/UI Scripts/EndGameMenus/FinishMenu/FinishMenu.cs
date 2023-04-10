@@ -21,7 +21,7 @@ public class FinishMenu : EndGameMenu
         if (finishedGame == true)
         {
             pausing.PauseGame();
-            menuScreen.SetActive(true);
+            menuScreen.SetActive(true); // Show the finish menu
         }
     }
     #endregion

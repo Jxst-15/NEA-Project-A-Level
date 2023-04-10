@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-// Will handle the communcation between Unity and the php scripts provided by URL
+// Will handle the communication between Unity and the php scripts provided by URL
 public class ConnectionHandler : MonoBehaviour
 {
     #region Fields

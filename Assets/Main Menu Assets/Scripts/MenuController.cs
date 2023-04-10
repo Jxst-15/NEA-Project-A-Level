@@ -5,7 +5,7 @@ public class MenuController : MonoBehaviour
 {
     #region Fields
     #region GameObject References
-    public GameObject needLogin;
+    public GameObject needLogin; // Text stating that the user needs to login to play
     #endregion
 
     #region Variables
@@ -51,9 +51,12 @@ public class MenuController : MonoBehaviour
     // Quits the game
     public void QuitButton()
     {
+        // If I am in the unity editor
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #endif
+        
+        // If it's the actual game
         Application.Quit();
     }
 }

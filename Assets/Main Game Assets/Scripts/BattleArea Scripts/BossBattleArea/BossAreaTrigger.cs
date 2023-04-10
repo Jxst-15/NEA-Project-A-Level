@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BossAreaTrigger : MonoBehaviour
@@ -12,12 +10,6 @@ public class BossAreaTrigger : MonoBehaviour
     public GameObject eSpawner;
 
     public GameObject bossEnemy;
-    #endregion
-
-    #region Script references
-    private BattleArea areaControl;
-
-    private FinishMenu finishMenu;
     #endregion
 
     #region Variables
@@ -34,10 +26,6 @@ public class BossAreaTrigger : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        areaControl = battleArea.GetComponent<BattleArea>();
-
-        finishMenu = GameObject.Find("UI Canvas").GetComponent<FinishMenu>();
-
         AreaController(false);
     }
     #endregion

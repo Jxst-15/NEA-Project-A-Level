@@ -34,24 +34,14 @@ public abstract class EnemyStats : CharStats
         enemyAI = GetComponent<EnemyAI>();
     }
 
-    // Start is called before the first frame update
-    protected override void Start()
-    {
-        StartInit();
-    }
-
-    protected void OnEnable()
-    {
-        StartInit();
-    }
-    #endregion
-
-    protected virtual void StartInit()
+    // Called when the gameobject is enables and active
+    protected virtual void OnEnable()
     {
         enemyScript = GetComponent<EnemyScript>();
         flashScript = GetComponent<FlashScript>();
         base.Start();
     }
+    #endregion
 
     protected override void StaminaRegen()
     {

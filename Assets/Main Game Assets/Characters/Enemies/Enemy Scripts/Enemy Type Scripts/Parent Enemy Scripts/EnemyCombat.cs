@@ -240,16 +240,16 @@ public class EnemyCombat : CharCombat
 
     protected override void DefendLogic()
     {
-        throw new System.NotImplementedException();
+        // Defend Feature
     }
 
     protected override void Block()
     {
-
+        // Block Feature
     }
 
     protected override void Parry()
     {
-
+        // Parry Feature
     }
 }

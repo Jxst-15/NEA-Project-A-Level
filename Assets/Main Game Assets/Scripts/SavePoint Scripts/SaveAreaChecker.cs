@@ -30,6 +30,7 @@ public class SaveAreaChecker : MonoBehaviour
         CheckList();
     }
 
+    // Sees if there is any enemies in the area
     private void CheckList()
     {
         if (gameObjects.Count > 0)
@@ -50,17 +51,11 @@ public class SaveAreaChecker : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D entity)
     {
-        // savePoint.canSave = CheckIfEnemyPresent(entity, false);
-
         AdjustList(entity, false);
     }
 
     private void OnTriggerExit2D(Collider2D entity)
     {
-        // Debug.Log("Exit");
-        
-        // savePoint.canSave = CheckIfEnemyPresent(entity, true);
-
         AdjustList(entity, true);
     }
 

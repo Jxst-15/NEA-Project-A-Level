@@ -6,8 +6,6 @@ public class LoginSignUpHandler : MonoBehaviour
     #region Script References
     public LoginSignUpButtons buttons;
     #endregion
-
-    public const string defVal = "None";
     #endregion
 
     void Awake()

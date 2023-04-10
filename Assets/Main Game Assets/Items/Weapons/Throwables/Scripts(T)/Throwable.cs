@@ -18,9 +18,6 @@ public class Throwable : Weapon
     #endregion
 
     private Rigidbody2D rb;
-
-
-    private IComboMeter toUpdate;
     #endregion
 
     #region Unity Methods

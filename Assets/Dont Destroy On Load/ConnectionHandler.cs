@@ -115,8 +115,7 @@ public class ConnectionHandler : MonoBehaviour
         }
         else
         {
-            error = true;
-            errorMsg = "Error: username or password entered was not correct";
+            SetError(data);
         }
 
         dataString = "";
@@ -146,8 +145,7 @@ public class ConnectionHandler : MonoBehaviour
         }
         else
         {
-            error = true;
-            errorMsg = "Error: The user entered already exists";
+            SetError(data);
         }
         dataString = "";
     }
@@ -185,7 +183,7 @@ public class ConnectionHandler : MonoBehaviour
         }
         else
         {
-            Debug.Log("Error");
+            SetError(data);
         }
         dataString = "";
     }
@@ -216,7 +214,7 @@ public class ConnectionHandler : MonoBehaviour
         }
         else
         {
-            Debug.Log("Error");
+            SetError(data);
         }
         dataString = "";
     }
@@ -232,18 +230,27 @@ public class ConnectionHandler : MonoBehaviour
 
         yield return GetRequest(deleteURL, form);
 
+        string[] data = dataString.Split("*");
+
+        int success = Convert.ToInt32(data[0]);
+
         // If the php script echoed 1
-        if (dataString == "1")
+        if (success == 1)
         {
             Debug.Log("Success, account deleted");
             LogOut();
         }
         else
         {
-            Debug.Log("Error");
-            error = true;
-            errorMsg = "Could not delete account";
+            SetError(data);
         }
         dataString = "";
+    }
+
+    private void SetError(string[] data)
+    {
+        Debug.Log("Error");
+        error = true;
+        errorMsg = data[1];
     }
 }

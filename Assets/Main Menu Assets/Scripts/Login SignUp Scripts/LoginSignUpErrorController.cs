@@ -2,6 +2,6 @@ public class LoginSignUpErrorController : UITextController
 {
     protected override void UpdateText()
     {
-        text.text = ConnectionHandler.instance.errorMsg;
+        text.text = "Error: " + ConnectionHandler.instance.errorMsg;
     }
 }
